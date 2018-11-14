@@ -1,0 +1,65 @@
+# docker-compose.yaml
+# 同样遵循严格的缩进
+version: '3.1'
+
+services:
+
+  video-service:
+    build: ./service/video-service
+    ports:
+      - 50053:50051
+    environment:
+      NET: "host"
+      MICRO_REGISTRY_ADDRESS: "consul:8500"
+      DB_NAME: "mysql"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
+      DB_USER: "root"
+      DB_PASSWORD: "123456"
+    depends_on:
+      - mysql
+      - consul
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - 8090:20050
+    environment:
+      NET: "host"
+      MICRO_REGISTRY_ADDRESS: "consul:8500"
+    depends_on:
+      - consul
+
+  consul:
+    image: progrium/consul:latest
+    container_name: consul-shop
+    environment:
+      NET: "host"
+#      - "constraint:node==nb1"
+    command: -ui-dir /ui -server -bootstrap
+    ports:
+      - 8300:8300
+      - 8301:8301
+      - 8301:8301/udp
+      - 8302:8302
+      - 8302:8302/udp
+      - 8400:8400
+      - 8500:8500
+      - 53:53/udp
+
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+
+  mysql:
+    image: cytopia/mysql-8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    ports:
+      - 3306:3306
+
+  datastore:
+    image: mongo
+    ports:
+      - 27017:27017
