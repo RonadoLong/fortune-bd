@@ -64,7 +64,7 @@
           <entry key="Dockerfile" value="12" />
           <entry key="Makefile" value="31" />
           <entry key="go" value="1126" />
-          <entry key="md" value="82" />
+          <entry key="md" value="106" />
           <entry key="proto" value="76" />
           <entry key="yaml" value="108" />
         </counts>
@@ -72,7 +72,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Go" value="1126" />
-          <entry key="PLAIN_TEXT" value="125" />
+          <entry key="PLAIN_TEXT" value="149" />
           <entry key="PROTO" value="76" />
           <entry key="YAML" value="108" />
         </counts>
@@ -125,7 +125,7 @@
         <entry file="file://$PROJECT_DIR$/api-gateway/handler/VideosHandler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="265">
-              <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+              <caret line="29" column="42" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
               <folding>
                 <element signature="e#17#217#0" expanded="true" />
               </folding>
@@ -137,7 +137,7 @@
         <entry file="file://$PROJECT_DIR$/service/video-service/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-214">
-              <caret line="12" column="33" lean-forward="true" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+              <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -145,8 +145,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+            <state relative-caret-position="242">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
@@ -287,6 +287,17 @@
               <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
               <item name="api-gateway" type="462c0819:PsiDirectoryNode" />
               <item name="resp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="video-service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
@@ -699,7 +710,7 @@
     <entry file="file://$PROJECT_DIR$/api-gateway/handler/VideosHandler.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
-          <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+          <caret line="29" column="42" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
           <folding>
             <element signature="e#17#217#0" expanded="true" />
           </folding>
@@ -709,14 +720,14 @@
     <entry file="file://$PROJECT_DIR$/service/video-service/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-214">
-          <caret line="12" column="33" lean-forward="true" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="242">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
