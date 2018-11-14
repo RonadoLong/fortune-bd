@@ -9,17 +9,13 @@ import (
 	pb "shop-micro/service/video-service/proto/video"
 )
 
-type Repository interface {
-	FindVideosList(req *pb.VideoListReq) (*pb.VideoListResp, error)
-}
-
 type VideoRepository struct {
 	DB *gorm.DB
 }
 
 func (vs *VideoRepository)FindVideosList(req *pb.VideoListReq) ([]*pb.VideotResp, error) {
 
-	total, err := vs.FindVideoCount(req.CategoryId)
+	total, err := vs.FindVideoCount(req.Category)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +25,7 @@ func (vs *VideoRepository)FindVideosList(req *pb.VideoListReq) ([]*pb.VideotResp
 		return nil, errors.New("offset > total")
 	}
 
-	videoList,err := vs.FindVideosListByOffset(offset, pageSize, req.CategoryId)
+	videoList,err := vs.FindVideosListByOffset(offset, pageSize, req.Category)
 	if err != nil {
 		return nil, err
 	}

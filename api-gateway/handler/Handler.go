@@ -58,8 +58,8 @@ func ClientEngine() *gin.Engine {
 	//}
 
 	/** home logic */
-	//homeGroup := api.Group("/home")
-	//homeGroup.GET("/headers", home.HomeRest.FindHomeNav)
+	homeGroup := api.Group("/home")
+	homeGroup.GET("/headers", FindHomeHeadList)
 	//homeGroup.GET("/list", home.HomeRest.FindHomeList)
 
 	/** news logic  */

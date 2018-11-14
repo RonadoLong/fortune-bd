@@ -7,7 +7,23 @@ services:
   video-service:
     build: ./service/video-service
     ports:
-      - 50053:50051
+      - 50003:50051
+    environment:
+      NET: "host"
+      MICRO_REGISTRY_ADDRESS: "consul:8500"
+      DB_NAME: "mysql"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
+      DB_USER: "root"
+      DB_PASSWORD: "123456"
+    depends_on:
+      - mysql
+      - consul
+
+  home-service:
+    build: ./service/home-service
+    ports:
+      - 50001:50051
     environment:
       NET: "host"
       MICRO_REGISTRY_ADDRESS: "consul:8500"
@@ -35,7 +51,6 @@ services:
     container_name: consul-shop
     environment:
       NET: "host"
-#      - "constraint:node==nb1"
     command: -ui-dir /ui -server -bootstrap
     ports:
       - 8300:8300
@@ -58,6 +73,13 @@ services:
       MYSQL_ROOT_PASSWORD: "123456"
     ports:
       - 3306:3306
+
+  redis:
+    image: redis
+    environment:
+      requirepass: "123456"
+    ports:
+      - 6379:6379
 
   datastore:
     image: mongo

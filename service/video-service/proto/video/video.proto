@@ -8,28 +8,27 @@ service Video {
 
 
 message VideoListReq {
-	string CategoryId = 1;
-	int32 PageNum = 2;
-	int32 PageSize = 3;
+	string category = 1;
+	int32 pageNum = 2;
+	int32 pageSize = 3;
 }
 
 message VideotResp {
-	int64 Id = 1;
-	string Title = 2;
-	string ThumbUrl = 3;
-	string Avatar = 4;
-	string Author = 5;
-	string Duration = 6;
-	string ReadCount = 7;
-	string CommentCount = 8;
-	int32 LikeCount = 9;
-	string Category = 10;
-	int32 ViewType = 11;
-	int32 IsRecommend = 12;
-	string Content = 13;
-	string Tags = 14;
-	string VideoDesc = 15;
-
+	int64 id = 1;
+	string title = 2;
+	string thumbUrl = 3;
+	string avatar = 4;
+	string author = 5;
+	string duration = 6;
+	string readCount = 7;
+	string commentCount = 8;
+	int32 likeCount = 9;
+	string category = 10;
+	int32 viewType = 11;
+	int32 isRecommend = 12;
+	string content = 13;
+	string tags = 14;
+	string videoDesc = 15;
 }
 
 message VideoListResp {

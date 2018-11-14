@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package shop.srv.home;
+
+service HomeService {
+    rpc FindHomeNav (HomeNavListReq) returns (HomeNavListResp) {}
+    rpc FindHomeList (HomeContentListReq) returns (HomeContentListResp) {}
+}
+
+message HomeNavListReq {
+}
+
+message HomeNav {
+    int64 id  = 1;
+    string title = 2;
+    string enTitle = 3;
+    string imgUrl = 4;
+    int32 types = 5;
+    int32 classId = 6;
+}
+
+message HomeNavListResp {
+    repeated HomeNav homeNavLists = 1;
+}
+
+message HomeContentListReq {
+
+}
+
+message HomeContentListResp {
+
+}

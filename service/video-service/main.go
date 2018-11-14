@@ -1,7 +1,7 @@
 package main
 
 import (
-	"shop-micro/service/video-service/database"
+	"shop-micro/commonUtils"
 	"shop-micro/service/video-service/handler"
 	_ "shop-micro/service/video-service/subscriber"
 
@@ -10,22 +10,7 @@ import (
 	pb "shop-micro/service/video-service/proto/video"
 )
 
-var videoService handler.VideoService
-
-func init()  {
-	db, err := database.CreateConnection()
-	if err != nil {
-		log.Fatalf("connect db err %v", err)
-	}
-
-	repo := &handler.VideoRepository{DB: db}
-	videoService = handler.VideoService{Repo: repo}
-
-}
-
 func main() {
-
-
 
 	// New Service
 	service := micro.NewService(
@@ -35,6 +20,14 @@ func main() {
 
 	// Initialise service
 	service.Init()
+
+	db, err := commonUtils.CreateConnection()
+	if err != nil {
+		log.Fatalf("connect db err %v", err)
+	}
+
+	repo := &handler.VideoRepository{DB: db}
+	videoService := handler.VideoService{Repo: repo}
 
 	// Register Handler
 	pb.RegisterVideoHandler(service.Server(), &videoService)
