@@ -8,8 +8,12 @@
  3. docker-compose up
 
 ```
-#部分页面展示
+#前端部分页面展示 代码: https://github.com/TorettoLong/mall-app
+
 <img src="https://image.showm.xin//test/01.png" width="375px">
+<img src="https://image.showm.xin//test/02.png" width="375px">
+<img src="https://image.showm.xin//test/03.png" width="375px">
+<img src="https://image.showm.xin//test/04.png" width="375px">
 
 ##govendor命令	功能
 
