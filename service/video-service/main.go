@@ -1,6 +1,7 @@
 package main
 
 import (
+	"shop-micro/service/video-service/database"
 	"shop-micro/service/video-service/handler"
 	_ "shop-micro/service/video-service/subscriber"
 
@@ -9,12 +10,22 @@ import (
 	pb "shop-micro/service/video-service/proto/video"
 )
 
+var videoService handler.VideoService
+
+func init()  {
+	db, err := database.CreateConnection()
+	if err != nil {
+		log.Fatalf("connect db err %v", err)
+	}
+
+	repo := &handler.VideoRepository{DB: db}
+	videoService = handler.VideoService{Repo: repo}
+
+}
+
 func main() {
 
-	db, err := handler.CreateConnection()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 
 	// New Service
 	service := micro.NewService(
@@ -25,10 +36,8 @@ func main() {
 	// Initialise service
 	service.Init()
 
-	repo := &handler.VideoRepository{db}
-	video := handler.VideoService{repo}
 	// Register Handler
-	pb.RegisterVideoHandler(service.Server(), &video)
+	pb.RegisterVideoHandler(service.Server(), &videoService)
 
 	//// Register Struct as Subscriber
 	//micro.RegisterSubscriber("shop.srv.video", service.Server(), new(subscriber.Example))

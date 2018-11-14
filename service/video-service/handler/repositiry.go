@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"encoding/json"
+	"errors"
 	"github.com/jinzhu/gorm"
+	"github.com/json-iterator/go"
 	"shop-micro/commonUtils"
+	"shop-micro/service/video-service/model"
 	pb "shop-micro/service/video-service/proto/video"
-	"shop-web/module/news/newsModel"
 )
 
 type Repository interface {
@@ -25,15 +26,15 @@ func (vs *VideoRepository)FindVideosList(req *pb.VideoListReq) ([]*pb.VideotResp
 
 	offset, pageSize := commonUtils.GeneratorPage(int(req.PageNum), int(req.PageSize))
 	if offset >= total{
-		return nil, nil
+		return nil, errors.New("offset > total")
 	}
 
 	videoList,err := vs.FindVideosListByOffset(offset, pageSize, req.CategoryId)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
-	videoRespList := []pb.VideotResp{}
+	videoRespList := []*pb.VideotResp{}
 	for _,video := range videoList {
 		videoResp := pb.VideotResp{}
 		videoResp.Id = video.Id
@@ -48,16 +49,16 @@ func (vs *VideoRepository)FindVideosList(req *pb.VideoListReq) ([]*pb.VideotResp
 		videoResp.Tags = video.Tags
 		videoResp.VideoDesc = video.VideoDesc
 
-		var pusherInfo newsModel.PusherInfo
-		err := json.Unmarshal([]byte(video.PusherInfo), &pusherInfo)
+		var pusherInfo model.PusherInfo
+		err := jsoniter.Unmarshal([]byte(video.PusherInfo), &pusherInfo)
 		if err == nil {
 			videoResp.Author = pusherInfo.Name
 			videoResp.Avatar = pusherInfo.Avatar
 		}
-		videoRespList = append(videoRespList, videoResp)
+		videoRespList = append(videoRespList, &videoResp)
 	}
 
-	return nil, nil
+	return videoRespList, nil
 }
 
 
