@@ -1,5 +1,11 @@
-# micro-web 单体应用改造 更新中...
-基于go-micro 微服务实战 配套Android iOS 前端
+#  mall-micro 单体应用改造 更新中...
+#  申明: 个人作品 仅供学习
+···
+ 1.基于go-micro微服务实战 
+ 2.配套mall-app Android iOSAPP  代码: https://github.com/TorettoLong/mall-app
+ 3.基于Vue 和springboot 构建的后台管理系统  代码: 晚点更新上来
+···
+
 
 #运行步骤
 ```
@@ -8,7 +14,7 @@
  3. docker-compose up
 
 ```
-#前端部分页面展示 代码: https://github.com/TorettoLong/mall-app
+#前端部分页面展示 
 ```
  功能点:
    登陆: 短信 微信 facebook 
