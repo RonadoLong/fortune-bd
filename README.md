@@ -9,10 +9,9 @@
 
 ```
 #部分页面展示
-![Image text](https://image.showm.xin//test/01.png)
-![Image text](https://image.showm.xin//test/02.png)
-![Image text](https://image.showm.xin//test/03.png)
-![Image text](https://image.showm.xin//test/04.png)
+```
+<img src="https://image.showm.xin//test/01.png" style="width: 375px">
+```
 
 ##govendor命令	功能
 
