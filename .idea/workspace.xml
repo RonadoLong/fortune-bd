@@ -2,46 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b93b78a-3fe2-49ed-8f6b-8b45c81b3b85" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/service/video-service/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/handler/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/repositiry.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/handler/repositiry.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/License" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/association.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_create.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_delete.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_query_preload.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_row_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_save.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/callback_update.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/dialect.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/dialect_common.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/dialect_mysql.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/dialect_postgres.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/dialect_sqlite3.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/errors.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/field.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/interface.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/join_table_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/logger.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/model.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/model_struct.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/naming.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/scope.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/search.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/test_all.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/utils.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/github.com/jinzhu/gorm/wercker.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/vendor.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -81,6 +42,7 @@
           <entry key="Makefile" value="3" />
           <entry key="go" value="64" />
           <entry key="json" value="2" />
+          <entry key="md" value="2" />
           <entry key="proto" value="3" />
           <entry key="sql" value="1" />
           <entry key="yaml" value="2" />
@@ -90,7 +52,7 @@
         <counts>
           <entry key="Go" value="64" />
           <entry key="JSON" value="2" />
-          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="PLAIN_TEXT" value="7" />
           <entry key="PROTO" value="3" />
           <entry key="SQL" value="1" />
           <entry key="Terminal Session" value="4" />
@@ -101,15 +63,16 @@
         <counts>
           <entry key="Dockerfile" value="12" />
           <entry key="Makefile" value="31" />
-          <entry key="go" value="1125" />
+          <entry key="go" value="1126" />
+          <entry key="md" value="82" />
           <entry key="proto" value="76" />
           <entry key="yaml" value="108" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="1125" />
-          <entry key="PLAIN_TEXT" value="43" />
+          <entry key="Go" value="1126" />
+          <entry key="PLAIN_TEXT" value="125" />
           <entry key="PROTO" value="76" />
           <entry key="YAML" value="108" />
         </counts>
@@ -161,11 +124,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api-gateway/handler/VideosHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="265">
+              <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
               <folding>
                 <element signature="e#17#217#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/service/video-service/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-214">
+              <caret line="12" column="33" lean-forward="true" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -182,11 +163,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/service/video-service/handler/repositiry.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="59" selection-start-line="59" selection-end-line="59" />
+            <state relative-caret-position="358">
+              <caret line="64" selection-start-line="64" selection-end-line="64" />
             </state>
           </provider>
         </entry>
@@ -208,30 +189,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-7">
               <caret line="591" column="12" selection-start-line="591" selection-start-column="12" selection-end-line="591" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/go/src/database/sql/sql.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
-              <folding>
-                <element signature="e#581#709#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../shop-web/vendor/github.com/go-sql-driver/mysql/driver.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <caret line="188" column="1" selection-start-line="188" selection-start-column="1" selection-end-line="188" selection-end-column="1" />
-              <folding>
-                <element signature="e#626#682#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -284,8 +241,9 @@
         <option value="$PROJECT_DIR$/service/video-service/database/database.go" />
         <option value="$PROJECT_DIR$/docker-compose.yaml" />
         <option value="$PROJECT_DIR$/service/video-service/handler/handler.go" />
-        <option value="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" />
         <option value="$PROJECT_DIR$/service/video-service/handler/repositiry.go" />
+        <option value="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -329,31 +287,6 @@
               <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
               <item name="api-gateway" type="462c0819:PsiDirectoryNode" />
               <item name="resp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-              <item name="video-service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-              <item name="video-service" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shop-micro" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-              <item name="video-service" type="462c0819:PsiDirectoryNode" />
-              <item name="handler" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shop-micro" type="b2602c69:ProjectViewProjectNode" />
@@ -450,8 +383,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2063882" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2063882" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -463,7 +397,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.4505723" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.4505723" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -735,16 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api-gateway/handler/VideosHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#17#217#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/service/video-service/main.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="301">
@@ -767,8 +691,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/service/video-service/handler/repositiry.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        <state relative-caret-position="358">
+          <caret line="64" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api-gateway/handler/VideosHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="29" column="42" lean-forward="true" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+          <folding>
+            <element signature="e#17#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/service/video-service/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-214">
+          <caret line="12" column="33" lean-forward="true" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
         </state>
       </provider>
     </entry>
