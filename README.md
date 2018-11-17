@@ -48,19 +48,3 @@ get	类似 go get 目录，拉取依赖包到 vendor 目录
 
 ```
 
-##组件
-```$xslt
-gin web         github.com/gin-gonic/gin
-gorm msyql      github.com/jinzhu/gorm
-redis           github.com/go-redis/redis
-file setting    github.com/BurntSushi/toml
-uuid            github.com/HaroldHoo/id_generator
-gin pprof       github.com/DeanThompson/ginpprof
-auth            gopkg.in/dgrijalva/jwt-go.v3
-tail            github.com/hpcloud/tail
-logs            github.com/astaxie/beego/logs
-kafka           github.com/Shopify/sarama
-elasticSearch   github.com/olivere/elastic
-json            github.com/json-iterator/go
-go-torch        github.com/uber/go-torch
-```
