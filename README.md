@@ -2,9 +2,7 @@
 #  申明: 个人作品 仅供学习
  ## 1.基于go-micro微服务实战 
  ## 2.配套mall-app Android iOSAPP  [代码:](https://github.com/TorettoLong/mall-app)
- ## 3.基于Vue 和springboot 构建的后台管理系统  
-   ### 3.1 [前端代码:](https://github.com/TorettoLong/mall-admin)
-   ### 3.2 [接口代码](https://github.com/TorettoLong/mall-admin-java)
+ ## 3.基于Vue 和springboot 构建的后台管理系统 [前端代码:](https://github.com/TorettoLong/mall-admin) [接口代码](https://github.com/TorettoLong/mall-admin-java)
 
 ```
   # 待加功能
