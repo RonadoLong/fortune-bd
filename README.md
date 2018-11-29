@@ -9,6 +9,13 @@
  
 ```
 
+```
+  # 待加功能
+  1. 使用rabbitmq中间件, 实现延迟队列
+  2. 添加grpc重试，限流，熔断
+  3. ......
+```
+
 # 运行步骤
 ```
  1. make build
@@ -29,12 +36,7 @@
    
 ```
 
-<img src="https://image.showm.xin//test/02.png" width="375px">
-<img src="https://image.showm.xin//test/03.png" width="375px">
-<img src="https://image.showm.xin//test/04.png" width="375px">
-
 ##govendor命令	功能
-<img src="https://image.showm.xin//test/01.png" width="375px">
 ```
 init	初始化 vendor 目录
 list	列出所有的依赖包
