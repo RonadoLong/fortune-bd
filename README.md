@@ -8,7 +8,7 @@
    3.2 接口代码: https://github.com/TorettoLong/mall-admin-java
  
 ```
-
+[百度](http://baidu.com)
 ```
   # 待加功能
   1. 使用rabbitmq中间件, 实现延迟队列
