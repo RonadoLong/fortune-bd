@@ -26,14 +26,15 @@
    上传图片七牛
    支付宝支付
    银联支付....
+   
 ```
-<img src="https://image.showm.xin//test/01.png" width="375px">
+
 <img src="https://image.showm.xin//test/02.png" width="375px">
 <img src="https://image.showm.xin//test/03.png" width="375px">
 <img src="https://image.showm.xin//test/04.png" width="375px">
 
 ##govendor命令	功能
-
+<img src="https://image.showm.xin//test/01.png" width="375px">
 ```
 init	初始化 vendor 目录
 list	列出所有的依赖包
