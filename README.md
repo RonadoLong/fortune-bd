@@ -30,7 +30,7 @@
    银联支付....
    
 ```
-<img src="https://image.showm.xin//test/01.png" width="375px" height="667px">
+<img src="https://image.showm.xin/phone/test/01.png" width="375px" height="667px">
 
 <img src="https://image.showm.xin//test/02.png" width="375px" height="667px">
 
