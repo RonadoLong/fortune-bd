@@ -1,12 +1,14 @@
 #  mall-micro 基于单体应用重构更新中...
 #  申明: 个人作品 仅供学习
+ ## 1.基于go-micro微服务实战 
+ ## 2.配套mall-app Android iOSAPP  [代码:](https://github.com/TorettoLong/mall-app)
+ ## 3.基于Vue 和springboot 构建的后台管理系统 [前端代码:](https://github.com/TorettoLong/mall-admin) [接口代码](https://github.com/TorettoLong/mall-admin-java)
+
 ```
- 1.基于go-micro微服务实战 
- 2.配套mall-app Android iOSAPP  代码: https://github.com/TorettoLong/mall-app
- 3.基于Vue 和springboot 构建的后台管理系统  
-   3.1 前端代码: https://github.com/TorettoLong/mall-admin
-   3.2 接口代码: https://github.com/TorettoLong/mall-admin-java
- 
+  # 待加功能
+  1. 使用rabbitmq中间件, 实现延迟队列
+  2. 添加grpc重试，限流，熔断
+  3. ......
 ```
 
 # 运行步骤
@@ -15,6 +17,7 @@
  2. docker-compose build
  3. docker-compose up
 
+[百度](http://baidu.com)
 ```
 # 前端部分页面展示 
 ```
@@ -26,7 +29,9 @@
    上传图片七牛
    支付宝支付
    银联支付....
+   
 ```
+<<<<<<< HEAD
 ##视频详情
 <img src="https://image.showm.xin//test/01.png" width="375px">
 
@@ -36,9 +41,10 @@
 <img src="https://image.showm.xin//test/03.png" width="375px">
 
 <img src="https://image.showm.xin//test/04.png" width="375px">
+=======
+>>>>>>> 57fa5cfe5660965ecd9d1a32f6263534b1a24cd4
 
 ##govendor命令	功能
-
 ```
 init	初始化 vendor 目录
 list	列出所有的依赖包
@@ -53,19 +59,3 @@ get	类似 go get 目录，拉取依赖包到 vendor 目录
 
 ```
 
-##组件
-```$xslt
-gin web         github.com/gin-gonic/gin
-gorm msyql      github.com/jinzhu/gorm
-redis           github.com/go-redis/redis
-file setting    github.com/BurntSushi/toml
-uuid            github.com/HaroldHoo/id_generator
-gin pprof       github.com/DeanThompson/ginpprof
-auth            gopkg.in/dgrijalva/jwt-go.v3
-tail            github.com/hpcloud/tail
-logs            github.com/astaxie/beego/logs
-kafka           github.com/Shopify/sarama
-elasticSearch   github.com/olivere/elastic
-json            github.com/json-iterator/go
-go-torch        github.com/uber/go-torch
-```

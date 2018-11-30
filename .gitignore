@@ -2,4 +2,4 @@ api-gateway
 home-service
 video-service
 
-.idea/
+.idea/*
