@@ -25,12 +25,10 @@
   * 支付宝支付
   * 银联支付....
 
-## 前端部分页面展示 
-```
+## 前端部分页面展示
 <img src="https://image.showm.xin/phone/test/01.png" width="375px" height="667px">
 
 <img src="https://image.showm.xin//test/04.png" width="375px">
-```
 
 ##govendor命令	功能
 ```
