@@ -1,8 +1,8 @@
 #  mall-micro 基于单体应用重构更新中...
 #  申明: 个人作品 仅供学习
- 1.基于go-micro微服务实战 
- 2.配套mall-app 基于React native 开发Android,iOS APP [代码:](https://github.com/TorettoLong/mall-app)
- 3.基于Vue和springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
+ * 基于go-micro微服务实战，涉及视频资讯，电商支付，广告发布等需求
+ * [配套mall-app 基于React native 开发Android,iOS APP](https://github.com/TorettoLong/mall-app)
+ * 基于Vue和springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
 
 ```
   # 待加功能
