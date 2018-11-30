@@ -2,35 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b93b78a-3fe2-49ed-8f6b-8b45c81b3b85" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/commonUtils/jsonhelper.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hystrix/hystrix.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shop-micro.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shop-micro.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/handler/HomeHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/handler/HomeHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/handler/VideosHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commonUtils/dbHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/commonUtils/dbHelper.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/handler/homeRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/handler/homeRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/handler/home_db.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/handler/home_db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/handler/home_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/handler/home_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/plugin.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/plugin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/proto/home.micro.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/proto/home.pb.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/home-service/proto/home.proto" beforeDir="false" afterPath="$PROJECT_DIR$/service/home-service/proto/home.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/handler/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/repositiry.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/handler/repositiry.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/handler/video_db.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/handler/video_db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/plugin.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/video-service/plugin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/proto/video/video.micro.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/proto/video/video.pb.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/video-service/proto/video/video.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -88,7 +62,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="96">
-              <caret line="4" column="6" lean-forward="true" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+              <caret line="4" column="7" lean-forward="true" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -902,7 +876,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
-          <caret line="4" column="6" lean-forward="true" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+          <caret line="4" column="7" lean-forward="true" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
         </state>
       </provider>
     </entry>

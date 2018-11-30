@@ -17,7 +17,6 @@
  2. docker-compose build
  3. docker-compose up
 
-[百度](http://baidu.com)
 ```
 # 前端部分页面展示 
 ```
@@ -31,18 +30,14 @@
    银联支付....
    
 ```
-<<<<<<< HEAD
-##视频详情
 <img src="https://image.showm.xin//test/01.png" width="375px">
 
 <img src="https://image.showm.xin//test/02.png" width="375px">
 
-##广告
 <img src="https://image.showm.xin//test/03.png" width="375px">
 
 <img src="https://image.showm.xin//test/04.png" width="375px">
-=======
->>>>>>> 57fa5cfe5660965ecd9d1a32f6263534b1a24cd4
+```
 
 ##govendor命令	功能
 ```
