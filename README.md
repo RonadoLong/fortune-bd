@@ -4,31 +4,28 @@
  * [配套mall-app 基于React native 开发Android,iOS APP](https://github.com/TorettoLong/mall-app)
  * 基于Vue和springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
 
-```
-  # 待加功能
-  1. 使用rabbitmq中间件, 实现延迟队列
-  2. 添加grpc重试，限流，熔断
-  3. ......
-```
 
-# 运行步骤
-```
- 1. make build
- 2. docker-compose build
- 3. docker-compose up
+## 待加功能
+  * 使用rabbitmq中间件, 实现延迟队列
+  * 添加grpc重试，限流，熔断
+  * .....
 
-```
-# 前端部分页面展示 
-```
- 功能点:
-   登陆: 短信 微信 facebook 
-   视频：视频播放
-   新闻: 新闻
-   发布广告
-   上传图片七牛
-   支付宝支付
-   银联支付....
-   
+
+## 运行步骤
+ * sh build.sh
+ * docker-compose build
+ * docker-compose up
+ 
+##功能点:
+  * 登陆: 短信 微信 facebook 
+  * 视频：视频播放
+  * 新闻: 新闻
+  * 发布广告
+  * 上传图片七牛
+  * 支付宝支付
+  * 银联支付....
+
+## 前端部分页面展示 
 ```
 <img src="https://image.showm.xin/phone/test/01.png" width="375px" height="667px">
 
