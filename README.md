@@ -32,10 +32,6 @@
 ```
 <img src="https://image.showm.xin/phone/test/01.png" width="375px" height="667px">
 
-<img src="https://image.showm.xin//test/02.png" width="375px" height="667px">
-
-<img src="https://image.showm.xin//test/03.png" width="375px">
-
 <img src="https://image.showm.xin//test/04.png" width="375px">
 ```
 
