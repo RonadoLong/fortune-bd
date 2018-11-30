@@ -3,11 +3,11 @@ syntax = "proto3";
 package shop.srv.home;
 
 service HomeService {
-    rpc FindHomeNav (HomeNavListReq) returns (HomeNavListResp) {}
-    rpc FindHomeList (HomeContentListReq) returns (HomeContentListResp) {}
+    rpc FindHomeHeaders (HomeHeaderReq) returns (HomeHeadersResp) {}
+    rpc FindHomeContents (HomeContentsReq) returns (HomeContentsResp) {}
 }
 
-message HomeNavListReq {
+message HomeHeaderReq {
 }
 
 message HomeNav {
@@ -19,14 +19,22 @@ message HomeNav {
     int32 classId = 6;
 }
 
-message HomeNavListResp {
-    repeated HomeNav homeNavLists = 1;
+message HomeCourse {
+    int64 Id = 1;
+    string Title = 2;
+    string EnTitle = 3;
+    string ImgUrl = 4;
+    string Url = 5;
 }
 
-message HomeContentListReq {
+message HomeHeadersResp {
+    repeated HomeNav homeNavList = 1;
+    repeated HomeCourse HomeCourseList = 2;
+}
+
+message HomeContentsReq {
 
 }
 
-message HomeContentListResp {
-
+message HomeContentsResp {
 }

@@ -10,7 +10,6 @@ func (vs *VideoRepository) FindVideosListByOffset( pageNum int, pageSize int, ca
 		Where("category = ? and status = 1", category).
 		Order("`create_time` desc").Offset(pageNum).Limit(pageSize).
 		Find(&videoList).Error; err != nil{
-
 		return videoList, err
 	}
 	return videoList, nil

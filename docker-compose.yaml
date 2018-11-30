@@ -6,11 +6,11 @@ services:
 
   video-service:
     build: ./service/video-service
+    command: --registry_address=consul:8500
     ports:
       - 50003:50051
     environment:
       NET: "host"
-      MICRO_REGISTRY_ADDRESS: "consul:8500"
       DB_NAME: "mysql"
       DB_HOST: "mysql"
       DB_PORT: "3306"
@@ -22,27 +22,30 @@ services:
 
   home-service:
     build: ./service/home-service
+    command: --registry_address=consul:8500
     ports:
       - 50001:50051
     environment:
       NET: "host"
-      MICRO_REGISTRY_ADDRESS: "consul:8500"
       DB_NAME: "mysql"
       DB_HOST: "mysql"
       DB_PORT: "3306"
       DB_USER: "root"
       DB_PASSWORD: "123456"
+      REDIS_ADDR: "redis:6379"
+      REDIS_PWD: ""
     depends_on:
       - mysql
       - consul
+      - redis
 
   api-gateway:
     build: ./api-gateway
+    command: --registry_address=consul:8500
     ports:
       - 8090:20050
     environment:
       NET: "host"
-      MICRO_REGISTRY_ADDRESS: "consul:8500"
     depends_on:
       - consul
 
@@ -61,6 +64,11 @@ services:
       - 8400:8400
       - 8500:8500
       - 53:53/udp
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
 
   database:
     image: postgres

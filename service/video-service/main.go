@@ -2,20 +2,25 @@ package main
 
 import (
 	"shop-micro/commonUtils"
+	"shop-micro/service/video-service/config"
 	"shop-micro/service/video-service/handler"
 	_ "shop-micro/service/video-service/subscriber"
+	"time"
 
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
-	pb "shop-micro/service/video-service/proto/video"
+	pb "shop-micro/service/video-service/proto"
 )
 
 func main() {
 
 	// New Service
 	service := micro.NewService(
-		micro.Name("shop.srv.video"),
+		micro.Name(config.SRV_NAME),
 		micro.Version("latest"),
+		micro.RegisterTTL(time.Second*30),
+		micro.RegisterInterval(time.Second*15),
+		micro.WrapHandler(logWrapper),
 	)
 
 	// Initialise service

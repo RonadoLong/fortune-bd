@@ -6,7 +6,7 @@ import (
 	"github.com/json-iterator/go"
 	"shop-micro/commonUtils"
 	"shop-micro/service/video-service/model"
-	pb "shop-micro/service/video-service/proto/video"
+	pb "shop-micro/service/video-service/proto"
 )
 
 type VideoRepository struct {
@@ -30,7 +30,7 @@ func (vs *VideoRepository)FindVideosList(req *pb.VideoListReq) ([]*pb.VideotResp
 		return nil, err
 	}
 
-	videoRespList := []*pb.VideotResp{}
+	var videoRespList []*pb.VideotResp
 	for _,video := range videoList {
 		videoResp := pb.VideotResp{}
 		videoResp.Id = video.Id

@@ -9,11 +9,7 @@ import (
 
 var DB *gorm.DB
 
-func CreateConnection() (*gorm.DB, error) {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-
+func GetDbByHost(user string, password string, host string,)  (*gorm.DB, error){
 	var mysql = fmt.Sprintf(
 		"%s:%s@tcp(%s:3306)/shop?charset=utf8mb4&parseTime=True&loc=Local",
 		user, password, host,
@@ -28,6 +24,13 @@ func CreateConnection() (*gorm.DB, error) {
 	DB.DB().SetMaxOpenConns(100)
 	return DB, nil
 }
+
+func CreateConnection() (*gorm.DB, error) {
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	return GetDbByHost(user, password, host)
+}
 //
 //func ConnectDB(mysql string, logLevel string) {
 //	var err error
@@ -37,7 +40,7 @@ func CreateConnection() (*gorm.DB, error) {
 //	//	logger.Fatal("auto migrate tables failed: " + err.Error())
 //	//}
 //	if nil != err {
-//		logger.Fatalf("opens database failed: " + err.Error())
+//		logger.Fatalf("opens client failed: " + err.Error())
 //	}
 //	if logLevel == "dev" {
 //		DB.LogMode(true)
@@ -51,6 +54,6 @@ func CreateConnection() (*gorm.DB, error) {
 //
 //func DisconnectDB() {
 //	if err := DB.Close(); nil != err {
-//		logger.Errorf("Disconnect from database failed: " + err.Error())
+//		logger.Errorf("Disconnect from client failed: " + err.Error())
 //	}
 //}

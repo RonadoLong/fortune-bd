@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"shop-micro/service/home-service/model"
+
+	"shop-micro/service/home-service/proto"
 )
 
-func (repo * HomeRepository) FindHomeNavList() ([]model.HomeNav, error) {
-	var homeNavList []model.HomeNav
+func (repo * HomeRepository) FindHomeNavList() ([]*shop_srv_home.HomeNav, error) {
+	var homeNavList []*shop_srv_home.HomeNav
 	err := repo.DB.Table("home_nav").
 		Where("`status` = 1").
 		Order("`sort` desc").
@@ -17,8 +18,8 @@ func (repo * HomeRepository) FindHomeNavList() ([]model.HomeNav, error) {
 	return homeNavList, nil
 }
 
-func (repo * HomeRepository) FindHomeCarouselList() ([]model.HomeCarousel,error){
-	var homeCarousel []model.HomeCarousel
+func (repo * HomeRepository) FindHomeCarouselList() ([]*shop_srv_home.HomeCourse,error){
+	var homeCarousel []*shop_srv_home.HomeCourse
 	err := repo.DB.Table("home_carousel").
 		Where("`status` = 1").
 		Order("`sort` desc").
