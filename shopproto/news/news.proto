@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package shop.srv.info;
+package shop.srv.shopproto;
 
 message News {
     int64 id = 1;
@@ -16,4 +16,9 @@ message News {
     int32 isRecommend = 11;
     string content = 12;
     string createTime = 13;
+}
+
+message NewsCategory {
+    int32 id = 1;
+    string title = 3;
 }

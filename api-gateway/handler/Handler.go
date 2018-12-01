@@ -63,26 +63,26 @@ func ClientEngine() *gin.Engine {
 	//homeGroup.GET("/list", home.HomeRest.FindHomeList)
 
 	/** news logic  */
-	//news := api.Group("/news")
-	//news.GET("/nav/list", News.NewsRest.FindNewSNavList)
-	//news.GET("/list/:category/:pageNum/:pageSize", News.NewsRest.FindNewsList)
-	//news.GET("/homeList/:pageNum/:pageSize", News.NewsRest.FindNewsAllList)
+	news := api.Group("/news")
+	news.GET("/category/list", GetNewsCategoryList)
+	news.GET("/list/:category/:pageNum/:pageSize", GetNewsList)
+	news.GET("/homeList/:pageNum/:pageSize", GetNewsList)
 	//news.GET("/detail/:newsId", News.NewsRest.FindNewsDetail)
 	//news.GET("/like/:newsId", News.NewsRest.AddLikeById)
 
 	/** video logic  */
 	video := api.Group("/video")
 	video.GET("/list/:category/:pageNum/:pageSize", FindVideoList)
-	//video.GET("/homeList/:pageNum/:pageSize", News.VideoRest.FindVideoAllList)
+	video.GET("/homeList/:pageNum/:pageSize", FindVideoList)
 	//video.GET("/detail/:videoId", News.VideoRest.FindVideoDetail)
-	//video.GET("categoryList", News.VideoRest.FindCategoryList)
+	video.GET("categoryList", FindVideoCategoryList)
 
-	/** goods logic  */
-	//goods := api.Group("/goods")
-	//goods.GET("/nav/list", FindGoodsNavList)
-	//goods.GET("/list/:category/:pageNum/:pageSize", FindGoodsList)
-	//goods.GET("/homeList/:pageNum/:pageSize", Goods.GoodsRest.FindGoodsAllList)
-	//goods.GET("/detail/:goodsId", Goods.GoodsRest.FindGoodsDetail)
+	/** product logic  */
+	//product := api.Group("/product")
+	//product.GET("/nav/list", FindGoodsNavList)
+	//product.GET("/list/:category/:pageNum/:pageSize", FindGoodsList)
+	//product.GET("/homeList/:pageNum/:pageSize", Goods.GoodsRest.FindGoodsAllList)
+	//product.GET("/detail/:goodsId", Goods.GoodsRest.FindGoodsDetail)
 
 	/** cart logic */
 	//cart := api.Group("/cart")

@@ -1,41 +1,34 @@
 syntax = "proto3";
 
-package shop.srv.info;
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.sizer_all) = true;
-option (gogoproto.unmarshaler_all) = true;
-option (gogoproto.goproto_enum_prefix_all) = false;
+package shop.srv.shopproto;
 
-service Video {
-	rpc GetVideoList(VideoListReq) returns (VideoListResp) {}
+message Video {
+    int64 id = 1;
+    string title = 2;
+    string thumbUrl = 3;
+    string avatar = 4;
+    string author = 5;
+    string duration = 6;
+    string readCount = 7;
+    string commentCount = 8;
+    int32 likeCount = 9;
+    string category = 10;
+    int32 viewType = 11;
+    int32 isRecommend = 12;
+    string content = 13;
+    string tags = 14;
+    string videoDesc = 15;
+    VideoPusherInfo pusherInfo = 16;
 }
 
-
-message VideoListReq {
-	string category = 1;
-	int32 pageNum = 2;
-	int32 pageSize = 3;
+message VideoCategory {
+    int32 id = 1;
+    string title = 3;
 }
 
-message VideotResp {
-	int64 id = 1;
-	string title = 2;
-	string thumbUrl = 3;
-	string avatar = 4;
-	string author = 5;
-	string duration = 6;
-	string readCount = 7;
-	string commentCount = 8;
-	int32 likeCount = 9;
-	string category = 10;
-	int32 viewType = 11;
-	int32 isRecommend = 12;
-	string content = 13;
-	string tags = 14;
-	string videoDesc = 15;
-}
-
-message VideoListResp {
-	repeated VideotResp videoResp = 1;
+message VideoPusherInfo {
+    string name = 1;
+    string avatar = 2;
+    string info = 3;
+    string url = 4;
 }

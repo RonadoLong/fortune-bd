@@ -5,11 +5,12 @@ GOPATH:=$(shell go env GOPATH)
 
 
 proto:
-	protoc --proto_path=${GOPATH}/src:. --micro_out=. --gofast_out=. proto/*.proto
+	find shopproto -name "*.proto" | xargs -t -I{} protoc -I.:${GOPATH}/src --gofast_out=plugins=micro:. {}
+#	protoc --proto_path=${GOPATH}/src:. --micro_out=. --gofast_out=. proto/*.proto
 
 build:
 	cd service/home-service && make build
-	cd service/video-service && make build
+	cd service/info-service && make build
 	cd api-gateway && make build
 
 test:

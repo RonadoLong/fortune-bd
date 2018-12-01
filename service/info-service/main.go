@@ -2,18 +2,23 @@ package main
 
 import (
 	"shop-micro/commonUtils"
-	"shop-micro/service/news-service/config"
-	"shop-micro/service/news-service/handler"
-	_ "shop-micro/service/news-service/subscriber"
+	"shop-micro/hystrix"
+	"shop-micro/service/info-service/config"
+	"shop-micro/service/info-service/handler"
+	_ "shop-micro/service/info-service/subscriber"
 	"time"
 
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
-	pb "shop-micro/service/news-service/proto"
+	pb "shop-micro/service/info-service/proto"
 )
 
 func main() {
 
+	hystrix.Configure([]string{
+		config.SRV_NAME + "infoHandler.GetCategoryList",
+		config.SRV_NAME + "infoHandler.GetVideoList",
+	})
 	// New Service
 	service := micro.NewService(
 		micro.Name(config.SRV_NAME),
@@ -21,6 +26,7 @@ func main() {
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*15),
 		micro.WrapHandler(logWrapper),
+		micro.WrapClient(hystrix.NewClientWrapper()),
 	)
 
 	// Initialise service
@@ -31,11 +37,11 @@ func main() {
 		log.Fatalf("connect db err %v", err)
 	}
 
-	repo := &handler.VideoRepository{DB: db}
-	videoService := handler.VideoService{Repo: repo}
+	repo := &handler.InfoRepository{DB: db}
+	infoHandler := handler.InfoHandler{Repo: repo}
 
 	// Register Handler
-	pb.RegisterVideoHandler(service.Server(), &videoService)
+	_ = pb.RegisterInfoHandler(service.Server(), &infoHandler)
 
 	//// Register Struct as Subscriber
 	//micro.RegisterSubscriber("shop.srv.video", service.Server(), new(subscriber.Example))

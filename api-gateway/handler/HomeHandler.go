@@ -6,8 +6,10 @@ import (
 	home "shop-micro/service/home-service/client"
 )
 
+var (
+	homeClient = home.NewHomeClient()
+)
 func FindHomeHeadList(c *gin.Context) {
-	homeClient := home.NewHomeClient()
 	resp, err := homeClient.FindHomeHeadList(c)
 	if err != nil {
 		log.Printf("home err %v",err)

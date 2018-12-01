@@ -1,26 +1,22 @@
 syntax = "proto3";
 
-package starme.media.smproto;
+package shop.srv.shopproto;
 
 // StarMaker 用户信息
 message UserInfo {
-    uint64 uid = 1;
-    uint64 score = 2; //分数，用于排序
-    repeated int32 roles = 3; //权限
-    string nick = 4; //名称
-    bool is_verified = 5; //是否是签约歌手
-    string profile_image = 6;
-    bool is_vip = 7;
-    int32 vip_level = 8;
-    int32 level = 9;
-    int32 enter_effect_level = 10; //入场动效
-    string vip_type = 11;
-    string extra = 12;
+    string userId = 1;
+    string nickname = 2;
+    string realName = 3;
+    string sex = 4;
+    string avatar = 5;
+    string remark = 6;
+    string isRecommend = 7;
+    string recommendCode = 8;
+    int64 duration = 9;
+    int32 integral = 10;
+    int32 commission = 11;
+    string status = 12;
+    bool isBindWx = 13;
+    bool isBindPhone = 14;
 }
 
-// 最小 StarMaker 用户信息
-// 不要添加无关紧要的字段
-message SimpleUserInfo {
-    uint64 uid = 1;
-    string nick = 2;
-}

@@ -1,5 +1,5 @@
 package config
 
 const (
-	SRV_NAME = "shop.srv.video"
+	SRV_NAME = "shop.srv.info"
 )
