@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package shopMicro.shopproto;
+
+message Goods {
+    int64 productId = 1;
+    int64 merchantId = 2;
+    string  code = 3;
+    int32 categoryId = 4;
+    string title = 5;
+    string sellPoint = 6;
+    int32 postage = 7;
+    string    `json:"goods_images"`
+    int       `json:"memberPrice"`
+    int       `json:"price"`
+    int       `json:"soldCount"`
+    int       `json:"stock"`
+    int       `json:"buyMax"`
+    int       `json:"commission"`
+    int       `json:"integral"`
+    int       `json:"status"`
+    timeStamep `json:"createTime"`
+}

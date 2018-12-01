@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package shop.srv.info;
+
+message News {
+    int64 id = 1;
+    string title = 2;
+    string thumbUrl = 3;
+    string author = 4;
+    string avatar = 5;
+    int32 readCount = 6;
+    int32 commentCount = 7;
+    int32 likeCount = 8;
+    string category = 9;
+    int32 viewType = 10;
+    int32 isRecommend = 11;
+    string content = 12;
+    string createTime = 13;
+}

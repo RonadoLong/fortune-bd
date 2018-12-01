@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 package shop.srv.home;
+import "shop-micro/shopproto/news/news.proto";
+import "shop-micro/shopproto/product/product.proto";
 
 service HomeService {
     rpc FindHomeHeaders (HomeHeaderReq) returns (HomeHeadersResp) {}
@@ -37,4 +39,6 @@ message HomeContentsReq {
 }
 
 message HomeContentsResp {
+    repeated shopproto.Product HomeGoodsList = 1;
+    repeated shopproto.News HomeNewsList = 2;
 }

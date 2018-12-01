@@ -2,14 +2,14 @@ package main
 
 import (
 	"shop-micro/commonUtils"
-	"shop-micro/service/video-service/config"
-	"shop-micro/service/video-service/handler"
-	_ "shop-micro/service/video-service/subscriber"
+	"shop-micro/service/news-service/config"
+	"shop-micro/service/news-service/handler"
+	_ "shop-micro/service/news-service/subscriber"
 	"time"
 
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
-	pb "shop-micro/service/video-service/proto"
+	pb "shop-micro/service/news-service/proto"
 )
 
 func main() {

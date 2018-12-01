@@ -4,7 +4,7 @@ package subscriber
 //	"context"
 //	"github.com/micro/go-log"
 //
-//	example "shop-micro/service/video-service/proto/video"
+//	example "shop-micro/service/news-service/proto/video"
 //)
 //
 //type Example struct{}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package starme.media.smproto;
+
+// StarMaker 用户信息
+message UserInfo {
+    uint64 uid = 1;
+    uint64 score = 2; //分数，用于排序
+    repeated int32 roles = 3; //权限
+    string nick = 4; //名称
+    bool is_verified = 5; //是否是签约歌手
+    string profile_image = 6;
+    bool is_vip = 7;
+    int32 vip_level = 8;
+    int32 level = 9;
+    int32 enter_effect_level = 10; //入场动效
+    string vip_type = 11;
+    string extra = 12;
+}
+
+// 最小 StarMaker 用户信息
+// 不要添加无关紧要的字段
+message SimpleUserInfo {
+    uint64 uid = 1;
+    string nick = 2;
+}

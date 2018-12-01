@@ -5,8 +5,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/json-iterator/go"
 	"shop-micro/commonUtils"
-	"shop-micro/service/video-service/model"
-	pb "shop-micro/service/video-service/proto"
+	"shop-micro/service/news-service/model"
+	pb "shop-micro/service/news-service/proto"
 )
 
 type VideoRepository struct {
