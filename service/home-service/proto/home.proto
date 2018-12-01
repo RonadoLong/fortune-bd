@@ -22,16 +22,16 @@ message HomeNav {
 }
 
 message HomeCourse {
-    int64 Id = 1;
-    string Title = 2;
-    string EnTitle = 3;
-    string ImgUrl = 4;
-    string Url = 5;
+    int64 id = 1;
+    string title = 2;
+    string enTitle = 3;
+    string imgUrl = 4;
+    string url = 5;
 }
 
 message HomeHeadersResp {
     repeated HomeNav homeNavList = 1;
-    repeated HomeCourse HomeCourseList = 2;
+    repeated HomeCourse homeCourseList = 2;
 }
 
 message HomeContentsReq {
