@@ -4,6 +4,9 @@
  * [配套基于React-native开发Android、iOS](https://github.com/TorettoLong/mall-app)
  * 基于Vue和Springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
  * 为了方便暂时gateway 先只是聚合接口 后续拓展
+
+## 简易架构图
+![](./images/micro.jpg)
  
 ## 功能点
   * 使用rabbitmq中间件, 实现延迟队列
