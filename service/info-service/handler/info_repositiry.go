@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/json-iterator/go"
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	pb "shop-micro/service/info-service/proto"
 	"shop-micro/shopproto/video"
 )
@@ -44,7 +44,7 @@ func (info *InfoRepository) FindVideosList(req *pb.InfoListReq) ([]*shop_srv_sho
 		return nil, err
 	}
 
-	offset, pageSize := commonUtils.GeneratorPage(int(req.PageNum), int(req.PageSize))
+	offset, pageSize := helper.GeneratorPage(int(req.PageNum), int(req.PageSize))
 	if offset >= total {
 		return nil, errors.New("offset > total")
 	}
@@ -117,7 +117,7 @@ func (info *InfoRepository) GetNewsList(req *pb.InfoListReq, resp *pb.NewsListRe
 		return errors.New("no more content")
 	}
 
-	offset, pageSize := commonUtils.GeneratorPage(int(req.PageNum), int(req.PageSize))
+	offset, pageSize := helper.GeneratorPage(int(req.PageNum), int(req.PageSize))
 	if offset >= total {
 		return errors.New("offset > total")
 	}

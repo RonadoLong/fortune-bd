@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro/client"
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	"shop-micro/service/info-service/config"
 	pb "shop-micro/service/info-service/proto"
 )
@@ -28,7 +28,7 @@ func (c *InfoClient) GetCategoryList(ctx context.Context) (interface{}, error) {
 
 func (c *InfoClient) GetVideoList(ctx *gin.Context) (interface{}, error){
 	category := ctx.Param("category")
-	offset, pageSize := commonUtils.GetOffset(ctx)
+	offset, pageSize := helper.GetOffset(ctx)
 
 	req := &pb.InfoListReq{
 		PageNum: int32(offset),
@@ -44,7 +44,7 @@ func (c *InfoClient) GetNewsCategoryList(ctx context.Context) (interface{}, erro
 
 func (c *InfoClient) GetNewsList(ctx *gin.Context) (interface{}, error){
 	category := ctx.Param("category")
-	offset, pageSize := commonUtils.GetOffset(ctx)
+	offset, pageSize := helper.GetOffset(ctx)
 
 	req := &pb.InfoListReq{
 		PageNum: int32(offset),

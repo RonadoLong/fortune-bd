@@ -1,7 +1,7 @@
 package main
 
 import (
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	"shop-micro/hystrix"
 	"shop-micro/service/info-service/config"
 	"shop-micro/service/info-service/handler"
@@ -32,7 +32,7 @@ func main() {
 	// Initialise service
 	service.Init()
 
-	db, err := commonUtils.CreateConnection()
+	db, err := helper.CreateConnection()
 	if err != nil {
 		log.Fatalf("connect db err %v", err)
 	}

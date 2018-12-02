@@ -2,6 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"shop-micro/helper"
+	"time"
 )
 
 func ClientEngine() *gin.Engine {
@@ -9,43 +11,45 @@ func ClientEngine() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	//
-	//AuthMiddleware := &jwt.GinJWTMiddleware{
-	//	PubKeyFile:  "resource/pub_key.pem",
-	//	PrivKeyFile: "resource/pri_key.pem",
-	//	Realm:       "test zone",
-	//	Key:         []byte("secret key"),
-	//	Timeout:     time.Hour * 24 * 3000,
-	//	MaxRefresh:  time.Hour,
-	//	Authenticator: func(loginParams interface{}, c *gin.Context) (*model.User, bool) {
-	//		return controller.UserRest.Login(loginParams, c)
-	//	},
-	//	Authorizator: func(userId string, c *gin.Context) bool {
-	//		return true
-	//	},
-	//	Unauthorized: func(c *gin.Context, code int, message string) {
-	//		c.JSON(code, gin.H{
-	//			"code":    code,
-	//			"message": message,
-	//		})
-	//	},
-	//	TokenLookup:   "header:Authorization",
-	//	TokenHeadName: "Bearer",
-	//	TimeFunc:      time.Now,
-	//}
+
+	AuthMiddleware := &helper.GinJWTMiddleware{
+		Realm:            "test zone",
+		SigningAlgorithm: "",
+		Key:              []byte("secret key"),
+		Timeout:          time.Hour * 24 * 3000,
+		MaxRefresh:       time.Hour,
+		Authenticator:    Login,
+		Authorizator: func(userId string, c *gin.Context) bool {
+			return true
+		},
+		PayloadFunc: nil,
+		Unauthorized: func(c *gin.Context, code int, message string) {
+			c.JSON(code, gin.H{
+				"code":    code,
+				"message": message,
+			})
+		},
+		IdentityHandler:       nil,
+		TokenLookup:           "header:Authorization",
+		TokenHeadName:         "Bearer",
+		TimeFunc:              time.Now,
+		HTTPStatusMessageFunc: nil,
+		PrivKey:               helper.GetRsaPriKey(),
+		PubKey:                helper.GetRsaPublicKey(),
+	}
 
 	api := router.Group("/api/client")
 
 	/**  global interceptor */
-	//api.Use(AuthMiddleware.MiddlewareParseUser)
+	api.Use(AuthMiddleware.MiddlewareParseUser)
 
 	/**  user logic */
-	//userGroup := api.Group("/user")
-	//userGroup.POST("/login", AuthMiddleware.LoginHandler)
-	//userGroup.GET("/getCode/:phone", controller.UserRest.SendCode)
+	userGroup := api.Group("/user")
+	userGroup.POST("/login", AuthMiddleware.LoginHandler)
+	userGroup.GET("/getCode/:phone",GetPhoneCode)
 
-	//auth := userGroup.Group("/auth")
-	//auth.Use(AuthMiddleware.MiddlewareFunc())
+	auth := userGroup.Group("/auth")
+	auth.Use(AuthMiddleware.MiddlewareFunc())
 	//{
 	//	auth.POST("/update", controller.UserRest.UpdateUserInfo)
 	//	auth.GET("/userInfo", controller.UserRest.GetUserInfo)

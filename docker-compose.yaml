@@ -20,6 +20,22 @@ services:
       - mysql
       - consul
 
+  user-service:
+    build: service/user-service
+    command: --registry_address=consul:8500
+    ports:
+      - 50004:50051
+    environment:
+      NET: "host"
+      DB_NAME: "mysql"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
+      DB_USER: "root"
+      DB_PASSWORD: "123456"
+    depends_on:
+      - mysql
+      - consul
+
   home-service:
     build: ./service/home-service
     command: --registry_address=consul:8500

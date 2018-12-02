@@ -2,13 +2,13 @@ package handler
 
 import (
 	"fmt"
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	"shop-micro/service/info-service/proto"
 	"testing"
 )
 
 func TestInfoRepository(t *testing.T) {
-	db, err := commonUtils.GetDbByHost("root", "123456", "0.0.0.0")
+	db, err := helper.GetDbByHost("root", "123456", "0.0.0.0")
 	if err != nil {
 		fmt.Printf("connect db error %v \n", err.Error())
 		return

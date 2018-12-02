@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/micro/go-micro"
 	"log"
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	"shop-micro/hystrix"
 	"shop-micro/service/home-service/config"
 	"shop-micro/service/home-service/handler"
@@ -27,8 +27,8 @@ func main() {
 		micro.WrapClient(hystrix.NewClientWrapper()),
 	)
 
-	redisPool := commonUtils.CreateRedisPool()
-	db, err := commonUtils.CreateConnection()
+	redisPool := helper.CreateRedisPool()
+	db, err := helper.CreateConnection()
 	if err != nil {
 		log.Printf("connect db error %v", err.Error())
 		return
@@ -47,12 +47,6 @@ func main() {
 
 	// Register Handler
 	_ = pb.RegisterHomeServiceHandler(service.Server(), homeHandler)
-	//
-	//// Register Struct as Subscriber
-	//micro.RegisterSubscriber("shop.srv.home-service", service.Server(), new(subscriber.Example))
-	//
-	//// Register Function as Subscriber
-	//micro.RegisterSubscriber("shop.srv.home-service", service.Server(), subscriber.Handler)
 
 	// Run service
 	if err := service.Run(); err != nil {

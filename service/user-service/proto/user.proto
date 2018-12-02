@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package shop.srv.user;
+
+service User {
+    rpc Login (LoginReq) returns (UserResp) {
+    }
+    rpc GetCode (PhoneCodeReq) returns (PhoneCodeResp) {
+    }
+}
+
+message LoginReq {
+    string username = 1;
+    string password = 2;
+    string unionId = 3;
+    string type = 4; /** wechat  2 facebook 3 phone*/
+    string sex = 5;
+    string nickname = 6;
+    string birthday = 7;
+    string verifyCode = 8;
+    string phone = 9;
+    string recommendCode = 10;
+    string avatar = 11;
+    string hometown = 12;
+}
+
+message UserResp {
+    string userId = 1;
+    string nickname = 2;
+    string realName = 3;
+    string sex = 4;
+    string birth = 5;
+    string avatar = 6;
+    string hometown = 7;
+    string remark = 8;
+    string loginTime = 9;
+}
+
+message PhoneCodeReq {
+    string phone = 1;
+}
+
+message PhoneCodeResp {
+}

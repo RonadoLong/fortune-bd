@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"github.com/jinzhu/gorm"
-	"shop-micro/commonUtils"
+	"shop-micro/helper"
 	pb "shop-micro/service/home-service/proto"
 	"shop-web/common/cost"
 	"strings"
@@ -57,12 +57,12 @@ func (repo *HomeRepository) FindHomeNav(req *pb.HomeHeaderReq, resp *pb.HomeHead
 		resp.HomeNavList = navList
 		resp.HomeCourseList = carousels
 
-		bytes, _ := commonUtils.MarshalToByte(resp)
+		bytes, _ := helper.MarshalToByte(resp)
 		_, _ = redisConn.Do("set", HomeHeaderKey, bytes)
 
 	} else {
 		reply, _ := redisConn.Do("get", HomeHeaderKey)
-		_ = commonUtils.UnMarshal(resp, reply.([]byte))
+		_ = helper.UnMarshal(resp, reply.([]byte))
 	}
 	return nil
 }
