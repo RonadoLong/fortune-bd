@@ -1,5 +1,5 @@
 ## mall-micro 基于单体应用重构更新中...
-## 申明: 个人作品 仅供学习
+## 申明: 个人作品，写的不好的地方望交流谢谢
  * 基于go-micro微服务实战，涉及视频资讯，电商支付，广告发布等需求
  * [配套基于React-native开发Android、iOS](https://github.com/TorettoLong/mall-app)
  * 基于Vue和Springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
