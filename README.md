@@ -3,7 +3,7 @@
  * 基于go-micro微服务实战，涉及视频资讯，电商支付，广告发布等需求
  * [配套基于React-native开发Android、iOS](https://github.com/TorettoLong/mall-app)
  * 基于Vue和Springboot构建的后台管理系统 [前端代码](https://github.com/TorettoLong/mall-admin) [API代码](https://github.com/TorettoLong/mall-admin-java)
- * 为了方便暂时gateway 先只是聚合接口 后续拓展
+ * 为了方便暂时gateway 先只是聚合接口
 
 ## 简易架构图
 ![](./images/micro.jpg)
