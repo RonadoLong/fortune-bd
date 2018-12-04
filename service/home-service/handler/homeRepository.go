@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"shop-micro/helper"
 	pb "shop-micro/service/home-service/proto"
-	"shop-web/common/cost"
 	"strings"
 )
 
@@ -39,7 +38,7 @@ func (repo *HomeRepository) FindHomeNav(req *pb.HomeHeaderReq, resp *pb.HomeHead
 
 		for idx := range navList {
 			if strings.Index(navList[idx].ImgUrl, "http") == -1 {
-				navList[idx].ImgUrl = cost.Img_prefix + navList[idx].ImgUrl
+				navList[idx].ImgUrl = helper.Img_prefix + navList[idx].ImgUrl
 			}
 		}
 
@@ -50,7 +49,7 @@ func (repo *HomeRepository) FindHomeNav(req *pb.HomeHeaderReq, resp *pb.HomeHead
 		}
 		for idx := range navList {
 			if strings.Index(carousels[idx].ImgUrl, "http") == -1 {
-				carousels[idx].ImgUrl = cost.Img_prefix + carousels[idx].ImgUrl
+				carousels[idx].ImgUrl = helper.Img_prefix + carousels[idx].ImgUrl
 			}
 		}
 
