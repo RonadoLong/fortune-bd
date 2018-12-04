@@ -16,15 +16,17 @@ func NewUserHandler() (*UserHandler, error) {
 		return nil, err
 	}
 	repository := &userRepository{DB:db}
-	handler := &UserHandler{repository}
+	handler := &UserHandler{
+		repo:repository,
+	}
 	return handler, nil
 }
 
 func (u *UserHandler) Login(c context.Context, req *shop_srv_user.LoginReq, resp *shop_srv_user.UserResp) error {
-	err := u.repo.login(req, resp)
-	if err != nil {
-
+	if err := u.repo.login(req, resp); err != nil{
+		return err
 	}
+
 	return nil
 }
 

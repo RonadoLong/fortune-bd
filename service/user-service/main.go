@@ -17,6 +17,7 @@ func main() {
 		log.Printf("NewUserHandler err %v", err)
 		return
 	}
+
 	userService := micro.NewService(
 		micro.Name(SRV_NAME),
 		micro.Version("latest"),

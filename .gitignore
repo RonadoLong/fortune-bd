@@ -1,5 +1,6 @@
-api-gateway
-home-service
-info-service
+api-gateway/api-gateway
+service/home-service/home-service
+service/info-service/info-service
+service/user-service/user-service
 
 .idea/*

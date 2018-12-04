@@ -18,7 +18,7 @@ type userRepository struct {
 func (repository *userRepository) login(req *shop_srv_user.LoginReq, resp *shop_srv_user.UserResp) error {
 
 	if req.Type == WECHAT || req.Type == FACEBOOK {
-
+		
 	} else if req.Type == PHONE {
 
 	}
