@@ -6,6 +6,7 @@ import (
 	"shop-micro/service/user-service/handler"
 	"shop-micro/service/user-service/proto"
 	"time"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const SRV_NAME = "shop.srv.user"
