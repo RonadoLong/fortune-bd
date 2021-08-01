@@ -1,11 +1,8 @@
 def registryHost = ""
 def tagName = ""
-def gocmd = env.GO
 def targetPath = ""
-def configPath = "--configPath=conf.yaml"
 pipeline {
     agent any
-
     stages  {
         stage("检查构建分支") {
             steps {
@@ -17,19 +14,10 @@ pipeline {
                     } else {
                         targetPath = "$WORKSPACE/service/$APP_NAME"
                     }
-
-                    try{
-                    	sh "$gocmd mod init wq-fotune-backend"
-                    } catch(Exception e) {
-                    		println e
-                    }
-                    sh "$gocmd mod tidy"
-                    sh "$gocmd mod vendor"
                     if (env.GIT_BRANCH ==~ /^v([0-9])+\.([0-9])+\.([0-9])+.*/)  {
                         echo "构建正式环境，tag=${env.GIT_BRANCH}"
                         tagName = env.GIT_BRANCH
                         registryHost = env.PRO_REGISTRY_HOST
-                        configPath = "--configPath=confPro.yaml"
                     } else if (env.GIT_BRANCH ==~ /^release-([0-9])+\.([0-9])+\.([0-9])+.*/) {
                         echo "构建预生产环境，tag=${env.GIT_BRANCH}"
                         tagName = env.GIT_BRANCH
