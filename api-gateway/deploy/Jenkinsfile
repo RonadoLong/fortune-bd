@@ -3,9 +3,9 @@ pipeline{
           label 'agent-linux-01'
     }
     // 允许颜色输出
-    options {
-      ansiColor('xterm')
-    }
+//     options {
+//       ansiColor('xterm')
+//     }
     environment{
         HARBOR_HOST= '192.168.3.30'
         K8S_NAMESPACE='develop'
@@ -57,16 +57,32 @@ pipeline{
         }
     }
     post {
-        failure {
-//             emailext (
-//                 subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-//                 body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-//                     <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
-//                 to: "chenbin@flyele.net,wuzizhou@flyele.net",
-//                 from: "flyele@flyele.net"
-//             )
-        }
-    }
+    		always {
+    			echo 'One way or another, I have finished'
+    			echo sh(returnStdout: true, script: 'env')
+    			deleteDir() /* clean up our workspace */
+    		}
+    		success {
+//     			SendDingding("success")
+    			echo 'structure success'
+    		}
+    		failure {
+//     			SendDingding("failure")
+    			echo 'structure failure'
+    		}
+    		unsuccessful {
+    			//SendDingding("unsuccessful")
+    			echo 'structure unsuccessful'
+    		}
+    		aborted {
+    			//SendDingding("aborted")
+    			echo 'structure aborted'
+    		}
+    		unstable {
+    			//SendDingding("unstable")
+    			echo 'structure unstable'
+    		}
+       }
 }
 
 
