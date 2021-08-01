@@ -163,7 +163,7 @@ metadata:
     nginx.org/websocket-services: api-gateway-svc
 spec:
   rules:
-    - host: yum.mateforce.cn
+    - host: yun.mateforce.cn
       http:
         paths:
           - path: /
