@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY ./go.mod ./
 COPY ./go.sum ./
 COPY . .
-RUN CGO_ENABLED=0  go build -o server ./cmd
+RUN CGO_ENABLED=0  go build -o server ./api-gateway
 
 FROM alpine:3.12 as runner
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /etc/localtime

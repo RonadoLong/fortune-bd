@@ -5,7 +5,7 @@ DOCKER_IMAGE=api-gateway
 
 echo ${APP_VERSION}
 docker ps
-docker login -u admin -p QQabc123++ ${HARBOR_HOST}
+docker login -u admin -p QQabc123++ ${HARBOR_HOST} --password-stdin.
 docker build -t ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f ./Dockerfile .
 docker push ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION}
 docker rmi ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f
