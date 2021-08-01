@@ -75,9 +75,9 @@ spec:
   ports:
   - name: http
     nodePort: 31414
-    port: 8080
+    port: 9530
     protocol: TCP
-    targetPort: 8080
+    targetPort: 9530
   - name: health
     nodePort: 30508
     port: 5000
