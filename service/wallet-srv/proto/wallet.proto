@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+option go_package = ".;fotune_srv_wallet";
+import "google/protobuf/empty.proto";
+import public "google/protobuf/timestamp.proto";
+
+service WalletService {
+  rpc CreateWallet(uidReq) returns (google.protobuf.Empty) {
+  }
+  rpc Transfer(transferReq) returns (google.protobuf.Empty) {
+  }
+  rpc GetWalletIFC(uidReq) returns (walletBalanceResp) {
+  }
+  rpc GetWalletUSDT(uidReq) returns (walletBalanceResp) {
+  }
+  rpc GetUsdtDepositAddr(uidReq) returns (usdtDepositAddrResp) {
+  }
+  rpc ConvertCoinTips(convertCoinTipsReq) returns (convertCoinTipsResp) {}
+  rpc ConvertCoin(convertCoinReq) returns(convertCoinResp) {}
+  rpc Withdrawal(withdrawalReq) returns (google.protobuf.Empty) {}
+  rpc AddIfcBalance(AddIfcBalanceReq) returns (google.protobuf.Empty) {}
+  rpc GetTotalRebate(GetTotalRebateReq) returns(GetTotalRebateResp) {}
+  rpc StrategyRunNotify(StrategyRunNotifyReq) returns(google.protobuf.Empty) {}
+}
+
+message StrategyRunNotifyReq {
+  string user_id = 1;
+}
+
+message GetTotalRebateReq {
+  string user_id = 1;
+}
+message ifcRecord {
+  string phone = 1;
+  string volume = 2;
+  string type_msg = 3;
+  string date = 4;
+}
+
+message GetTotalRebateResp {
+  string total = 1;
+  repeated ifcRecord record = 2;
+}
+
+message AddIfcBalanceReq {
+  string user_master_id = 1;
+  string in_user_id = 2;
+  double volume = 3;
+  string type = 4;
+  string exchange = 5;
+}
+
+message withdrawalReq {
+  string user_id = 1;
+  string coin = 2;
+  string address = 3;
+  double volume = 4;
+}
+
+message convertCoinTipsReq {
+  string from = 1;
+  string to = 2;
+  string user_id = 3;
+}
+message convertCoinTipsResp {
+  string describe = 1;
+}
+message convertCoinReq {
+  string from = 1;
+  string to = 2;
+  double volume = 3;
+  string user_id = 4;
+}
+message convertCoinResp {
+  string describe = 1;
+  double volume = 2;
+}
+
+message usdtDepositAddrResp {
+  string address = 1;
+}
+
+message uidReq {
+  string user_id = 1;
+}
+
+message transferReq {
+  string userId = 1;
+  string fromCoin = 2;
+  string toCoin = 3;
+  double fromCoinAmount = 4;
+}
+
+message walletBalanceResp {
+  string title = 1;
+  string symbol = 2;
+  string total = 3;
+  string available = 4;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+option go_package = ".;fotune_srv_exchange";
+import "google/protobuf/empty.proto";
+
+service ForwardOffer {
+    rpc PushSwapOrder (TradeSignal) returns (google.protobuf.Empty) {
+    }
+}
+
+//UID       string      `json:"uid"`       // 用户id
+//FileID    string      `json:"fileID"`    // 策略文件id
+//SharedID  string      `json:"sharedID"`  // 共享id
+//TradeType int         `json:"tradeType"` // 交易信号类型，0:普通下单，2:挂单
+//Orders    interface{} // 订单内容
+message TradeSignal {
+    string uid = 1;
+    string fileID = 2;
+    string sharedID = 3;
+    int32 tradeType = 4;
+    OrdinaryOrder orders = 5;
+}
+
+message OrdinaryOrder {
+    string side = 1;
+    string ordType = 2;
+    int32 orderQty = 3;
+    string orderID = 4;
+    int32 delayerTime = 5;
+    int32 tryCount = 6;
+    string exchange = 7;
+    string symbol = 8;
+    double price = 9;
+    double slipPrice = 10;
+    string tradingQtyCoefficient = 11;
+}

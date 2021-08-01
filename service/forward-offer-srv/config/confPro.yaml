@@ -1,0 +1,11 @@
+runtimeMode: pro
+
+mysql:
+  host: lujunhong:WQ1qaz!QAZ@tcp(rm-j6cwo247566oy5yj290130.mysql.rds.aliyuncs.com:3306)/wq_fotune?charset=utf8mb4&parseTime=True&loc=Local
+
+redis:
+  host: r-j6ckgivq6l0a96hf8m.redis.rds.aliyuncs.com:6379
+  password: WQ1qaz!QAZ
+
+etcd:
+  addr: 172.28.119.46:2379

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = ".;fotune_srv_quote";
+import "google/protobuf/empty.proto";
+import public "google/protobuf/timestamp.proto";
+import public "google/protobuf/any.proto";
+
+
+service QuoteService {
+  rpc GetTicksWithExchange (GetTicksReq) returns (TickResp) {
+  }
+  rpc GetTicksWithExchangeSymbol (GetTicksSymbolReq) returns (TickResp) {
+  }
+  rpc StreamOkexTicks (GetTicksReq) returns (stream TickResp) {
+  }
+  rpc GetRate(google.protobuf.Empty) returns (RateUsdRmb) {
+  }
+}
+
+message GetTicksSymbolReq {
+  string symbol = 1;
+  string exchange = 2;
+}
+
+message GetTicksReq {
+  bool all = 1;
+  string exchange = 2;
+}
+
+message TickResp {
+  bytes ticks = 1;
+}
+
+message RateUsdRmb {
+  string InstrumentID = 1;
+  string Rate = 2;
+  string Timestamp = 3;
+}

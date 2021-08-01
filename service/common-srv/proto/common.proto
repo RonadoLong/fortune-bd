@@ -1,0 +1,78 @@
+syntax = "proto3";
+option go_package = ".;fotune_srv_common";
+import "google/protobuf/empty.proto";
+
+service Common {
+  rpc Carousel (google.protobuf.Empty) returns (CarouselList) {
+  }
+  rpc CustomerService (google.protobuf.Empty) returns (ContractAddr) {
+  }
+  rpc GetAppVersion (VersionReq) returns (AppVersion) {
+  }
+  rpc GetUserRateRank(google.protobuf.Empty) returns (UserRateRankResp) {
+  }
+  rpc GetUserRateYearRank(google.protobuf.Empty) returns (UserRateRankResp) {
+  }
+  rpc PushProfitImageOss(PushImageReq) returns (ImageResp) {
+  }
+}
+
+message VersionReq {
+  string platform = 1;
+}
+
+message PushImageReq {
+  string imageBase64 = 1;
+}
+
+message ImageResp {
+  string imageUrl =1;
+}
+
+message UserRateRankResp {
+  bytes data =1;
+}
+
+message CarouselList {
+  bytes carousels = 1;
+}
+
+message ContractAddr {
+  string image = 1;
+  string content = 2;
+  string contact = 3;
+}
+
+message SharedGroups {
+  int64 id = 1;
+  string groupName = 2;
+  string totalCapitals = 3;
+  string capitalUnit = 4;
+  double distributeType = 5;
+  string leverageRatio = 6;
+  string total_return = 7;
+  string annual_return = 8;
+  string max_ddpercent = 9;
+  string calmar_ratio = 10;
+  string sharpe_ratio = 11;
+  repeated Strategies strategies = 12;
+}
+
+message Strategies {
+  int64 id = 1;
+  string strategyName = 2;
+  string distributeRatio = 3;
+  string exchange = 4;
+  string symbol = 5;
+}
+
+message AppVersion {
+  int32 id = 1;
+  bool hasUpdate = 2;
+  bool isIgnorable = 3;
+  int32 versionCode = 4;
+  string versionName = 5;
+  string updateLog = 6;
+  string apkUrl = 7;
+  string iosUrl = 8;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package rpcpb;
+
+service Demo {
+    rpc Hello (Req) returns (Response);
+}
+
+message Req {
+    string id = 1;
+}
+
+message Response {
+    string resp = 1;
+}

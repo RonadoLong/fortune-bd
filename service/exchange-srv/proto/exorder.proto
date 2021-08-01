@@ -1,0 +1,308 @@
+syntax = "proto3";
+option go_package = ".;fotune_srv_exchange";
+import "google/protobuf/empty.proto";
+import public "google/protobuf/timestamp.proto";
+
+
+service ExOrder {
+  rpc ExChangeInfo (google.protobuf.Empty) returns (ExChangeList) {
+  }
+  rpc AddExchangeApi (ExchangeApi) returns (google.protobuf.Empty) {
+  }
+  rpc GetExchangeApiList (GetExApiReq) returns (ExApiResp) {
+  }
+  rpc UpdateExchangeApi (UpdateExchangeApiReq) returns (google.protobuf.Empty) {
+  }
+  rpc DeleteExchangeApi (UserApiReq) returns (google.protobuf.Empty) {
+  }
+  rpc GetTradeList (GetTradeListReq) returns (TradeListResp) {
+  }
+  rpc GetProfitRealTime (profitReq) returns (ProfitRealTimeResp) {
+  }
+//  rpc GetUserStrategyList (GetStrategyReq) returns (UserStrategyListResp) {
+//  }
+//  rpc SetUserStrategyApi (SetUserStrategyApiReq) returns (google.protobuf.Empty) {
+//  }
+//  rpc GetUserStrategyDetail (UserStrategyDetailReq) returns (UserStrategy) {
+//  }
+//  rpc GetStrategyList (StrategyReq) returns (StrategyList) {
+//  }
+//  rpc SetUserStrategyBalance (SetUserStrategyBalanceReq) returns (google.protobuf.Empty) {
+//  }
+//  rpc GetStrategy (GetStrategyDetail) returns (Strategy) {
+//  }
+//  rpc CreateStrategy (CreateStrategyReq) returns (google.protobuf.Empty) {
+//  }
+  rpc Evaluation (tradeReq) returns (google.protobuf.Empty) {
+  }
+  rpc EvaluationSpot (orderReq) returns (google.protobuf.Empty) {
+  }
+  rpc GetExchangePos (GetExchangePosReq) returns (ExchangePosResp) {
+  }
+//  rpc RunUserStrategy (UserStrategyRunReq) returns (google.protobuf.Empty) {
+//  }
+  rpc GetTradeSymbols(TradeSymbolReq) returns (GetSymbolsResp){
+  }
+  rpc GetUserStrategyEva(UserStrategyDetailReq) returns (UserStrategyEvaResp) {
+  }
+  rpc GetApiKeyInfo(UserApiKeyReq) returns (ExchangeApiResp) {
+  }
+  rpc GetAssetsByAllApiKey(GetExApiReq) returns (AssertsResp) {
+  }
+  rpc GetSymbolRankWithRateYear(google.protobuf.Empty) returns (SymbolRankWithRateYearResp) {
+  }
+  rpc StrategyProfitCompensate(StrategyProfitCompensateReq) returns (google.protobuf.Empty) {
+  }
+}
+
+message StrategyProfitCompensateReq {
+  string strategy_id = 1;
+  double price = 2;
+}
+
+message symbolWithRate {
+  string symbol = 1;
+  string rateYear = 2;
+  string url = 3;
+}
+
+message SymbolRankWithRateYearResp {
+  repeated symbolWithRate data = 1;
+}
+
+message AssertsResp {
+  string asserts = 1;
+  string profit = 2;
+  string profitPercent = 3;
+}
+
+message TradeSymbolReq {
+  string exchange = 1;
+  string coin = 2;
+}
+
+message Symbol {
+  string symbol = 1;
+  string Exchange = 2;
+  int32  state =3;
+  string unit = 4;
+  string price = 5;
+  string change = 6;
+}
+message GetSymbolsResp {
+  repeated Symbol symbols = 1;
+}
+
+message ExChangeList {
+  bytes exchanges = 1;
+}
+
+message UserApiReq {
+  string user_id = 1;
+  int64 ApiID = 2;
+}
+message UserApiKeyReq {
+  string user_id = 1;
+  string api_key = 2;
+}
+message ExchangeApi {
+  string UserID = 1;
+  int64 ExchangeID = 2;
+  string ApiKey = 3;
+  string Secret = 4;
+  string Passphrase = 5;
+}
+
+message ExchangeApiResp {
+  string user_id = 1;
+  int64 exchange_id = 2;
+  string exchange_name = 3;
+  string api_key = 4;
+  string secret = 5;
+  string passphrase = 6;
+}
+
+message UpdateExchangeApiReq {
+  string UserID = 1;
+  int64 ExchangeID = 2;
+  string ApiKey = 3;
+  string Secret = 4;
+  string Passphrase = 5;
+  int64 ApiID = 6;
+}
+
+message GetExApiReq {
+  string user_id = 1;
+}
+
+message ExApiResp {
+  bytes ExApiList = 1;
+}
+
+
+message GetTradeListReq {
+  string user_id = 1;
+  string strategy_id = 2;
+  int32 pageNum = 3;
+  int32 pageSize = 4;
+}
+
+message TradeListResp {
+  bytes TradeList = 1;
+  int32 tradeCount = 2;
+}
+
+message profitReq {
+  string user_id = 1;
+  string strategy_id = 2;
+}
+
+message ProfitRealTimeResp {
+  bytes profitList = 1;
+}
+
+message GetExchangePosReq {
+  string user_id = 1;
+  string exchange = 2;
+}
+
+message GetStrategyReq {
+  string user_id = 1;
+}
+
+message UserStrategyListResp {
+  repeated UserStrategyWithRate user_strategy_list = 1;
+}
+
+message SetUserStrategyApiReq {
+  string user_id = 1;
+  string strategy_id = 2;
+  string api_key = 3;
+}
+
+message UserStrategyDetailReq {
+  string user_id = 1;
+  string strategy_id = 2;
+}
+
+message UserStrategy {
+  string user_id = 1;
+  string strategy_id = 2;
+  int64 parent_strategy_id = 4;
+  string platform = 5;
+  string api_key = 6;
+  string balance = 7;
+  int32 state = 9;
+}
+
+message UserStrategyWithRate {
+  string user_id = 1;
+  string strategy_id = 2;
+  int64 parent_strategy_id = 3;
+  string platform = 4;
+  string api_key = 5;
+  string balance = 6;
+  int32 state = 7;
+  string run_at = 8;
+  string total_profit = 9;
+  string realize_profit = 10;
+  string un_realize_profit = 11;
+  string rate_return_year = 12;
+  string symbol = 13;
+}
+
+message StrategyList {
+  bytes strategyList = 1;
+}
+
+message StrategyReq {
+  int32 pageNum = 1;
+  int32 pageSize = 2;
+}
+
+message SetUserStrategyBalanceReq {
+  string user_id = 1;
+  string strategy_id = 2;
+  float balance = 3;
+}
+
+message GetStrategyDetail {
+  int64 id = 1;
+}
+
+message Strategy {
+  int64 id = 1;
+  string name = 2;
+  string Tag = 3;
+  string remark = 4;
+  string exchange_name = 5;
+  int64 exchange_id = 6;
+  int32 level = 7;
+  int32 state = 8;
+}
+
+message CreateStrategyReq {
+  string user_id = 1;
+  int64 id = 2;
+  float balance = 3;
+}
+
+
+message tradeReq {
+  string trade_id = 1;
+  string user_id = 2;
+  string api_key = 3;
+  string order_id = 4;
+  string strategy_id = 5;
+  string direction = 6;
+  string volume = 7;
+  string commission = 8;
+  string unit = 9;
+  string symbol = 10;
+  string price = 11;
+  google.protobuf.Timestamp trade_at = 12;
+  string exchange = 13;
+}
+
+message orderReq {
+  string order_id = 1;
+  string user_id = 2;
+  string api_key = 3;
+  string strategy_id = 5;
+  string volume = 7;
+  string symbol = 10;
+  string buy_price = 11; //买入价
+  string sell_price = 12; //卖出价
+  string trade_at = 13;
+  string exchange = 14;
+  string unit = 15;
+}
+
+message exchangePos {
+  string symbol = 1;
+  string balance = 2;
+  string available = 3;
+  string frozen = 4;
+  string type = 5;
+  string price = 6;
+  string total_usdt =7;
+}
+message ExchangePosResp {
+  repeated exchangePos exchange_pos = 1;
+}
+
+message UserStrategyRunReq {
+  string user_id = 1;
+  string strategy_id = 2;
+}
+
+message evaDaily {
+  string date = 1;
+  string profit_daily = 2;
+}
+message UserStrategyEvaResp {
+  string realize_profit = 1;
+  string rate_return_year = 2;
+  string rate_return =3;
+  repeated evaDaily eva_daily_list = 4;
+}

@@ -1,0 +1,13 @@
+
+runtimeMode: dev
+
+mysql:
+  host: root:WQabc123@tcp(172.28.119.44:13306)/wq_fotune?charset=utf8mb4&parseTime=True&loc=Local
+
+redis:
+  host: 172.28.119.44:16379
+  password: 1qaz!QAZ
+
+
+etcd:
+  addr: 172.28.119.42:2379
