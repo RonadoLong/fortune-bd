@@ -1,7 +1,6 @@
 pipeline{
-    agent {
-          label 'agent-linux-01'
-    }
+    agent any
+
     // 允许颜色输出
 //     options {
 //       ansiColor('xterm')
