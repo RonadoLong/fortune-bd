@@ -36,7 +36,7 @@ pipeline{
                 }
             }
             steps("Start Build") {
-                sh "./service/user-srv/deploy/build.sh"
+                sh "./service/wallet-srv/deploy/build.sh"
             }
 
         }
@@ -49,7 +49,7 @@ pipeline{
             steps("Deploy to kubernetes") {
                 script {
                     if (params.DEPLOYMENT_K8S) {
-                        sh "./service/user-srv/deploy/deploy.sh"
+                        sh "./service/wallet-srv/deploy/deploy.sh"
                     }
                 }
             }
