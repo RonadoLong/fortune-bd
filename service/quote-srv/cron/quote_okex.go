@@ -150,7 +150,7 @@ func storeRateRmb() {
 	all, _ := ioutil.ReadAll(response.Body)
 	var rate QuoteRate
 	if err := json.Unmarshal(all, &rate); err != nil {
-		logger.Warnf("解析法币汇率数据错误 %v", err)
+		logger.Warnf("解析法币汇率数据错误 %v %s", err, string(all))
 		return
 	}
 	if err := global.RedisCli.Set(RateKey, rate, 0).Err(); err != nil {
