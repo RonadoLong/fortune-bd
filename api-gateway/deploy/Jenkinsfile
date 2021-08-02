@@ -37,7 +37,6 @@ pipeline{
         stage("Docker Build") {
             when {
                 allOf {
-                    expression { params.CONTAINER_VERSION != '' }
                     expression { env.APP_VERSION != null }
                 }
             }
