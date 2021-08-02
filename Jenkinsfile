@@ -21,7 +21,7 @@ pipeline{
                          if (APP_NAME ==~ /^api-.*/) {
                              env.TARGET_PATH = "./${APP_NAME}"
                          } else {
-                            env.TARGET_PATH = "./service/${APP_NAME}"
+                            env.TARGET_PATH = "./internal/${APP_NAME}"
                          }
                           // 脚本式创建一个环境变量
                         if (params.CONTAINER_VERSION == '') {
