@@ -49,6 +49,7 @@ pipeline{
             steps("Deploy to kubernetes") {
                 script {
                     if (params.DEPLOYMENT_K8S) {
+                        sh "export ${env.KUBECONFIG}"
                         sh "./service/user-srv/deploy/deploy.sh"
                     }
                 }
