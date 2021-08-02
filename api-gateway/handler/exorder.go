@@ -14,8 +14,8 @@ import (
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/middleware"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/service/exchange-srv/client"
-	pb "wq-fotune-backend/service/exchange-srv/proto"
+	"wq-fotune-backend/internal/exchange-srv/client"
+	pb "wq-fotune-backend/internal/exchange-srv/proto"
 )
 
 var (

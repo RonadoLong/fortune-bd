@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 	"wq-fotune-backend/pkg/goex"
-	"wq-fotune-backend/service/forward-offer-srv/global"
-	"wq-fotune-backend/service/forward-offer-srv/srv/model"
+	"wq-fotune-backend/internal/forward-offer-srv/global"
+	"wq-fotune-backend/internal/forward-offer-srv/srv/model"
 )
 
 var (

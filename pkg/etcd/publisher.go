@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// Publisher a service publish
+// Publisher a internal publish
 type Publisher interface {
 	Publish(service string, meta naming.Update) error
 }

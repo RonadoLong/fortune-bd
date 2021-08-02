@@ -10,8 +10,8 @@ import (
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/pkg/middleware"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/service/wallet-srv/client"
-	pb "wq-fotune-backend/service/wallet-srv/proto"
+	"wq-fotune-backend/internal/wallet-srv/client"
+	pb "wq-fotune-backend/internal/wallet-srv/proto"
 )
 
 var (
