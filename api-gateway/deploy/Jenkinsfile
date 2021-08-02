@@ -19,9 +19,9 @@ pipeline{
                         env.DOCKER_IMAGE='${PROJECT_NAME}'
                          APP_NAME = "$PROJECT_NAME"
                          if (APP_NAME ==~ /^api-.*/) {
-                             env.TARGET_PATH = "./${APP_NAME}/deploy"
+                             env.TARGET_PATH = "./${APP_NAME}"
                          } else {
-                            env.TARGET_PATH = "./service/${APP_NAME}/deploy"
+                            env.TARGET_PATH = "./service/${APP_NAME}"
                          }
                           // 脚本式创建一个环境变量
                         if (params.CONTAINER_VERSION == '') {
@@ -42,7 +42,7 @@ pipeline{
             }
             steps("Start Build") {
                 sh "docker login -u admin -p QQabc123++ ${HARBOR_HOST}"
-                sh "docker build --build-arg TARGET_PATH=${TARGET_PATH} -t ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f ${TARGET_PATH}/Dockerfile ."
+                sh "docker build --build-arg TARGET_PATH=${TARGET_PATH} -t ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f ${TARGET_PATH}/deploy/Dockerfile ."
                 sh "docker push ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION}"
                 sh "docker rmi ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f"
             }
@@ -58,8 +58,8 @@ pipeline{
                 script {
                     if (params.DEPLOYMENT_K8S) {
                         sh "export KUBECONFIG=${env.KUBECONFIG}"
-                        sh "sed -i 's/VERSION_NUMBER/${APP_VERSION}/g' ${TARGET_PATH}/k8s-deployment.yml"
-                        sh "kubectl apply -f ${TARGET_PATH}/k8s-deployment.yml --namespace=develop"
+                        sh "sed -i 's/VERSION_NUMBER/${APP_VERSION}/g' ${TARGET_PATH}/deploy/k8s-deployment.yml"
+                        sh "kubectl apply -f ${TARGET_PATH}/deploy/k8s-deployment.yml --namespace=develop"
                     }
                 }
             }
