@@ -1,12 +1,10 @@
 pipeline{
     agent any
-
-    // 允许颜色输出
-//     options {
-//       ansiColor('xterm')
-//     }
     environment{
-        HARBOR_HOST= '192.168.3.30'
+        APP_VERSION='v1.0.0'
+        HARBOR_HOST='192.168.3.30:8086'
+        HARBOR_ADDR='192.168.3.30:8086/mateforce'
+        DOCKER_IMAGE='api-gateway'
         K8S_NAMESPACE='develop'
     }
     parameters {
@@ -18,9 +16,9 @@ pipeline{
         stage('Initial') {
             steps{
                 script {
-                        env.DOCKER_IMAGE='develop/${PROJECT_NAME}'
+                        env.DOCKER_IMAGE='${PROJECT_NAME}'
                           // 脚本式创建一个环境变量
-                        if (params.CONTAINER_VERSION == ''){
+                        if (params.CONTAINER_VERSION == '') {
 //                             env.APP_VERSION = sh(returnStdout:true,script:"jenkins-build-tools gen -p ${params.PROJECT_NAME}").trim()
                         }else {
                             env.APP_VERSION ="${params.CONTAINER_VERSION}-alpha"
@@ -32,11 +30,15 @@ pipeline{
         stage("Docker Build") {
             when {
                 allOf {
+                    expression { params.CONTAINER_VERSION != '' }
                     expression { env.APP_VERSION != null }
                 }
             }
             steps("Start Build") {
-                sh "./api-gateway/deploy/build.sh"
+                sh "docker login -u admin -p QQabc123++ ${HARBOR_HOST}"
+                sh "docker build -t ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f ./api-gateway/deploy/Dockerfile ."
+                sh "docker push ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION}"
+                sh "docker rmi ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f"
             }
 
         }
@@ -49,7 +51,9 @@ pipeline{
             steps("Deploy to kubernetes") {
                 script {
                     if (params.DEPLOYMENT_K8S) {
-                        sh "./api-gateway/deploy/deploy.sh"
+                        sh "export KUBECONFIG=${env.KUBECONFIG}"
+                        sh "sed -i 's/VERSION_NUMBER/${APP_VERSION}/g' api-gateway/deploy/k8s-deployment.yml"
+                        sh "kubectl apply -f api-gateway/deploy/k8s-deployment.yml --namespace=develop"
                     }
                 }
             }
