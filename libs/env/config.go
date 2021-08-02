@@ -1,6 +1,11 @@
 package env
 
-import "os"
+import (
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+)
 
 const (
 	runMode   = "RUN_MODE"
@@ -34,7 +39,7 @@ var (
 	NotifyStatisticsURL = "http://test.ifortune.io/api/v1/exchange-order/forward-offer/orderGrid"
 	// 启动策略通知接口
 	NotifyStrategyStartUpURL = "http://test.ifortune.io/api/v1/wallet/strategyStartUpNotify"
-	ProxyAddr                = "socks5://192.168.3.58:1080"
+	ProxyAddr                = "socks5://192.168.3.30:20170"
 
 	EXCHANGE_ORDER_SRV_NAME = "exchange-order.srv"
 	USER_SRV_NAME           = "usercenter.srv"
@@ -66,4 +71,17 @@ func (env envConfig) getValue(key string) string {
 		return v
 	}
 	return ""
+}
+
+func GetProxyHttpClient() *http.Client {
+	client := &http.Client{}
+	client.Transport = &http.Transport{
+		Proxy: func(req *http.Request) (*url.URL, error) {
+			return &url.URL{
+				Scheme: "socks5",
+				Host:   strings.Split(ProxyAddr, "//")[1],
+			}, nil
+		},
+	}
+	return client
 }

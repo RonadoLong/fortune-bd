@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
+	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/global"
 	"wq-fotune-backend/libs/logger"
 	api "wq-fotune-backend/libs/okex_client"
@@ -133,15 +133,7 @@ func storeRateRmb() {
 		logger.Warnf("获取法币汇率接口错误 %v", err)
 		return
 	}
-	client := &http.Client{}
-	proxy, _ := url.Parse("http://192.168.3.58:7890")
-	client = &http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyURL(proxy),
-		},
-		Timeout: time.Second * 5,
-	}
-	response, err := client.Do(request)
+	response, err := env.GetProxyHttpClient().Do(request)
 	if err != nil {
 		logger.Warnf("获取法币汇率接口错误 %v", err)
 		return

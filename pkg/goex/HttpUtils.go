@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/valyala/fasthttp"
-	"github.com/valyala/fasthttp/fasthttpproxy"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,7 +12,11 @@ import (
 	"os"
 	"strings"
 	"time"
+	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/pkg/goex/internal/logger"
+
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/fasthttpproxy"
 )
 
 var (
@@ -87,9 +89,13 @@ func NewHttpRequest(client *http.Client, reqType string, reqUrl string, postData
 			req.Header.Add(k, v)
 		}
 	}
-	proxy, _ := url.Parse("http://192.168.3.58:7890")
 	client.Transport = &http.Transport{
-		Proxy: http.ProxyURL(proxy),
+		Proxy: func(req *http.Request) (*url.URL, error) {
+			return &url.URL{
+				Scheme: "socks5",
+				Host:   strings.Split(env.ProxyAddr, "//")[1],
+			}, nil
+		},
 	}
 	resp, err := client.Do(req)
 	if err != nil {

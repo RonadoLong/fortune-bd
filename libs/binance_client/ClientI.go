@@ -4,7 +4,9 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
+	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/goex/binance"
 )
@@ -17,12 +19,13 @@ type BinanceClient struct {
 //todo 代理
 var (
 	client = &http.Client{
-		Timeout:   time.Second * 5,
+		Timeout: time.Second * 5,
 		Transport: &http.Transport{
 			Proxy: func(req *http.Request) (*url.URL, error) {
 				return &url.URL{
 					Scheme: "socks5",
-					Host:   "192.168.3.58:1080"}, nil
+					Host:   strings.Split(env.ProxyAddr, "//")[1],
+				}, nil
 			},
 		},
 	}

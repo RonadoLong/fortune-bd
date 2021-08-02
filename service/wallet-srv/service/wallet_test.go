@@ -2,12 +2,10 @@ package service
 
 import (
 	"testing"
-	"wq-fotune-backend/service/wallet-srv/config"
 	"wq-fotune-backend/service/wallet-srv/dao"
 )
 
 func TestWalletService_AddIfcBalance(t *testing.T) {
-	config.Init("../../wallet-srv/config/conf.yaml")
 	srv := &WalletService{
 		dao:          dao.New(),
 		cacheService: nil,

@@ -3,13 +3,11 @@ package cron
 import (
 	"log"
 	"testing"
-	global2 "wq-fotune-backend/libs/global"
-	"wq-fotune-backend/service/quote-srv/config"
+	"wq-fotune-backend/libs/global"
 )
 
 func TestStoreBinanceTick(t *testing.T) {
-	config.Init("../../quote-srv/config/conf.yaml")
-	global2.InitRedis()
+	global.InitRedis()
 	StoreBinanceTick()
 	select {}
 }
