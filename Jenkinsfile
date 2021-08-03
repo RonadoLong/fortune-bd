@@ -3,12 +3,11 @@ pipeline{
     environment{
         HARBOR_HOST='192.168.3.30:8086'
         HARBOR_ADDR='192.168.3.30:8086/mateforce'
-        DOCKER_IMAGE='api-gateway'
+        DOCKER_IMAGE=''
         K8S_NAMESPACE='develop'
-//         TARGET_PATH='' //项目路径
     }
     parameters {
-        string(name: 'PROJECT_NAME', defaultValue: 'api-gateway', description: 'project name,same as the name ofdocker container')
+        string(name: 'PROJECT_NAME', defaultValue: '', description: 'project name,same as the name ofdocker container')
         string(name: 'CONTAINER_VERSION', defaultValue: '', description: 'docker container version number, SET when major version number changed')
         booleanParam(name: 'DEPLOYMENT_K8S', defaultValue: true, description: 'release deployment k8s')
     }
@@ -41,7 +40,7 @@ pipeline{
                 }
             }
             steps("Start Build") {
-                sh "docker login -u admin -p QQabc123++ ${HARBOR_HOST}"
+//                 sh "docker login -u admin -p QQabc123++ ${HARBOR_HOST}"
                 sh "docker build --build-arg TARGET_PATH=${TARGET_PATH} -t ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f ${TARGET_PATH}/deploy/Dockerfile ."
                 sh "docker push ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION}"
                 sh "docker rmi ${HARBOR_ADDR}/${DOCKER_IMAGE}:${APP_VERSION} -f"
