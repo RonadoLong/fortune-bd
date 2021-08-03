@@ -3,7 +3,6 @@ pipeline{
     environment{
         HARBOR_HOST='192.168.3.30:8086'
         HARBOR_ADDR='192.168.3.30:8086/mateforce'
-        DOCKER_IMAGE=''
         K8S_NAMESPACE='develop'
     }
     parameters {
