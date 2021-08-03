@@ -5,7 +5,7 @@ import (
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/dbclient"
-	"wq-fotune-backend/internal/user-srv/model"
+	"wq-fotune-backend/internal/usercenter-srv/model"
 )
 
 type Dao struct {

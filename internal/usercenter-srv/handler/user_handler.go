@@ -14,9 +14,9 @@ import (
 	"wq-fotune-backend/pkg/message"
 	"wq-fotune-backend/pkg/response"
 	validate_code "wq-fotune-backend/pkg/validate-code"
-	"wq-fotune-backend/internal/user-srv/dao"
-	"wq-fotune-backend/internal/user-srv/model"
-	fotune_srv_user "wq-fotune-backend/internal/user-srv/proto"
+	"wq-fotune-backend/internal/usercenter-srv/dao"
+	"wq-fotune-backend/internal/usercenter-srv/model"
+	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
 	walletCli "wq-fotune-backend/internal/wallet-srv/client"
 	walletPb "wq-fotune-backend/internal/wallet-srv/proto"
 )

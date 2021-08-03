@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"wq-fotune-backend/pkg/response"
-	fotune_srv_user "wq-fotune-backend/internal/user-srv/proto"
+	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
 
 	"github.com/golang/protobuf/ptypes/empty"
 )

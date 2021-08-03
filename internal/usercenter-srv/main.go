@@ -1,13 +1,12 @@
 package main
 
 import (
-
+	"wq-fotune-backend/internal/usercenter-srv/handler"
+	pd "wq-fotune-backend/internal/usercenter-srv/proto"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/libs/micro_service"
 	"wq-fotune-backend/pkg/redis"
-	"wq-fotune-backend/internal/user-srv/handler"
-	pd "wq-fotune-backend/internal/user-srv/proto"
 
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"

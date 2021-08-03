@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 	"wq-fotune-backend/libs/env"
-	fotune_srv_user "wq-fotune-backend/internal/user-srv/proto"
+	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
 )
 
 func TestNewUserClientClient(t *testing.T) {

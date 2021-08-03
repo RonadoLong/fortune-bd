@@ -10,7 +10,7 @@ import (
 	"wq-fotune-backend/libs/logger"
 	exchange_info "wq-fotune-backend/pkg/exchange-info"
 	"wq-fotune-backend/pkg/response"
-	userPb "wq-fotune-backend/internal/user-srv/proto"
+	userPb "wq-fotune-backend/internal/usercenter-srv/proto"
 	fotune_srv_wallet "wq-fotune-backend/internal/wallet-srv/proto"
 	"wq-fotune-backend/internal/wallet-srv/service"
 )

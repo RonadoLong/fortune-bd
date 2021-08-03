@@ -3,8 +3,8 @@ package service
 import (
 	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/env"
-	userCli "wq-fotune-backend/internal/user-srv/client"
-	fotune_srv_user "wq-fotune-backend/internal/user-srv/proto"
+	userCli "wq-fotune-backend/internal/usercenter-srv/client"
+	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
 	"wq-fotune-backend/internal/wallet-srv/cache"
 	"wq-fotune-backend/internal/wallet-srv/dao"
 )

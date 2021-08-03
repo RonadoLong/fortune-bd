@@ -6,8 +6,8 @@ import (
 	pb "wq-fotune-backend/internal/exchange-srv/proto"
 	quoteCli "wq-fotune-backend/internal/quote-srv/client"
 	pbQuote "wq-fotune-backend/internal/quote-srv/proto"
-	userCli "wq-fotune-backend/internal/user-srv/client"
-	pbUser "wq-fotune-backend/internal/user-srv/proto"
+	userCli "wq-fotune-backend/internal/usercenter-srv/client"
+	pbUser "wq-fotune-backend/internal/usercenter-srv/proto"
 	walletCli "wq-fotune-backend/internal/wallet-srv/client"
 	pbWallet "wq-fotune-backend/internal/wallet-srv/proto"
 )

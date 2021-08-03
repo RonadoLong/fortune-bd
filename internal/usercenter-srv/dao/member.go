@@ -2,7 +2,7 @@ package dao
 
 import (
     "wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/internal/user-srv/model"
+	"wq-fotune-backend/internal/usercenter-srv/model"
 )
 
 func (d *Dao) GetMembersWithState(state int32) (wqMembers []*model.WqMember) {

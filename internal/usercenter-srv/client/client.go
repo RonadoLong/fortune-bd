@@ -3,7 +3,7 @@ package client
 import (
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/micro_client"
-	pb "wq-fotune-backend/internal/user-srv/proto"
+	pb "wq-fotune-backend/internal/usercenter-srv/proto"
 )
 
 func NewUserClient(etcdAddr string) pb.UserService {

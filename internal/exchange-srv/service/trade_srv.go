@@ -14,7 +14,7 @@ import (
 	globalF "wq-fotune-backend/internal/forward-offer-srv/global"
 	quoteCron "wq-fotune-backend/internal/quote-srv/cron"
 	pbQuote "wq-fotune-backend/internal/quote-srv/proto"
-	fotune_srv_user "wq-fotune-backend/internal/user-srv/proto"
+	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
 )
 
 func (e *ExOrderService) GetTradeSymbols(exchange, symbol string) ([]*pb.Symbol, error) {
