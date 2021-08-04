@@ -11,7 +11,7 @@ import (
 	"time"
 	"unsafe"
 	. "wq-fotune-backend/pkg/goex"
-	"wq-fotune-backend/internal/forward-offer-srv/global"
+	"wq-fotune-backend/app/forward-offer-srv/global"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary

@@ -54,7 +54,7 @@ func main() {
 	go waitStop(func() {
 		s.GracefulStop()
 	})
-	log.Printf("starting hello internal at %s", port)
+	log.Printf("starting hello app at %s", port)
 	if err = s.Serve(lis); err != nil{
 		log.Fatal(err)
 	}

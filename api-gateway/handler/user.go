@@ -13,8 +13,8 @@ import (
 	"wq-fotune-backend/pkg/middleware"
 	"wq-fotune-backend/pkg/response"
 	"wq-fotune-backend/pkg/validate-code/phone"
-	"wq-fotune-backend/internal/usercenter-srv/client"
-	fotune_srv_user "wq-fotune-backend/internal/usercenter-srv/proto"
+	"wq-fotune-backend/app/usercenter-srv/client"
+	fotune_srv_user "wq-fotune-backend/app/usercenter-srv/proto"
 )
 
 var (

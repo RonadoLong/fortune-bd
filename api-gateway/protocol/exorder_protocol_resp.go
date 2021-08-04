@@ -2,7 +2,7 @@ package protocol
 
 import (
 	"time"
-	pb "wq-fotune-backend/internal/exchange-srv/proto"
+	pb "wq-fotune-backend/app/exchange-srv/proto"
 )
 
 type ExchangeResp struct {

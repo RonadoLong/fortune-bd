@@ -39,15 +39,15 @@ func Register(name string, host string, port int, target string, interval time.D
 			if err != nil {
 				if err == rpctypes.ErrKeyNotFound {
 					if _, err := client.Put(context.TODO(), serviceKey, serviceValue, etcd3.WithLease(resp.ID)); err != nil {
-						log.Printf("grpclb: set internal '%s' with ttl to etcd3 failed: %s", name, err.Error())
+						log.Printf("grpclb: set app '%s' with ttl to etcd3 failed: %s", name, err.Error())
 					}
 				} else {
-					log.Printf("grpclb: internal '%s' connect to etcd3 failed: %s", name, err.Error())
+					log.Printf("grpclb: app '%s' connect to etcd3 failed: %s", name, err.Error())
 				}
 			} else {
 				// refresh set to true for not notifying the watcher
 				if _, err := client.Put(context.Background(), serviceKey, serviceValue, etcd3.WithLease(resp.ID)); err != nil {
-					log.Printf("grpclb: refresh internal '%s' with ttl to etcd3 failed: %s", name, err.Error())
+					log.Printf("grpclb: refresh app '%s' with ttl to etcd3 failed: %s", name, err.Error())
 				}
 			}
 			select {
@@ -60,7 +60,7 @@ func Register(name string, host string, port int, target string, interval time.D
 	return nil
 }
 
-// UnRegister delete registered internal from etcd_del
+// UnRegister delete registered app from etcd_del
 func UnRegister() error {
 	stopSignal <- true
 	stopSignal = make(chan bool, 1) // just a hack to avoid multi UnRegister deadlock

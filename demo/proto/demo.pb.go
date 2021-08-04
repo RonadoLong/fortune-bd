@@ -129,7 +129,7 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// DemoClient is the client API for Demo internal.
+// DemoClient is the client API for Demo app.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type DemoClient interface {
@@ -153,7 +153,7 @@ func (c *demoClient) Hello(ctx context.Context, in *Req, opts ...grpc.CallOption
 	return out, nil
 }
 
-// DemoServer is the server API for Demo internal.
+// DemoServer is the server API for Demo app.
 type DemoServer interface {
 	Hello(context.Context, *Req) (*Response, error)
 }

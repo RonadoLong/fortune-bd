@@ -10,19 +10,19 @@ import (
 
 // resolver is the implementaion of grpc.naming.Resolver
 type resolver struct {
-	serviceName string // internal name to resolve
+	serviceName string // app name to resolve
 }
 
-// NewResolver return resolver with internal name
+// NewResolver return resolver with app name
 func NewResolver(serviceName string) *resolver {
 	return &resolver{serviceName: serviceName}
 }
 
-// Resolve to resolve the internal from etcd, target is the dial address of etcd
+// Resolve to resolve the app from etcd, target is the dial address of etcd
 // target example: "http://127.0.0.1:2379,http://127.0.0.1:12379,http://127.0.0.1:22379"
 func (re *resolver) Resolve(target string) (naming.Watcher, error) {
 	if re.serviceName == "" {
-		return nil, errors.New("grpclb: no internal name provided")
+		return nil, errors.New("grpclb: no app name provided")
 	}
 	client, err := etcd3.New(etcd3.Config{
 		Endpoints: strings.Split(target, ","),

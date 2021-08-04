@@ -6,8 +6,8 @@ pipeline{
         K8S_NAMESPACE='develop'
     }
     parameters {
-        string(name: 'PROJECT_NAME', defaultValue: '', description: 'project name,same as the name ofdocker container')
-        string(name: 'CONTAINER_VERSION', defaultValue: '', description: 'docker container version number, SET when major version number changed')
+//         string(name: 'PROJECT_NAME', defaultValue: '', description: 'project name,same as the name ofdocker container')
+//         string(name: 'CONTAINER_VERSION', defaultValue: '', description: 'docker container version number, SET when major version number changed')
         booleanParam(name: 'DEPLOYMENT_K8S', defaultValue: false, description: 'release deployment k8s')
     }
     stages {

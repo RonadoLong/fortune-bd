@@ -12,9 +12,9 @@ import (
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/goex/okex"
 	"wq-fotune-backend/pkg/utils"
-	"wq-fotune-backend/internal/forward-offer-srv/global"
+	"wq-fotune-backend/app/forward-offer-srv/global"
 
-	"wq-fotune-backend/internal/forward-offer-srv/srv/model"
+	"wq-fotune-backend/app/forward-offer-srv/srv/model"
 )
 
 var (

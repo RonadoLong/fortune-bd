@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	grid_strategy_srv "wq-fotune-backend/internal/grid-strategy-srv"
+	grid_strategy_srv "wq-fotune-backend/app/grid-strategy-srv"
 )
 
 func InitGridEngine(engine *gin.RouterGroup) {

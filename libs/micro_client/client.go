@@ -28,7 +28,7 @@ type logWrapper struct {
 }
 
 func (l *logWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
-	logger.Infof("[wrapper] client request internal: %s method: %s\n", req.Service(), req.Method())
+	logger.Infof("[wrapper] client request app: %s method: %s\n", req.Service(), req.Method())
 	return l.Client.Call(ctx, req, rsp)
 }
 

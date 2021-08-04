@@ -13,9 +13,9 @@ import (
 	"wq-fotune-backend/libs/logger"
 	exchange_info "wq-fotune-backend/pkg/exchange-info"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/internal/quote-srv/client"
-	"wq-fotune-backend/internal/quote-srv/cron"
-	pb "wq-fotune-backend/internal/quote-srv/proto"
+	"wq-fotune-backend/app/quote-srv/client"
+	"wq-fotune-backend/app/quote-srv/cron"
+	pb "wq-fotune-backend/app/quote-srv/proto"
 )
 
 var (

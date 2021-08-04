@@ -120,7 +120,7 @@ func (okV3Ws *OKExV3Ws) handle(msg []byte) error {
 	if wsResp.Table != "" {
 		err = okV3Ws.respHandle(wsResp.Table, wsResp.Data)
 		if err != nil {
-			logger.Error("handler ws data error:", err)
+			logger.Error("service ws data error:", err)
 		}
 		return err
 	}

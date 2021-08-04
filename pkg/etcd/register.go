@@ -37,10 +37,10 @@ func RegisterServer(client *clientv3.Client, serviceName, addr string, metadata 
 	}
 	err = publisher.Publish(serviceName, metaData)
 	if err != nil {
-		log.Fatalf("rpc: publish internal <%s> failed, error:\n%+v", serviceName, err)
+		log.Fatalf("rpc: publish app <%s> failed, error:\n%+v", serviceName, err)
 		return err
 	}
-	log.Printf("rpc: internal <%s> already published \n", serviceName)
+	log.Printf("rpc: app <%s> already published \n", serviceName)
 	return nil
 }
 
@@ -55,7 +55,7 @@ func adjustAddr(addr string) string {
 	return addr
 }
 
-// UnRegister delete registered internal from etcd
+// UnRegister delete registered app from etcd
 //func UnRegister() error {
 //	stopSignal <- true
 //	stopSignal = make(chan bool, 1) // just a hack to avoid multi UnRegister deadlock
