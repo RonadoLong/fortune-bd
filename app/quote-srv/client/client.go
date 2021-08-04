@@ -1,9 +1,9 @@
 package client
 
 import (
+	pb "wq-fotune-backend/api/quote"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/micro_client"
-	pb "wq-fotune-backend/app/quote-srv/proto"
 )
 
 func NewQuoteClient(etcdAddr string) pb.QuoteService {

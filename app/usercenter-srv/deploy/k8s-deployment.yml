@@ -8,7 +8,7 @@ metadata:
 spec:
   minReadySeconds: 5
   progressDeadlineSeconds: 600
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -33,17 +33,14 @@ spec:
           resources:
             limits:
               cpu: 500m
-            requests:
-              cpu: 200m	# CPU最小是200微核
+#            requests:
+#              cpu: 200m	# CPU最小是200微核
           ports:
-            - containerPort: 8080
+            - containerPort: 9530
               name: http
               protocol: TCP
             - containerPort: 5000
               name: health
-              protocol: TCP
-            - containerPort: 8084
-              name: grpc
               protocol: TCP
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
@@ -54,46 +51,6 @@ status:
   updatedReplicas: 1
 
 ---
-# cloud disk 服务发现
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  labels:
-#    cattle.io/creator: norman
-#    name: api-gateway-svc
-#    namespace: develop
-#  name: api-gateway-svc
-#  namespace: develop
-#  ownerReferences:
-#  - apiVersion: apps/v1beta2
-#    controller: true
-#    kind: deployment
-#    name: api-gateway-svc
-#    uid: cf1dc754-16f0-40c9-8821-59db66e85916
-#spec:
-#  externalTrafficPolicy: Cluster
-#  ports:
-#  - name: http
-#    nodePort: 31414
-#    port: 9530
-#    protocol: TCP
-#    targetPort: 9530
-#  - name: health
-#    nodePort: 30508
-#    port: 5000
-#    protocol: TCP
-#    targetPort: 5000
-#  - name: grpc
-#    nodePort: 31843
-#    port: 8084
-#    protocol: TCP
-#    targetPort: 8084
-#  selector:
-#    workload.user.cattle.io/workloadselector: dm-develop-api-gateway-svc
-#  type: NodePort
-#status:
-#  loadBalancer: {}
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -118,61 +75,28 @@ spec:
 status:
   loadBalancer: {}
 
-# ---
-# # grpc ingress
-# apiVersion: extensions/v1beta1
-# kind: Ingress
-# metadata:
-#   annotations:
-#     nginx.ingress.kubernetes.io/backend-protocol: GRPC
-#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-#   name: clouddisk-grpc-ingress
-#   namespace: develop
-# spec:
-#   rules:
-#     - host: clouddisk-svc.flyele.vip
-#       http:
-#         paths:
-#           - backend:
-#               serviceName: clouddisk-svc
-#               servicePort: 8084
-#             path: /
-#   tls:
-#     - hosts:
-#         - clouddisk-svc.flyele.vip
-#       secretName: tls-secret-dev
-
-
 ---
 # http ingress
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: api-gateway-ingress
-#  namespace: develop
-#  annotations:
-#    kubernetes.io/ingress.class: "nginx"
-#    # nginx.ingress.kubernetes.io/rewrite-target: /$1
-#      #配置websocket 需要的配置
-#    nginx.ingress.kubernetes.io/configuration-snippet: |
-#       proxy_set_header Upgrade "websocket";
-#       proxy_set_header Connection "Upgrade";
-#    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-#    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-#    nginx.ingress.kubernetes.io/websocket-services: api-gateway-svc
-#    nginx.org/websocket-services: api-gateway-svc
-#spec:
-#  rules:
-#    - host: yun.mateforce.cn
-#      http:
-#        paths:
-#          - path: /
-#            pathType: Prefix
-#            backend:
-#              app:
-#                name: api-gateway-svc
-#                port:
-#                  number: 9530
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: usercenter-ingress
+  namespace: develop
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: yun.mateforce.cn
+      http:
+        paths:
+          - path: /userv
+            pathType: Prefix
+            backend:
+              app:
+                name: usercenter-srv
+                port:
+                  number: 9530
   # tls:
   #   - hosts:
   #       - zuyyjv.natappfree.cc

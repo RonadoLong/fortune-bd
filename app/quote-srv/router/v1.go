@@ -3,240 +3,162 @@ package router
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/gorilla/websocket"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/micro/go-micro/v2/errors"
-	"wq-fotune-backend/api-gateway/protocol"
-	"wq-fotune-backend/app/usercenter-srv/client"
-	fotune_srv_user "wq-fotune-backend/app/usercenter-srv/proto"
+	"log"
+	"net/http"
+	"time"
+	pb "wq-fotune-backend/api/quote"
+	"wq-fotune-backend/app/quote-srv/client"
+	"wq-fotune-backend/app/quote-srv/cron"
 	"wq-fotune-backend/libs/env"
-	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/middleware"
+	exchange_info "wq-fotune-backend/pkg/exchange-info"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/pkg/validate-code/phone"
 )
 
 var (
-	userService fotune_srv_user.UserService
+	quoteService pb.QuoteService
+	upGrader = websocket.Upgrader{
+		//允许跨域
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
 )
 
 func v1api(engine *gin.RouterGroup) {
-	userService = client.NewUserClient(env.EtcdAddr)
-	v1Group := engine.Group("/v1")
-	{
-		v1Group.POST("/login", Login)
-		v1Group.POST("/send/validate-code", SendValidateCode)
-		v1Group.POST("/register", Register)
-		v1Group.PUT("/forget/password", ForgetPassword)
-		v1Group.GET("/members", GetMembers)
-		v1Group.GET("/paymentMethods", GetPaymentMethods)
-
-		v1Group.Use(middleware.JWTAuth())
-		v1Group.PUT("/update", UpdateUser)
-		v1Group.PUT("/reset/password", ResetPassword)
-		v1Group.GET("/base-info", BaseInfo)
-	}
+	quoteService = client.NewQuoteClient(env.EtcdAddr)
+	group := engine.Group("/quote")
+	group.GET("/ticks", GetTicks)
+	group.GET("/ticks/realtime", SubRealTimeTickers)
 }
 
-func Login(c *gin.Context) {
-	//
-	var req protocol.LoginReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
+// SubRealTimeTickers 实时获取行情数据
+func SubRealTimeTickers(c *gin.Context) {
+	conn, err := upGrader.Upgrade(c.Writer, c.Request, c.Writer.Header())
+	if err != nil {
+		logger.Warnf("ws upgrader conn err: %v", err)
+		response.NewErrorCreate(c, "网络出错", nil)
 		return
 	}
-	loginReq := &fotune_srv_user.LoginReq{
-		Phone:    req.Phone,
-		Password: req.Password,
+	go StreamHandler(conn)
+}
+
+func StreamHandler(ws1 *websocket.Conn) {
+	//即便 我们不再 期望 来自websocket 更多的请求,我们仍需要 去 websocket 读取 内容，为了能获取到 close 信号
+	run := func(ws *websocket.Conn, exchange string, ctxOut context.Context, cancelClose context.CancelFunc) {
+		// 发送请求 给 stream server
+		service, err := quoteService.StreamOkexTicks(context.Background(), &pb.GetTicksReq{Exchange: exchange})
+		if err != nil {
+			logger.Warnf("行情服务端连接失败 %v", err)
+			errMsg := response.NewResultInternalErr("行情服务端连接失败")
+			_ = ws.WriteJSON(errMsg)
+			return
+		}
+		defer func() {
+			service.Close()
+		}()
+		for {
+			select {
+			case <-ctxOut.Done():
+				return
+			default:
+				// 1. 不断获取行情数据
+				resp, err := service.Recv()
+				if resp == nil {
+					time.Sleep(1 * time.Second)
+					continue
+				}
+				if err != nil {
+					logger.Warnf("行情服务recv数据失败 %v", err)
+					errMsg := response.NewResultInternalErr("行情服务recv数据失败")
+					_ = ws.WriteJSON(errMsg)
+					time.Sleep(2 * time.Second)
+					continue
+				}
+				// 2. 转发到ws中
+				//TODO 币本位行情
+				//ticks := make([]map[string][]cron.Ticker, 0)
+				var ticks []cron.Ticker
+				if err := jsoniter.Unmarshal(resp.Ticks, &ticks); err != nil {
+					logger.Warnf("StreamHandler:Unmarshal数据失败")
+					errMsg := response.NewResultInternalErr("StreamHandler:Unmarshal数据失败")
+					_ = ws.WriteJSON(errMsg)
+					time.Sleep(5 * time.Second)
+					continue
+				}
+
+				err = ws.WriteJSON(response.NewResultSuccess(ticks))
+				if err != nil {
+					if isExpectedClose(err) {
+						logger.Warnf("expected close on socket")
+					}
+					logger.Warnf("ws1 writeErr: %v", err)
+					cancelClose()
+					return
+				}
+				time.Sleep(2 * time.Second)
+			}
+
+		}
 	}
-	user, err := userService.Login(context.Background(), loginReq)
+
+	go func(ws1 *websocket.Conn) {
+		ctx := context.Background()
+		ctxOut, cancelOut := context.WithCancel(ctx)
+		ctxRun, cancelRun := context.WithCancel(ctx)
+		msg := []byte(exchange_info.BINANCE)
+		var err error
+		go run(ws1, string(msg), ctxOut, cancelRun)
+		//open := true
+		time.Sleep(2 * time.Second)
+		defer ws1.Close()
+		for {
+			select {
+			case <-ctxRun.Done():
+				return
+			default:
+				_, msg, err = ws1.ReadMessage()
+				if err != nil {
+					log.Println(err)
+					cancelOut()
+					return
+				}
+				if string(msg) == exchange_info.OKEX || string(msg) == exchange_info.BINANCE || string(msg) == exchange_info.HUOBI {
+					cancelOut()
+					time.Sleep(2 * time.Second)
+					ctxOut, cancelOut = context.WithCancel(ctx)
+					ctxRun, cancelRun = context.WithCancel(ctx)
+					go run(ws1, string(msg), ctxOut, cancelRun)
+				}
+			}
+		}
+	}(ws1)
+}
+
+func isExpectedClose(err error) bool {
+	if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
+		logger.Warnf("Unexpected websocket close: %v", err)
+		return false
+	}
+	return true
+}
+
+// GetTicks 获取行情数据
+func GetTicks(c *gin.Context) {
+	resp, err := quoteService.GetTicksWithExchange(context.Background(), &pb.GetTicksReq{All: false})
 	if err != nil {
 		fromError := errors.FromError(err)
-		logger.Errorf("userService.Login  调用失败 %v", err.Error())
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
 	}
-	token, err := middleware.NewToken(user.UserID, middleware.RoleUser)
-	if err != nil {
-		logger.Errorf("生成token失败 用户 %s, 角色 %d", user.UserID, middleware.RoleUser)
+	//var ticks []cron.Ticker
+	var ticks = make(map[string]map[string]interface{})
+	if err := jsoniter.Unmarshal(resp.Ticks, &ticks); err != nil {
 		response.NewInternalServerErr(c, nil)
 		return
 	}
-	lastLogin, _ := ptypes.Timestamp(user.LastLogin)
-	response.NewSuccess(c, &protocol.LoginResp{
-		UserId:         user.UserID,
-		Token:          token,
-		InvitationCode: user.InvitationCode,
-		Name:           user.Name,
-		Avatar:         user.Avatar,
-		Phone:          user.Phone,
-		LastLogin:      lastLogin,
-		LoginCount:     user.LoginCount,
-	})
-}
-
-func SendValidateCode(c *gin.Context) {
-	var req protocol.ValidateCodeReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
-		return
-	}
-	if !phone.CheckPhone(req.Phone) {
-		response.NewErrorParam(c, "手机号格式错误！", nil)
-		return
-	}
-
-	vcodeReq := &fotune_srv_user.ValidateCodeReq{Phone: req.Phone}
-	resp, err := userService.SendValidateCode(context.Background(), vcodeReq)
-	if err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, resp.Code)
-}
-
-func Register(c *gin.Context) {
-	var req protocol.RegisterReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
-		return
-	}
-	//检验基本参数
-	if err := req.CheckBaseParam(); err != nil {
-		response.NewErrorParam(c, err.Error(), nil)
-		return
-	}
-	registerReq := &fotune_srv_user.RegisterReq{
-		Phone:           req.Phone,
-		Password:        req.Password,
-		ConfirmPassword: req.ConfirmPassword,
-		InvitationCode:  req.InvitationCode,
-		ValidateCode:    req.ValidateCode,
-	}
-	if _, err := userService.Register(context.Background(), registerReq); err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, nil)
-}
-
-func ResetPassword(c *gin.Context) {
-	var req protocol.ChangePasswordReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
-		return
-	}
-	if err := req.CheckPassword(); err != nil {
-		response.NewErrorParam(c, err.Error(), nil)
-		return
-	}
-	claims, _ := c.Get("claims")
-	jwtP := claims.(*jwt.JWTPayload)
-	resetReq := &fotune_srv_user.ChangePasswordReq{UserID: jwtP.UserID, Password: req.Password, ConfirmPassword: req.ConfirmPassword}
-	if _, err := userService.ResetPassword(context.Background(), resetReq); err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, nil)
-}
-
-func UpdateUser(c *gin.Context) {
-	var req protocol.UpdateUserBaseReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
-		return
-	}
-	if err := req.CheckNotNull(); err != nil {
-		response.NewErrorParam(c, err.Error(), nil)
-		return
-	}
-	claims, _ := c.Get("claims")
-	JwtP := claims.(*jwt.JWTPayload)
-	updateUserReq := &fotune_srv_user.UpdateUserReq{
-		Name:   req.Name,
-		Avatar: req.Avatar,
-		UserId: JwtP.UserID,
-	}
-	if _, err := userService.UpdateUser(context.Background(), updateUserReq); err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, nil)
-}
-
-func ForgetPassword(c *gin.Context) {
-	var req protocol.ForgetPasswordReq
-	if err := c.BindJSON(&req); err != nil {
-		response.NewBindJsonErr(c, nil)
-		return
-	}
-	if err := req.CheckPhoneVCode(); err != nil {
-		response.NewErrorParam(c, err.Error(), nil)
-		return
-	}
-	if err := req.CheckPassword(); err != nil {
-		response.NewErrorParam(c, err.Error(), nil)
-		return
-	}
-
-	changePassReq := &fotune_srv_user.ForgetPasswordReq{
-		Password:        req.Password,
-		ConfirmPassword: req.ConfirmPassword,
-		Phone:           req.Phone,
-		ValidateCode:    req.ValidateCode,
-	}
-
-	if _, err := userService.ForgetPassword(context.Background(), changePassReq); err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, nil)
-}
-
-func BaseInfo(c *gin.Context) {
-	claims, _ := c.Get("claims")
-	JwtP := claims.(*jwt.JWTPayload)
-	req := &fotune_srv_user.UserInfoReq{UserID: JwtP.UserID}
-	user, err := userService.GetUserInfo(context.Background(), req)
-	if err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	lastLogin, _ := ptypes.Timestamp(user.LastLogin)
-	response.NewSuccess(c, &protocol.LoginResp{
-		UserId:         user.UserID,
-		InvitationCode: user.InvitationCode,
-		Name:           user.Name,
-		Avatar:         user.Avatar,
-		Phone:          user.Phone,
-		LastLogin:      lastLogin,
-		LoginCount:     user.LoginCount,
-	})
-}
-
-func GetMembers(c *gin.Context) {
-	resp, err := userService.GetMembers(context.Background(), &empty.Empty{})
-	if err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, resp.Members)
-}
-
-func GetPaymentMethods(c *gin.Context) {
-	resp, err := userService.GetPaymentMethod(context.Background(), &empty.Empty{})
-	if err != nil {
-		fromError := errors.FromError(err)
-		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
-		return
-	}
-	response.NewSuccess(c, resp.Payments)
+	response.NewSuccess(c, ticks)
 }
