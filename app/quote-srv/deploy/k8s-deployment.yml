@@ -87,13 +87,13 @@ metadata:
   namespace: develop
   annotations:
     kubernetes.io/ingress.class: "nginx"
-      nginx.ingress.kubernetes.io/configuration-snippet: |
+    nginx.ingress.kubernetes.io/configuration-snippet: |
         proxy_set_header Upgrade "websocket";
         proxy_set_header Connection "Upgrade";
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: quote-svc
-      nginx.org/websocket-services: quote-svc
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: quote-svc
+    nginx.org/websocket-services: quote-svc
     # nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
