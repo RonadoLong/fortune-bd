@@ -95,7 +95,7 @@ metadata:
     nginx.ingress.kubernetes.io/websocket-services: quote-svc
     nginx.org/websocket-services: quote-svc
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
     - host: yun.mateforce.cn
