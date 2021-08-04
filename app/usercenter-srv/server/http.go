@@ -24,7 +24,7 @@ func RunHttp(port string) {
 		IdleTimeout:    120 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	pprof.Register(engine, "/debug")
+	pprof.Register(engine, "/user/debug")
 	logger.Infof("启动服务，监听端口：%d", port)
 	if err := s.ListenAndServe(); err != nil {
 		log.Println("启动服务失败 ", port)
