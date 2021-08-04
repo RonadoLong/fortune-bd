@@ -21,9 +21,8 @@ var (
 	userService pb.UserService
 )
 
-func apiV1(engine *gin.RouterGroup) {
+func apiV1(group *gin.RouterGroup) {
 	userService = client.NewUserClient(env.EtcdAddr)
-	group := engine.Group("/user")
 	group.POST("/login", Login)
 	group.POST("/send/validate-code", SendValidateCode)
 	group.POST("/register", Register)
