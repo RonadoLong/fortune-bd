@@ -66,7 +66,7 @@ pipeline{
     post {
     		always {
     			echo 'One way or another, I have finished'
-    			echo sh(returnStdout: true, script: 'env')
+//     			echo sh(returnStdout: true, script: 'env')
     			deleteDir() /* clean up our workspace */
     		}
     		success {
