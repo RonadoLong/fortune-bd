@@ -8,7 +8,7 @@ pipeline{
     parameters {
 //         string(name: 'PROJECT_NAME', defaultValue: '', description: 'project name,same as the name ofdocker container')
 //         string(name: 'CONTAINER_VERSION', defaultValue: '', description: 'docker container version number, SET when major version number changed')
-        booleanParam(name: 'DEPLOYMENT_K8S', defaultValue: false, description: 'release deployment k8s')
+        // booleanParam(name: 'DEPLOYMENT_K8S', defaultValue: false, description: 'release deployment k8s')
     }
     stages {
         stage('Initial') {
@@ -54,11 +54,9 @@ pipeline{
             }
             steps("Deploy to kubernetes") {
                 script {
-                    if (params.DEPLOYMENT_K8S) {
                         sh "export KUBECONFIG=${env.KUBECONFIG}"
                         sh "sed -i 's/VERSION_NUMBER/${APP_VERSION}/g' ${TARGET_PATH}/deploy/k8s-deployment.yml"
                         sh "kubectl apply -f ${TARGET_PATH}/deploy/k8s-deployment.yml --namespace=develop"
-                    }
                 }
             }
         }
