@@ -94,7 +94,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: usercenter-srv
+                name: usercenter-svc
                 port:
                   number: 9530
   # tls:
