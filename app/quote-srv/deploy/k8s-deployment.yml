@@ -103,7 +103,7 @@ spec:
           - path: /quote
             pathType: Prefix
             backend:
-              app:
+              service:
                 name: quote-svc
                 port:
                   number: 9530

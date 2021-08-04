@@ -93,7 +93,7 @@ spec:
           - path: /userv
             pathType: Prefix
             backend:
-              app:
+              service:
                 name: usercenter-srv
                 port:
                   number: 9530
