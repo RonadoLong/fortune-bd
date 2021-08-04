@@ -28,9 +28,8 @@ var (
 	}
 )
 
-func v1api(engine *gin.RouterGroup) {
+func v1api(group *gin.RouterGroup) {
 	quoteService = client.NewQuoteClient(env.EtcdAddr)
-	group := engine.Group("/quote")
 	group.GET("/ticks", GetTicks)
 	group.GET("/ticks/realtime", SubRealTimeTickers)
 }
