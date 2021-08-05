@@ -1,8 +1,10 @@
 package server
 
 import (
+	"github.com/chenjiandongx/ginprom"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/zhufuyi/pkg/render"
 	"log"
 	"net/http"
@@ -14,6 +16,8 @@ import (
 func RunHttp(port string) {
 	engine := gin.Default()
 	engine.Use(render.InOutLog(), gin.Recovery())
+	engine.Use(ginprom.PromMiddleware(nil))
+	engine.GET("/wallet/metrics", ginprom.PromHandler(promhttp.Handler()))
 	router.Init(engine)
 
 	s := &http.Server{

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis"
 	"time"
+	"wq-fotune-backend/app/forward-offer-srv/global"
+	"wq-fotune-backend/app/quote-srv/cron"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/libs/redisHelper"
-	"wq-fotune-backend/app/forward-offer-srv/global"
-	"wq-fotune-backend/app/quote-srv/cron"
 )
 
 const (
@@ -25,13 +25,13 @@ func NewService() *Service {
 	}
 }
 
-// 缓存交易所数据
+// CacheExchangeAccountList 缓存交易所数据
 func (s *Service) CacheExchangeAccountList(userId string, data []byte) {
 	var key = global.StringJoinString(exchangeKey, userId)
 	s.redisCli.Set(key, data, time.Second*10)
 }
 
-// 获取用户在缓存中的数据
+// GetExchangeAccountList 获取用户在缓存中的数据
 func (s *Service) GetExchangeAccountList(userId string) []byte {
 	var key = global.StringJoinString(exchangeKey, userId)
 	result, err := s.redisCli.Get(key).Bytes()

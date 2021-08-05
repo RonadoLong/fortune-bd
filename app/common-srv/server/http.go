@@ -9,7 +9,7 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"wq-fotune-backend/app/usercenter-srv/router"
+	"wq-fotune-backend/app/common-srv/router"
 	"wq-fotune-backend/libs/logger"
 )
 
@@ -17,7 +17,7 @@ func RunHttp(port string) {
 	engine := gin.Default()
 	engine.Use(render.InOutLog(), gin.Recovery())
 	engine.Use(ginprom.PromMiddleware(nil))
-	engine.GET("/user/metrics", ginprom.PromHandler(promhttp.Handler()))
+	engine.GET("/common/metrics", ginprom.PromHandler(promhttp.Handler()))
 	router.Init(engine)
 
 	s := &http.Server{
@@ -28,7 +28,7 @@ func RunHttp(port string) {
 		IdleTimeout:    120 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	pprof.Register(engine, "/user/debug")
+	pprof.Register(engine, "/common/debug")
 	logger.Infof("启动服务，监听端口：%d", port)
 	if err := s.ListenAndServe(); err != nil {
 		log.Println("启动服务失败 ", port)

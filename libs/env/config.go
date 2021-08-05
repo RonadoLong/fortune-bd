@@ -41,11 +41,11 @@ var (
 	NotifyStrategyStartUpURL = "http://test.ifortune.io/api/v1/wallet/strategyStartUpNotify"
 	ProxyAddr                = "socks5://192.168.3.30:20170"
 
-	EXCHANGE_ORDER_SRV_NAME = "exchange-order.srv"
-	USER_SRV_NAME           = "usercenter.srv"
-	WALLET_SRV_NAME         = "wallet.srv"
-	QUOTE_SRV_NAME          = "quote.srv"
-	COMMON_SRV_NAME         = "common.srv"
+	EXCHANGE_SRV_NAME = "exchange-order.srv"
+	USER_SRV_NAME     = "usercenter.srv"
+	WALLET_SRV_NAME   = "wallet.srv"
+	QUOTE_SRV_NAME    = "quote.srv"
+	COMMON_SRV_NAME   = "common.srv"
 )
 
 type envConfig map[string]string

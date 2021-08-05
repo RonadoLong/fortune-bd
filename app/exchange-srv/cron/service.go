@@ -4,18 +4,18 @@ import (
 	"github.com/robfig/cron"
 	"log"
 	"time"
-	"wq-fotune-backend/app/exchange-srv/service"
+	"wq-fotune-backend/app/exchange-srv/internal/biz"
 )
 
 var SrvCron *serviceCron
 
 type serviceCron struct {
-	exOrderSrv *service.ExOrderService
+	exOrderSrv *biz.ExOrderRepo
 }
 
 func Init() {
 	SrvCron = &serviceCron{
-		exOrderSrv: service.NewExOrderService(),
+		exOrderSrv: biz.NewExOrderRepo(),
 	}
 }
 

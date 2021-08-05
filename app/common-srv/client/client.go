@@ -3,7 +3,7 @@ package client
 import (
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/micro_client"
-	pb "wq-fotune-backend/app/common-srv/proto"
+	pb "wq-fotune-backend/api/common"
 )
 
 func NewCommonClient(etcdAddr string) pb.CommonService {
