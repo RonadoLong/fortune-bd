@@ -11,7 +11,7 @@ ARG TARGET_PATH
 COPY ./go.mod ./
 COPY ./go.sum ./
 COPY . .
-RUN CGO_ENABLED=0  go build -o server $TARGET_PATH
+RUN CGO_ENABLED=0  go build -o server $TARGET_PATH/cmd
 
 FROM alpine:3.12 as runner
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
