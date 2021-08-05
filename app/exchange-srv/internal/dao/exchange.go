@@ -55,7 +55,6 @@ func (d *Dao) GetExchangeApiListByUid(uid string) (ApiList []*model.WqExchangeAp
 	if err := d.db.Table(TABLE_WQ_EXCHANGE_API).Select("id, user_id,exchange_name, exchange_id, api_key, created_at, updated_at").
 		Where("user_id = ?", uid).Order("exchange_id desc").Find(&ApiList).Error; err != nil {
 		logger.Warnf("GetExchangeApiListByUid has err %v", err.Error())
-		return
 	}
 	return
 }
