@@ -9,19 +9,19 @@ import (
 
 func (e *ExOrderService) Evaluation(ctx context.Context, req *pb.TradeReq, resp *empty.Empty) error {
 	//合约的用不上了
-	return e.exOrderSrv.EvaluationSwap(req)
+	return e.ExOrderSrv.EvaluationSwap(req)
 }
 
 func (e *ExOrderService) EvaluationSpot(ctx context.Context, req *pb.OrderReq, resp *empty.Empty) error {
-	return e.exOrderSrv.EvaluationSpot(req)
+	return e.ExOrderSrv.EvaluationSpot(req)
 }
 
 func (e *ExOrderService) StrategyProfitCompensate(ctx context.Context, req *pb.StrategyProfitCompensateReq, empty *empty.Empty) error {
-	return e.exOrderSrv.StrategyProfitCompensate(req.StrategyId, req.Price)
+	return e.ExOrderSrv.StrategyProfitCompensate(req.StrategyId, req.Price)
 }
 
 func (e *ExOrderService) GetUserStrategyEva(ctx context.Context, req *pb.UserStrategyDetailReq, resp *pb.UserStrategyEvaResp) error {
-	profit, err := e.exOrderSrv.GetProfitByStrID(req.UserId, req.StrategyId)
+	profit, err := e.ExOrderSrv.GetProfitByStrID(req.UserId, req.StrategyId)
 	if err != nil {
 		resp.RealizeProfit = "0"
 		resp.RateReturnYear = "0"
@@ -31,7 +31,7 @@ func (e *ExOrderService) GetUserStrategyEva(ctx context.Context, req *pb.UserStr
 	resp.RateReturn = helper.Float64ToString(profit.RateReturn)
 	resp.RealizeProfit = profit.RealizeProfit
 	resp.RateReturnYear = helper.Float64ToString(profit.RateReturnYear)
-	profitDailyList := e.exOrderSrv.GetProfitDailyByStrID(req.UserId, req.StrategyId, 365)
+	profitDailyList := e.ExOrderSrv.GetProfitDailyByStrID(req.UserId, req.StrategyId, 365)
 
 	dateMap := make(map[string]bool, 0)
 	for _, daily := range profitDailyList {

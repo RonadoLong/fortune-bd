@@ -18,7 +18,7 @@ const (
 )
 
 func (e *ExOrderService) ExChangeInfo(ctx context.Context, req *empty.Empty, resp *pb.ExChangeList) error {
-	exchangeList, err := e.exOrderSrv.GetExchangeInfo()
+	exchangeList, err := e.ExOrderSrv.GetExchangeInfo()
 	if err != nil {
 		return err
 	}
@@ -32,16 +32,16 @@ func (e *ExOrderService) ExChangeInfo(ctx context.Context, req *empty.Empty, res
 }
 
 func (e *ExOrderService) AddExchangeApi(ctx context.Context, req *pb.ExchangeApi, resp *empty.Empty) error {
-	return e.exOrderSrv.AddExchangeApi(req.UserID, req.ApiKey, req.Secret, req.Passphrase, req.ExchangeID)
+	return e.ExOrderSrv.AddExchangeApi(req.UserID, req.ApiKey, req.Secret, req.Passphrase, req.ExchangeID)
 }
 
 func (e *ExOrderService) GetExchangeApiList(ctx context.Context, req *pb.GetExApiReq, resp *pb.ExApiResp) error {
-	ret := e.exOrderSrv.GetExchangeAccountListFromCache(req.UserId)
+	ret := e.ExOrderSrv.GetExchangeAccountListFromCache(req.UserId)
 	if ret != nil {
 		resp.ExApiList = ret
 		return nil
 	}
-	apiResp, err := e.exOrderSrv.GetExchangeApiList(req.UserId)
+	apiResp, err := e.ExOrderSrv.GetExchangeApiList(req.UserId)
 	if err != nil {
 		return err
 	}
@@ -51,13 +51,13 @@ func (e *ExOrderService) GetExchangeApiList(ctx context.Context, req *pb.GetExAp
 		return response.NewInternalServerErrMsg(ErrID)
 	}
 	resp.ExApiList = resData
-	e.exOrderSrv.SetExchangeAccountListCache(req.UserId, resData)
+	e.ExOrderSrv.SetExchangeAccountListCache(req.UserId, resData)
 	return nil
 }
 
 func (e *ExOrderService) GetExchangePos(ctx context.Context, req *pb.GetExchangePosReq, resp *pb.ExchangePosResp) error {
 	//获取持有币种的账户资产 先支持okex
-	pos, err := e.exOrderSrv.GetExchangePos(req.UserId, req.Exchange)
+	pos, err := e.ExOrderSrv.GetExchangePos(req.UserId, req.Exchange)
 	if err != nil {
 		return err
 	}
@@ -70,15 +70,15 @@ func (e *ExOrderService) GetExchangePos(ctx context.Context, req *pb.GetExchange
 }
 
 func (e *ExOrderService) UpdateExchangeApi(ctx context.Context, req *pb.UpdateExchangeApiReq, resp *empty.Empty) error {
-	return e.exOrderSrv.UpdateExchangeApi(req.UserID, req.ApiKey, req.Secret, req.Passphrase, req.ExchangeID, req.ApiID)
+	return e.ExOrderSrv.UpdateExchangeApi(req.UserID, req.ApiKey, req.Secret, req.Passphrase, req.ExchangeID, req.ApiID)
 }
 
 func (e *ExOrderService) DeleteExchangeApi(ctx context.Context, req *pb.UserApiReq, resp *empty.Empty) error {
-	return e.exOrderSrv.DeleteExchangeApi(req.UserId, req.ApiID)
+	return e.ExOrderSrv.DeleteExchangeApi(req.UserId, req.ApiID)
 }
 
 func (e *ExOrderService) GetApiKeyInfo(ctx context.Context, req *pb.UserApiKeyReq, resp *pb.ExchangeApiResp) error {
-	info, err := e.exOrderSrv.GetApiKeyInfo(req.UserId, req.ApiKey)
+	info, err := e.ExOrderSrv.GetApiKeyInfo(req.UserId, req.ApiKey)
 	if err != nil {
 		return response.NewDataNotFound(ErrID, "没有找到apiKey")
 	}
@@ -99,13 +99,13 @@ func (e *ExOrderService) GetAssetsByAllApiKey(ctx context.Context, req *pb.GetEx
 	resp.ProfitPercent = "0%"
 	var pos []*protocol.ExchangeApiResp
 	var err error
-	ret := e.exOrderSrv.GetExchangeAccountListFromCache(req.UserId)
+	ret := e.ExOrderSrv.GetExchangeAccountListFromCache(req.UserId)
 	if ret != nil {
 		if err = json.Unmarshal(ret, &pos); err != nil {
 			logger.Warnf("GetAssetsByAllApiKey jsonUnMarshal pos err %v ", err)
 		}
 	} else {
-		pos, err = e.exOrderSrv.GetExchangeApiList(req.UserId)
+		pos, err = e.ExOrderSrv.GetExchangeApiList(req.UserId)
 	}
 	if len(pos) == 0 || err != nil {
 		return nil
@@ -116,19 +116,19 @@ func (e *ExOrderService) GetAssetsByAllApiKey(ctx context.Context, req *pb.GetEx
 	}
 	asserts = utils.Keep2Decimal(asserts)
 	resp.Asserts = helper.Float64ToString(asserts) + "(USDT)"
-	strategyList := e.exOrderSrv.GetUserStrategyByUID(req.UserId)
+	strategyList := e.ExOrderSrv.GetUserStrategyByUID(req.UserId)
 	if len(strategyList) == 0 {
 		return nil
 	}
 	profit := 0.0
 	for _, strategy := range strategyList {
-		data, err := e.exOrderSrv.GetProfitByStrID("", strategy.ID)
+		data, err := e.ExOrderSrv.GetProfitByStrID("", strategy.ID)
 		if err != nil {
 			continue
 		}
 		if data.Unit == BTC { //如果是btc  换算成usdt
 			profitDecimal, _ := decimal.NewFromString(data.RealizeProfit)
-			price := e.exOrderSrv.GetBtcTickPrice()
+			price := e.ExOrderSrv.GetBtcTickPrice()
 			newProfit := profitDecimal.Mul(decimal.NewFromFloat(price))
 			logger.Infof("换算 btc数量%s 行情价格 %.2f", data.RealizeProfit, price)
 			data.RealizeProfit = newProfit.RoundBank(8).String()

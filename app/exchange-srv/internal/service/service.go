@@ -9,12 +9,12 @@ const (
 )
 
 type ExOrderService struct {
-	exOrderSrv *biz.ExOrderRepo
+	ExOrderSrv *biz.ExOrderRepo
 }
 
 func NewExOrderService() *ExOrderService {
 	handler := &ExOrderService{
-		exOrderSrv: biz.NewExOrderRepo(),
+		ExOrderSrv: biz.NewExOrderRepo(),
 	}
 	return handler
 }
