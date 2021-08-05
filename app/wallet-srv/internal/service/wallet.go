@@ -8,12 +8,11 @@ import (
 	"strings"
 	userPb "wq-fotune-backend/api/usercenter"
 	pb "wq-fotune-backend/api/wallet"
-	"wq-fotune-backend/app/exchange-srv/service"
 	"wq-fotune-backend/app/wallet-srv/internal/biz"
 	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/response"
-	symbol "wq-fotune-backend/pkg/symbol"
+	"wq-fotune-backend/pkg/symbol"
 )
 
 type WalletService struct {
@@ -41,16 +40,16 @@ func (w WalletService) CreateWallet(ctx context.Context, req *pb.UidReq, empty *
 
 func (w WalletService) Transfer(ctx context.Context, req *pb.TransferReq, e *empty.Empty) error {
 	if req.FromCoin == req.ToCoin {
-		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
+		return response.NewInternalServerErrWithMsg(biz.ErrID, "转入转出币种填写错误")
 	}
 	if req.FromCoin != biz.IFC && req.FromCoin != biz.USDT {
-		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
+		return response.NewInternalServerErrWithMsg(biz.ErrID, "转入转出币种填写错误")
 	}
 	if req.ToCoin != biz.IFC && req.ToCoin != biz.USDT {
-		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
+		return response.NewInternalServerErrWithMsg(biz.ErrID, "转入转出币种填写错误")
 	}
 	if req.FromCoinAmount <= 0.0 {
-		return response.NewParamsErrWithMsg(service.ErrID, "数量填写错误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "数量填写错误")
 	}
 	return w.walletSrv.Transfer(req.UserId, req.FromCoin, req.ToCoin, req.FromCoinAmount)
 }
@@ -64,10 +63,10 @@ func (w WalletService) GetWalletUSDT(ctx context.Context, req *pb.UidReq, resp *
 	spot, err := binance.GetAccountSpot()
 	if err != nil {
 		if strings.Contains(err.Error(), "1022") {
-			return response.NewInternalServerErrWithMsg(service.ErrID, "钱包密钥实效")
+			return response.NewInternalServerErrWithMsg(biz.ErrID, "钱包密钥实效")
 		}
 		logger.Warnf("用户id %s 获取子账户财产失败 %+v", err)
-		return response.NewInternalServerErrMsg(service.ErrID)
+		return response.NewInternalServerErrMsg(biz.ErrID)
 	}
 	if len(spot.SubAccounts) == 0 {
 		resp.Title = "usdt钱包"
@@ -102,13 +101,13 @@ func (w WalletService) GetWalletIFC(ctx context.Context, req *pb.UidReq, resp *p
 
 func (w WalletService) ConvertCoinTips(ctx context.Context, req *pb.ConvertCoinTipsReq, resp *pb.ConvertCoinTipsResp) error {
 	if req.From != biz.IFC && req.From != biz.USDT {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	if req.To != biz.IFC && req.To != biz.USDT {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	if req.From == req.To {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	wallet, err := w.walletSrv.GetWalletByUID(req.UserId)
 	if err != nil {
@@ -136,7 +135,7 @@ func (w WalletService) ConvertCoinTips(ctx context.Context, req *pb.ConvertCoinT
 	spot, err := binance.GetAccountSpot()
 	if err != nil {
 		logger.Warnf("用户id%s 钱包api-%s 获取财产%+v", req.UserId, wallet.ApiKey, err)
-		return response.NewInternalServerErrMsg(service.ErrID)
+		return response.NewInternalServerErrMsg(biz.ErrID)
 	}
 	if len(spot.SubAccounts) == 0 {
 		resp.Describe = fmt.Sprintf("usdt可用余额不足, 可兑换 %s IFC, 当前比例 %s:%s", wqCoinUsdtPrice, 1)
@@ -159,20 +158,20 @@ func (w WalletService) ConvertCoinTips(ctx context.Context, req *pb.ConvertCoinT
 
 func (w WalletService) ConvertCoin(ctx context.Context, req *pb.ConvertCoinReq, resp *pb.ConvertCoinResp) error {
 	if req.From != biz.IFC && req.From != biz.USDT {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	if req.To != biz.IFC && req.To != biz.USDT {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	if req.From == req.To {
-		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
+		return response.NewParamsErrWithMsg(biz.ErrID, "参数有误")
 	}
 	wqCoinInfo, err := w.walletSrv.GetWqCoinInfo()
 	if err != nil {
 		return err
 	}
 	if req.Volume <= 0 {
-		return response.NewParamsErrWithMsg(service.ErrID, "数量不能小于0")
+		return response.NewParamsErrWithMsg(biz.ErrID, "数量不能小于0")
 	}
 	wqCoinUsdtPrice, _ := decimal.NewFromString(wqCoinInfo.Price)
 	if req.From == biz.IFC {
@@ -187,10 +186,10 @@ func (w WalletService) ConvertCoin(ctx context.Context, req *pb.ConvertCoinReq, 
 
 func (w WalletService) Withdrawal(ctx context.Context, req *pb.WithdrawalReq, e *empty.Empty) error {
 	if req.Coin != biz.IFC && req.Coin != biz.USDT {
-		return response.NewParamsErrWithMsg(service.ErrID, "不支持体现该币种"+req.Coin)
+		return response.NewParamsErrWithMsg(biz.ErrID, "不支持体现该币种"+req.Coin)
 	}
 	if req.Volume <= 0.0 {
-		return response.NewParamsErrWithMsg(service.ErrID, "请输入正确数量")
+		return response.NewParamsErrWithMsg(biz.ErrID, "请输入正确数量")
 	}
 	return w.walletSrv.Withdrawal(req.UserId, req.Coin, req.Address, req.Volume)
 }
@@ -199,11 +198,11 @@ var exchangeParam = map[string]string{symbol.BINANCE: "", symbol.HUOBI: "", symb
 
 func (w WalletService) AddIfcBalance(ctx context.Context, req *pb.AddIfcBalanceReq, e *empty.Empty) error {
 	if req.Type != biz.TYPE_BIND_API && req.Type != biz.TYPE_REGISTER && req.Type != biz.TYPE_STRATEGY {
-		return response.NewParamsErrWithMsg(service.ErrID, "type参数只能为register,api,strategy当中")
+		return response.NewParamsErrWithMsg(biz.ErrID, "type参数只能为register,api,strategy当中")
 	}
 	if req.Type == biz.TYPE_BIND_API {
 		if _, ok := exchangeParam[req.Exchange]; !ok {
-			return response.NewParamsErrWithMsg(service.ErrID, "交易所exchange只能为binance,huobi,okex")
+			return response.NewParamsErrWithMsg(biz.ErrID, "交易所exchange只能为binance,huobi,okex")
 		}
 		record := w.walletSrv.GetIfcRecordByUidExchange(req.UserMasterId, req.InUserId, req.Exchange)
 		if len(record) != 0 {
@@ -217,7 +216,7 @@ func (w WalletService) AddIfcBalance(ctx context.Context, req *pb.AddIfcBalanceR
 func (w WalletService) GetTotalRebate(ctx context.Context, req *pb.GetTotalRebateReq, resp *pb.GetTotalRebateResp) error {
 	data := w.walletSrv.GetIfcRecordByUid(req.UserId)
 	if len(data) == 0 {
-		return response.NewDataNotFound(service.ErrID, "暂无数据")
+		return response.NewDataNotFound(biz.ErrID, "暂无数据")
 	}
 	var total decimal.Decimal
 	for _, v := range data {
