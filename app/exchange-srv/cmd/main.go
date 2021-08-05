@@ -13,14 +13,11 @@ const (
 	port = "0.0.0.0:9530"
 )
 
-func init() {
-	//日线统计
-	go cron.RunCron()
-}
-
 func main() {
 	go server.RunGrpc()
 	go server.RunHttp(port)
+	//日线统计
+	go cron.RunCron()
 	wait()
 }
 

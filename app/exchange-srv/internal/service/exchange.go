@@ -120,7 +120,6 @@ func (e *ExOrderService) GetAssetsByAllApiKey(ctx context.Context, req *pb.GetEx
 	if len(strategyList) == 0 {
 		return nil
 	}
-
 	profit := 0.0
 	for _, strategy := range strategyList {
 		data, err := e.exOrderSrv.GetProfitByStrID("", strategy.ID)
