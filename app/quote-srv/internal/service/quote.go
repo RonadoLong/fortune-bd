@@ -8,7 +8,7 @@ import (
 	quotepb "wq-fotune-backend/api/quote"
 	"wq-fotune-backend/app/quote-srv/cron"
 	"wq-fotune-backend/libs/logger"
-	exchange_info "wq-fotune-backend/pkg/exchange-info"
+	exchange_info "wq-fotune-backend/pkg/symbol"
 	"wq-fotune-backend/pkg/response"
 )
 

@@ -20,7 +20,7 @@ func (p *RequestOrdersWebSocketV1Client) Init(accessKey string, secretKey string
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *RequestOrdersWebSocketV1Client) SetHandler(
 	authHandler websocketclientbase.AuthenticationV1ResponseHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

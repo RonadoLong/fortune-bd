@@ -1,12 +1,12 @@
-package service
+package biz
 
 import (
+	pb "wq-fotune-backend/api/usercenter"
+	userCli "wq-fotune-backend/app/usercenter-srv/client"
+	"wq-fotune-backend/app/wallet-srv/cache"
+	"wq-fotune-backend/app/wallet-srv/internal/dao"
 	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/env"
-	userCli "wq-fotune-backend/app/usercenter-srv/client"
-	fotune_srv_user "wq-fotune-backend/app/usercenter-srv/proto"
-	"wq-fotune-backend/app/wallet-srv/cache"
-	"wq-fotune-backend/app/wallet-srv/dao"
 )
 
 const (
@@ -18,15 +18,15 @@ const (
 
 )
 
-type WalletService struct {
+type WalletRepo struct {
 	dao          *dao.Dao
 	cacheService *cache.Service
 	binance      *apiBinance.BinanceClient
-	UserSrv      fotune_srv_user.UserService
+	UserSrv      pb.UserService
 }
 
-func NewWalletService() *WalletService {
-	return &WalletService{
+func NewWalletRepo() *WalletRepo {
+	return &WalletRepo{
 		dao:          dao.New(),
 		cacheService: cache.NewService(),
 		binance:      apiBinance.InitClient(BinanceApiKey, BinanceSecret),

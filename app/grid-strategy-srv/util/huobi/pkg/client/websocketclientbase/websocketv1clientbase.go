@@ -50,7 +50,7 @@ func (p *WebSocketV1ClientBase) Init(accessKey string, secretKey string, host st
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *WebSocketV1ClientBase) SetHandler(authHandler AuthenticationV1ResponseHandler, msgHandler MessageHandler, repHandler ResponseHandler) {
 	p.authenticationResponseHandler = authHandler
 	p.messageHandler = msgHandler
@@ -230,14 +230,14 @@ func (p *WebSocketV1ClientBase) readLoop() {
 					logger.Infof("Respond  Pong: %d", pingV1Msg.Timestamp)
 				} else {
 					// Try to pass as websocket v1 authentication response
-					// If it is then invoke authentication service
+					// If it is then invoke authentication biz
 					authResp := auth.ParseWSV1AuthResp(message)
 					if authResp != nil && authResp.IsAuth() {
 						if p.authenticationResponseHandler != nil {
 							p.authenticationResponseHandler(authResp)
 						}
 					} else if strings.Contains(message, "balance") {
-						// If it contains expected string, then invoke message service and response service
+						// If it contains expected string, then invoke message biz and response biz
 						result, err := p.messageHandler(message)
 						if err != nil {
 							logger.Error("Handle message error", logger.Err(err))

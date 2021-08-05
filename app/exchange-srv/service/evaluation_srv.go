@@ -10,7 +10,7 @@ import (
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/evaluation"
-	exchange_info "wq-fotune-backend/pkg/exchange-info"
+	exchange_info "wq-fotune-backend/pkg/symbol"
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/response"
 	"wq-fotune-backend/pkg/utils"

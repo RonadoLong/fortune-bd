@@ -585,7 +585,7 @@ func (o *OrderNotifyMsg) toOrderInfo() *OrderInfo {
 
 func (bnWs *BinanceWs) SubscribeOrderReport(lKey string, symbol string, responseHandler func(symbol string, data interface{})) error {
 	if responseHandler == nil {
-		return errors.New("please set response service func")
+		return errors.New("please set response biz func")
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", bnWs.baseURL, lKey)
@@ -618,7 +618,7 @@ func (bnWs *BinanceWs) SubscribeOrderReport(lKey string, symbol string, response
 
 // ProcessTradeOrder 处理订单
 func ProcessTradeOrder(p Processer) func(symbol string, resp interface{}) {
-	// Response service
+	// Response biz
 	return func(symbol string, resp interface{}) {
 		defer func() {
 			if e := recover(); e != nil {

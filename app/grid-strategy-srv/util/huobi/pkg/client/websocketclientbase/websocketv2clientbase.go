@@ -52,7 +52,7 @@ func (p *WebSocketV2ClientBase) Init(accessKey string, secretKey string, host st
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *WebSocketV2ClientBase) SetHandler(authHandler AuthenticationV2ResponseHandler, msgHandler MessageHandler, repHandler ResponseHandler) {
 	p.authenticationResponseHandler = authHandler
 	p.messageHandler = msgHandler

@@ -1,15 +1,15 @@
 package client
 
 import (
-	"wq-fotune-backend/libs/env"
-	"wq-fotune-backend/libs/micro_client"
+	pbQuote "wq-fotune-backend/api/quote"
+	pbUser "wq-fotune-backend/api/usercenter"
+	pbWallet "wq-fotune-backend/api/wallet"
 	pb "wq-fotune-backend/app/exchange-srv/proto"
 	quoteCli "wq-fotune-backend/app/quote-srv/client"
-	pbQuote "wq-fotune-backend/app/quote-srv/proto"
 	userCli "wq-fotune-backend/app/usercenter-srv/client"
-	pbUser "wq-fotune-backend/app/usercenter-srv/proto"
 	walletCli "wq-fotune-backend/app/wallet-srv/client"
-	pbWallet "wq-fotune-backend/app/wallet-srv/proto"
+	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/micro_client"
 )
 
 func NewExOrderClient(etcdAddr string) pb.ExOrderService {

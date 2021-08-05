@@ -20,7 +20,7 @@ func (p *RequestAccountWebSocketV1Client) Init(accessKey string, secretKey strin
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *RequestAccountWebSocketV1Client) SetHandler(
 	authHandler websocketclientbase.AuthenticationV1ResponseHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

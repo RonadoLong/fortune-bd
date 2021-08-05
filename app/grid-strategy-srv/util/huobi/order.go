@@ -308,7 +308,7 @@ func (a *Account) GetHistoryOrdersInfo(symbol string, states string, types strin
 
 // ProcessTradeOrder 处理订单
 func ProcessTradeOrder(p goex.Processer) func(resp interface{}) {
-	// Response service
+	// Response biz
 	return func(resp interface{}) {
 		defer func() {
 			if e := recover(); e != nil {
@@ -379,7 +379,7 @@ func WsSubscribeOrder(wsClientID string, symbol string, responseHandler websocke
 	// Initialize a new instance
 	cli := new(orderwebsocketclient.SubscribeOrderWebSocketV2Client).Init(accessKey, secretKey, host)
 
-	// Connected service
+	// Connected biz
 	connectedHandler := func(resp *auth.WebSocketV2AuthenticationResponse) {
 		if !resp.IsSuccess() {
 			err = fmt.Errorf("websocket authentication error, code: %d, message:%s", resp.Code, resp.Message)
@@ -393,7 +393,7 @@ func WsSubscribeOrder(wsClientID string, symbol string, responseHandler websocke
 	// Set the callback handlers
 	cli.SetHandler(connectedHandler, responseHandler)
 
-	// Connect to the server and wait for the service to handle the response
+	// Connect to the server and wait for the biz to handle the response
 	cli.Connect(wsClientID)
 
 	return cli, err

@@ -1,4 +1,4 @@
-package service
+package biz
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"github.com/shopspring/decimal"
 	"strings"
 	"time"
+	"wq-fotune-backend/app/wallet-srv/cache"
+	"wq-fotune-backend/app/wallet-srv/internal/model"
 	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/app/wallet-srv/cache"
-	"wq-fotune-backend/app/wallet-srv/model"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 	TYPE_STRATEGY = "strategy"
 )
 
-func (w *WalletService) CreateWallet(userID string) error {
+func (w *WalletRepo) CreateWallet(userID string) error {
 	oldWallet, err := w.GetWalletByUID(userID)
 	if err != nil {
 		if strings.Contains(err.Error(), "1500") {
@@ -61,7 +61,7 @@ func (w *WalletService) CreateWallet(userID string) error {
 	return nil
 }
 
-func (w *WalletService) GetWalletByUID(userID string) (*model.WqWallet, error) {
+func (w *WalletRepo) GetWalletByUID(userID string) (*model.WqWallet, error) {
 	walletInfo, err := w.dao.GetWalletByUserID(userID)
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {
@@ -72,17 +72,8 @@ func (w *WalletService) GetWalletByUID(userID string) (*model.WqWallet, error) {
 	return walletInfo, nil
 }
 
-//func (w *WalletService) checkTransferVolume(fromCoin string, amount float64, walletInfo *model.WqWallet) error {
-//	if fromCoin == IFC {
-//		if amount > helper.StringToFloat64(walletInfo.WqCoinBalance) {
-//			return response.NewParamsErrWithMsg(ErrID, "可转余额不足")
-//		}
-//	}
-//	if fromCoin == USDT {
-//
-//	}
-//}
-func (w *WalletService) GetWqCoinInfo() (*model.WqCoinInfo, error) {
+
+func (w *WalletRepo) GetWqCoinInfo() (*model.WqCoinInfo, error) {
 	info, err := w.dao.GetWqCoinInfo()
 	if err != nil {
 		return nil, response.NewDataNotFound(ErrID, "请管理员先添加币种兑换信息")
@@ -90,7 +81,7 @@ func (w *WalletService) GetWqCoinInfo() (*model.WqCoinInfo, error) {
 	return info, nil
 }
 
-func (w *WalletService) Transfer(userID, fromCoin, toCoin string, fromCoinAmount float64) error {
+func (w *WalletRepo) Transfer(userID, fromCoin, toCoin string, fromCoinAmount float64) error {
 	ifcInfo, err := w.dao.GetWqCoinInfo()
 	if err != nil {
 		return response.NewInternalServerErrMsg(ErrID)
@@ -188,7 +179,7 @@ func (w *WalletService) Transfer(userID, fromCoin, toCoin string, fromCoinAmount
 	return nil
 }
 
-func (w *WalletService) Withdrawal(userID, Coin, Addr string, Volume float64) error {
+func (w *WalletRepo) Withdrawal(userID, Coin, Addr string, Volume float64) error {
 	wallet, err := w.GetWalletByUID(userID)
 	if err != nil {
 		return err
@@ -224,7 +215,7 @@ func (w *WalletService) Withdrawal(userID, Coin, Addr string, Volume float64) er
 	return nil
 }
 
-func (w *WalletService) CreateWalletAtRunning() {
+func (w *WalletRepo) CreateWalletAtRunning() {
 	resp, err := w.UserSrv.GetAllUserInfo(context.Background(), &empty.Empty{})
 	if err != nil {
 		logger.Warnf("获取所有用户失败 %+v", err)
@@ -248,7 +239,7 @@ func (w *WalletService) CreateWalletAtRunning() {
 	}
 }
 
-func (w *WalletService) AddIfcBalance(userID, inUserID, _type, exchange string, volumeIn float64) error {
+func (w *WalletRepo) AddIfcBalance(userID, inUserID, _type, exchange string, volumeIn float64) error {
 	logger.Infof("增加用户ifc数量 uid %s volume %v", userID, volumeIn)
 	wallet, err := w.GetWalletByUID(userID)
 	if err != nil {
@@ -282,16 +273,16 @@ func (w *WalletService) AddIfcBalance(userID, inUserID, _type, exchange string, 
 	return nil
 }
 
-func (w *WalletService) GetIfcRecordByUid(uid string) []*model.WqIfcGiftRecord {
+func (w *WalletRepo) GetIfcRecordByUid(uid string) []*model.WqIfcGiftRecord {
 	return w.dao.GetIfcGiftRecordByUid(uid)
 }
 
-func (w *WalletService) GetIfcRecordByUidExchange(userMasterId, inUserID, exchange string) []*model.WqIfcGiftRecord {
+func (w *WalletRepo) GetIfcRecordByUidExchange(userMasterId, inUserID, exchange string) []*model.WqIfcGiftRecord {
 	return w.dao.GetIfcGiftRecordBySql(userMasterId, inUserID, exchange)
 }
 
 //给当月首次启动策略加积分
-func (w *WalletService) AddIfcByStrategyRunInfo(userMasterID, inUserID string, volume float64) {
+func (w *WalletRepo) AddIfcByStrategyRunInfo(userMasterID, inUserID string, volume float64) {
 	_, err := w.cacheService.GetUserStrategyRunInfo(userMasterID)
 	if err != nil {
 		if err == cache.KeyNotFound {

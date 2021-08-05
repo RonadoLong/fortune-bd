@@ -1,4 +1,4 @@
-package exchange_info
+package symbol
 
 const (
 	OKEX    = "okex"

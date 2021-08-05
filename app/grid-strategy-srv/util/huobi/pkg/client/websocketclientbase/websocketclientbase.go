@@ -52,7 +52,7 @@ func (p *WebSocketClientBase) Init(host string) *WebSocketClientBase {
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *WebSocketClientBase) SetHandler(connHandler ConnectedHandler, msgHandler MessageHandler, repHandler ResponseHandler) {
 	p.connectedHandler = connHandler
 	p.messageHandler = msgHandler
@@ -220,7 +220,7 @@ func (p *WebSocketClientBase) readLoop() {
 					p.Send(pongMsg)
 					logger.Infof("Replied Pong: %d", pingMsg.Ping)
 				} else if strings.Contains(message, "tick") || strings.Contains(message, "data") {
-					// If it contains expected string, then invoke message service and response service
+					// If it contains expected string, then invoke message biz and response biz
 					result, err := p.messageHandler(message)
 					if err != nil {
 						logger.Error("Handle message error", logger.Err(err))

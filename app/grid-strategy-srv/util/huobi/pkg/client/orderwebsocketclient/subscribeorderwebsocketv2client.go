@@ -21,7 +21,7 @@ func (p *SubscribeOrderWebSocketV2Client) Init(accessKey string, secretKey strin
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *SubscribeOrderWebSocketV2Client) SetHandler(
 	authHandler websocketclientbase.AuthenticationV2ResponseHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

@@ -20,7 +20,7 @@ func (p *TradeWebSocketClient) Init(host string) *TradeWebSocketClient {
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *TradeWebSocketClient) SetHandler(
 	connectedHandler websocketclientbase.ConnectedHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

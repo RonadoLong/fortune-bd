@@ -19,7 +19,7 @@ import (
 	"wq-fotune-backend/libs/logger"
 	api "wq-fotune-backend/libs/okex_client"
 	"wq-fotune-backend/pkg/encoding"
-	exchange_info "wq-fotune-backend/pkg/exchange-info"
+	exchange_info "wq-fotune-backend/pkg/symbol"
 	"wq-fotune-backend/pkg/response"
 	"wq-fotune-backend/pkg/utils"
 	"wq-fotune-backend/app/exchange-srv/client"

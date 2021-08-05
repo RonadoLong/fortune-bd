@@ -1,12 +1,12 @@
-package service
+package biz
 
 import (
 	"testing"
-	"wq-fotune-backend/app/wallet-srv/dao"
+	"wq-fotune-backend/app/wallet-srv/internal/dao"
 )
 
 func TestWalletService_AddIfcBalance(t *testing.T) {
-	srv := &WalletService{
+	srv := &WalletRepo{
 		dao:          dao.New(),
 		cacheService: nil,
 		binance:      nil,

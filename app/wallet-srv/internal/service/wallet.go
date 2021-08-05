@@ -1,4 +1,4 @@
-package handler
+package service
 
 import (
 	"context"
@@ -6,25 +6,27 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/shopspring/decimal"
 	"strings"
-	userPb "wq-fotune-backend/app/usercenter-srv/proto"
-	fotune_srv_wallet "wq-fotune-backend/app/wallet-srv/proto"
-	"wq-fotune-backend/app/wallet-srv/service"
+	userPb "wq-fotune-backend/api/usercenter"
+	pb "wq-fotune-backend/api/wallet"
+	"wq-fotune-backend/app/exchange-srv/service"
+	"wq-fotune-backend/app/wallet-srv/internal/biz"
 	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/logger"
-	exchange_info "wq-fotune-backend/pkg/exchange-info"
 	"wq-fotune-backend/pkg/response"
+	symbol "wq-fotune-backend/pkg/symbol"
 )
 
-type WalletHandler struct {
-	walletSrv *service.WalletService
+type WalletService struct {
+
+	walletSrv *biz.WalletRepo
 }
 
-func NewWalletHandler() *WalletHandler {
-	return &WalletHandler{
-		walletSrv: service.NewWalletService(),
+func NewWalletHandler() *WalletService {
+	return &WalletService{
+		walletSrv: biz.NewWalletRepo(),
 	}
 }
-func (w WalletHandler) GetUsdtDepositAddr(ctx context.Context, req *fotune_srv_wallet.UidReq, resp *fotune_srv_wallet.UsdtDepositAddrResp) error {
+func (w WalletService) GetUsdtDepositAddr(ctx context.Context, req *pb.UidReq, resp *pb.UsdtDepositAddrResp) error {
 	wallet, err := w.walletSrv.GetWalletByUID(req.UserId)
 	if err != nil {
 		return err
@@ -33,18 +35,18 @@ func (w WalletHandler) GetUsdtDepositAddr(ctx context.Context, req *fotune_srv_w
 	return nil
 }
 
-func (w WalletHandler) CreateWallet(ctx context.Context, req *fotune_srv_wallet.UidReq, empty *empty.Empty) error {
+func (w WalletService) CreateWallet(ctx context.Context, req *pb.UidReq, empty *empty.Empty) error {
 	return w.walletSrv.CreateWallet(req.UserId)
 }
 
-func (w WalletHandler) Transfer(ctx context.Context, req *fotune_srv_wallet.TransferReq, e *empty.Empty) error {
+func (w WalletService) Transfer(ctx context.Context, req *pb.TransferReq, e *empty.Empty) error {
 	if req.FromCoin == req.ToCoin {
 		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
 	}
-	if req.FromCoin != service.IFC && req.FromCoin != service.USDT {
+	if req.FromCoin != biz.IFC && req.FromCoin != biz.USDT {
 		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
 	}
-	if req.ToCoin != service.IFC && req.ToCoin != service.USDT {
+	if req.ToCoin != biz.IFC && req.ToCoin != biz.USDT {
 		return response.NewInternalServerErrWithMsg(service.ErrID, "转入转出币种填写错误")
 	}
 	if req.FromCoinAmount <= 0.0 {
@@ -53,7 +55,7 @@ func (w WalletHandler) Transfer(ctx context.Context, req *fotune_srv_wallet.Tran
 	return w.walletSrv.Transfer(req.UserId, req.FromCoin, req.ToCoin, req.FromCoinAmount)
 }
 
-func (w WalletHandler) GetWalletUSDT(ctx context.Context, req *fotune_srv_wallet.UidReq, resp *fotune_srv_wallet.WalletBalanceResp) error {
+func (w WalletService) GetWalletUSDT(ctx context.Context, req *pb.UidReq, resp *pb.WalletBalanceResp) error {
 	wallet, err := w.walletSrv.GetWalletByUID(req.UserId)
 	if err != nil {
 		return err
@@ -75,7 +77,7 @@ func (w WalletHandler) GetWalletUSDT(ctx context.Context, req *fotune_srv_wallet
 		return nil
 	}
 	for key, value := range spot.SubAccounts {
-		if key.Symbol == service.USDT {
+		if key.Symbol == biz.USDT {
 			resp.Title = "usdt钱包"
 			resp.Symbol = "usdt"
 			resp.Total = decimal.NewFromFloat(value.Balance).String()
@@ -86,7 +88,7 @@ func (w WalletHandler) GetWalletUSDT(ctx context.Context, req *fotune_srv_wallet
 	return nil
 }
 
-func (w WalletHandler) GetWalletIFC(ctx context.Context, req *fotune_srv_wallet.UidReq, resp *fotune_srv_wallet.WalletBalanceResp) error {
+func (w WalletService) GetWalletIFC(ctx context.Context, req *pb.UidReq, resp *pb.WalletBalanceResp) error {
 	wallet, err := w.walletSrv.GetWalletByUID(req.UserId)
 	if err != nil {
 		return err
@@ -98,11 +100,11 @@ func (w WalletHandler) GetWalletIFC(ctx context.Context, req *fotune_srv_wallet.
 	return nil
 }
 
-func (w WalletHandler) ConvertCoinTips(ctx context.Context, req *fotune_srv_wallet.ConvertCoinTipsReq, resp *fotune_srv_wallet.ConvertCoinTipsResp) error {
-	if req.From != service.IFC && req.From != service.USDT {
+func (w WalletService) ConvertCoinTips(ctx context.Context, req *pb.ConvertCoinTipsReq, resp *pb.ConvertCoinTipsResp) error {
+	if req.From != biz.IFC && req.From != biz.USDT {
 		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
 	}
-	if req.To != service.IFC && req.To != service.USDT {
+	if req.To != biz.IFC && req.To != biz.USDT {
 		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
 	}
 	if req.From == req.To {
@@ -120,7 +122,7 @@ func (w WalletHandler) ConvertCoinTips(ctx context.Context, req *fotune_srv_wall
 	wqCoinUsdtPrice, _ := decimal.NewFromString(wqCoinInfo.Price)
 	wqCoinBalance, _ := decimal.NewFromString(wallet.WqCoinBalance)
 
-	if req.From == service.IFC {
+	if req.From == biz.IFC {
 		usdtVolume := wqCoinBalance.Mul(wqCoinUsdtPrice) //算出可兑换多少usdt
 		if usdtVolume.Equal(decimal.NewFromFloat(0)) {
 			resp.Describe = fmt.Sprintf("ifc可用余额不足,可兑换 %s USDT, 当前比例 %d:%s", usdtVolume.RoundBank(2).String(), 1, wqCoinUsdtPrice.String())
@@ -141,7 +143,7 @@ func (w WalletHandler) ConvertCoinTips(ctx context.Context, req *fotune_srv_wall
 		return nil
 	}
 	for key, value := range spot.SubAccounts {
-		if key.Symbol == service.USDT {
+		if key.Symbol == biz.USDT {
 			if value.Amount < 1 {
 				resp.Describe = fmt.Sprintf("usdt可用余额不足, 可兑换 0 IFC, 当前比例 %s:%d", wqCoinUsdtPrice.String(), 1)
 				return nil
@@ -155,11 +157,11 @@ func (w WalletHandler) ConvertCoinTips(ctx context.Context, req *fotune_srv_wall
 	return nil
 }
 
-func (w WalletHandler) ConvertCoin(ctx context.Context, req *fotune_srv_wallet.ConvertCoinReq, resp *fotune_srv_wallet.ConvertCoinResp) error {
-	if req.From != service.IFC && req.From != service.USDT {
+func (w WalletService) ConvertCoin(ctx context.Context, req *pb.ConvertCoinReq, resp *pb.ConvertCoinResp) error {
+	if req.From != biz.IFC && req.From != biz.USDT {
 		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
 	}
-	if req.To != service.IFC && req.To != service.USDT {
+	if req.To != biz.IFC && req.To != biz.USDT {
 		return response.NewParamsErrWithMsg(service.ErrID, "参数有误")
 	}
 	if req.From == req.To {
@@ -173,7 +175,7 @@ func (w WalletHandler) ConvertCoin(ctx context.Context, req *fotune_srv_wallet.C
 		return response.NewParamsErrWithMsg(service.ErrID, "数量不能小于0")
 	}
 	wqCoinUsdtPrice, _ := decimal.NewFromString(wqCoinInfo.Price)
-	if req.From == service.IFC {
+	if req.From == biz.IFC {
 		resp.Describe = "可兑换usdt"
 		resp.Volume, _ = decimal.NewFromFloat(req.Volume).Mul(wqCoinUsdtPrice).RoundBank(2).Float64()
 		return nil
@@ -183,8 +185,8 @@ func (w WalletHandler) ConvertCoin(ctx context.Context, req *fotune_srv_wallet.C
 	return nil
 }
 
-func (w WalletHandler) Withdrawal(ctx context.Context, req *fotune_srv_wallet.WithdrawalReq, e *empty.Empty) error {
-	if req.Coin != service.IFC && req.Coin != service.USDT {
+func (w WalletService) Withdrawal(ctx context.Context, req *pb.WithdrawalReq, e *empty.Empty) error {
+	if req.Coin != biz.IFC && req.Coin != biz.USDT {
 		return response.NewParamsErrWithMsg(service.ErrID, "不支持体现该币种"+req.Coin)
 	}
 	if req.Volume <= 0.0 {
@@ -193,13 +195,13 @@ func (w WalletHandler) Withdrawal(ctx context.Context, req *fotune_srv_wallet.Wi
 	return w.walletSrv.Withdrawal(req.UserId, req.Coin, req.Address, req.Volume)
 }
 
-var exchangeParam = map[string]string{exchange_info.BINANCE: "", exchange_info.HUOBI: "", exchange_info.OKEX: ""}
+var exchangeParam = map[string]string{symbol.BINANCE: "", symbol.HUOBI: "", symbol.OKEX: ""}
 
-func (w WalletHandler) AddIfcBalance(ctx context.Context, req *fotune_srv_wallet.AddIfcBalanceReq, e *empty.Empty) error {
-	if req.Type != service.TYPE_BIND_API && req.Type != service.TYPE_REGISTER && req.Type != service.TYPE_STRATEGY {
+func (w WalletService) AddIfcBalance(ctx context.Context, req *pb.AddIfcBalanceReq, e *empty.Empty) error {
+	if req.Type != biz.TYPE_BIND_API && req.Type != biz.TYPE_REGISTER && req.Type != biz.TYPE_STRATEGY {
 		return response.NewParamsErrWithMsg(service.ErrID, "type参数只能为register,api,strategy当中")
 	}
-	if req.Type == service.TYPE_BIND_API {
+	if req.Type == biz.TYPE_BIND_API {
 		if _, ok := exchangeParam[req.Exchange]; !ok {
 			return response.NewParamsErrWithMsg(service.ErrID, "交易所exchange只能为binance,huobi,okex")
 		}
@@ -212,7 +214,7 @@ func (w WalletHandler) AddIfcBalance(ctx context.Context, req *fotune_srv_wallet
 	return w.walletSrv.AddIfcBalance(req.UserMasterId, req.InUserId, req.Type, req.Exchange, req.Volume)
 }
 
-func (w WalletHandler) GetTotalRebate(ctx context.Context, req *fotune_srv_wallet.GetTotalRebateReq, resp *fotune_srv_wallet.GetTotalRebateResp) error {
+func (w WalletService) GetTotalRebate(ctx context.Context, req *pb.GetTotalRebateReq, resp *pb.GetTotalRebateResp) error {
 	data := w.walletSrv.GetIfcRecordByUid(req.UserId)
 	if len(data) == 0 {
 		return response.NewDataNotFound(service.ErrID, "暂无数据")
@@ -232,17 +234,17 @@ func (w WalletHandler) GetTotalRebate(ctx context.Context, req *fotune_srv_walle
 			phone = inUser.Phone
 		}
 		msg := ""
-		if v.Type == service.TYPE_STRATEGY {
+		if v.Type == biz.TYPE_STRATEGY {
 			msg = "邀请用户使用量化策略赠送"
 		}
-		if v.Type == service.TYPE_REGISTER {
+		if v.Type == biz.TYPE_REGISTER {
 			msg = "邀请用户注册赠送"
 		}
-		if v.Type == service.TYPE_BIND_API {
+		if v.Type == biz.TYPE_BIND_API {
 			msg = "邀请用户绑定api赠送"
 		}
 		date := v.UpdatedAt.Format("2006-01-02")
-		resp.Record = append(resp.Record, &fotune_srv_wallet.IfcRecord{
+		resp.Record = append(resp.Record, &pb.IfcRecord{
 			Phone:   phone,
 			Volume:  v.Volume,
 			TypeMsg: msg,
@@ -253,7 +255,7 @@ func (w WalletHandler) GetTotalRebate(ctx context.Context, req *fotune_srv_walle
 	return nil
 }
 
-func (w WalletHandler) StrategyRunNotify(ctx context.Context, req *fotune_srv_wallet.StrategyRunNotifyReq, e *empty.Empty) error {
+func (w WalletService) StrategyRunNotify(ctx context.Context, req *pb.StrategyRunNotifyReq, e *empty.Empty) error {
 	info, err := w.walletSrv.UserSrv.GetUserMasterByInViteUser(context.Background(), &userPb.GetUserMasterReq{
 		InviteUid: req.UserId,
 	})

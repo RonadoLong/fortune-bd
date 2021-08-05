@@ -123,7 +123,7 @@ func TestWsSubscribeOrder(t *testing.T) {
 	// Initialize a new instance
 	cli := new(orderwebsocketclient.SubscribeOrderWebSocketV2Client).Init(accessKey, secretKey, host)
 
-	// Connected service
+	// Connected biz
 	connectedHandler := func(resp *auth.WebSocketV2AuthenticationResponse) {
 		if resp.IsSuccess() {
 			// Subscribe if authentication passed
@@ -133,7 +133,7 @@ func TestWsSubscribeOrder(t *testing.T) {
 		}
 	}
 
-	// Response service
+	// Response biz
 	responseHandler := func(resp interface{}) {
 		subResponse, ok := resp.(order.SubscribeOrderV2Response)
 		if !ok {
@@ -175,7 +175,7 @@ func TestWsSubscribeOrder(t *testing.T) {
 	// Set the callback handlers
 	cli.SetHandler(connectedHandler, responseHandler)
 
-	// Connect to the server and wait for the service to handle the response
+	// Connect to the server and wait for the biz to handle the response
 	cli.Connect(wsClientID)
 
 	fmt.Println("waiting ......")

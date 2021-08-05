@@ -20,7 +20,7 @@ func (p *BestBidOfferWebSocketClient) Init(host string) *BestBidOfferWebSocketCl
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *BestBidOfferWebSocketClient) SetHandler(
 	connectedHandler websocketclientbase.ConnectedHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

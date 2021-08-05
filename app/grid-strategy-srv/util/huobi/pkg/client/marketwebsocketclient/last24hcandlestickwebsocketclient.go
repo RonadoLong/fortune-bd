@@ -20,7 +20,7 @@ func (p *Last24hCandlestickWebSocketClient) Init(host string) *Last24hCandlestic
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *Last24hCandlestickWebSocketClient) SetHandler(
 	connectedHandler websocketclientbase.ConnectedHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

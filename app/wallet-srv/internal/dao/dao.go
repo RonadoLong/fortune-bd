@@ -2,10 +2,10 @@ package dao
 
 import (
 	"github.com/jinzhu/gorm"
+	"wq-fotune-backend/app/wallet-srv/internal/model"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/dbclient"
-	"wq-fotune-backend/app/wallet-srv/model"
 )
 
 type Dao struct {

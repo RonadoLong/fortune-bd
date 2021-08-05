@@ -20,7 +20,7 @@ func (p *DepthWebSocketClient) Init(host string) *DepthWebSocketClient {
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *DepthWebSocketClient) SetHandler(
 	connectedHandler websocketclientbase.ConnectedHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

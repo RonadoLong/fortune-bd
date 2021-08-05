@@ -16,7 +16,7 @@ const (
 	errID = "user"
 )
 
-// NewUserService service
+// NewUserService biz
 func NewUserService() *UserService {
 	handler := &UserService{dao.New(), walletCli.NewWalletClient(env.EtcdAddr)}
 	return handler

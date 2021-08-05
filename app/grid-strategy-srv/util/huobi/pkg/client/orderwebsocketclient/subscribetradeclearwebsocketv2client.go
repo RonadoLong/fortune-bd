@@ -21,7 +21,7 @@ func (p *SubscribeTradeClearWebSocketV2Client) Init(accessKey string, secretKey 
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *SubscribeTradeClearWebSocketV2Client) SetHandler(
 	authHandler websocketclientbase.AuthenticationV2ResponseHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

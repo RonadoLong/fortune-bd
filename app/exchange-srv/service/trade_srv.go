@@ -6,15 +6,15 @@ import (
 	"github.com/shopspring/decimal"
 	"strings"
 	"time"
-	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/response"
+	pbQuote "wq-fotune-backend/api/quote"
+	fotune_srv_user "wq-fotune-backend/api/usercenter"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/app/exchange-srv/model"
 	pb "wq-fotune-backend/app/exchange-srv/proto"
 	globalF "wq-fotune-backend/app/forward-offer-srv/global"
 	quoteCron "wq-fotune-backend/app/quote-srv/cron"
-	pbQuote "wq-fotune-backend/app/quote-srv/proto"
-	fotune_srv_user "wq-fotune-backend/app/usercenter-srv/proto"
+	"wq-fotune-backend/libs/logger"
+	"wq-fotune-backend/pkg/response"
 )
 
 func (e *ExOrderService) GetTradeSymbols(exchange, symbol string) ([]*pb.Symbol, error) {

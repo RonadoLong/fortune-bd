@@ -20,7 +20,7 @@ func (p *MarketByPriceWebSocketClient) Init(host string) *MarketByPriceWebSocket
 	return p
 }
 
-// Set callback service
+// Set callback biz
 func (p *MarketByPriceWebSocketClient) SetHandler(
 	connectedHandler websocketclientbase.ConnectedHandler,
 	responseHandler websocketclientbase.ResponseHandler) {

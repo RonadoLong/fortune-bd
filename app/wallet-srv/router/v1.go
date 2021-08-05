@@ -1,4 +1,4 @@
-package handler
+package router
 
 import (
 	"context"
@@ -6,35 +6,36 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/micro/go-micro/v2/errors"
 	"log"
+	pb "wq-fotune-backend/api/wallet"
+	"wq-fotune-backend/app/wallet-srv/client"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/pkg/middleware"
 	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/app/wallet-srv/client"
-	pb "wq-fotune-backend/app/wallet-srv/proto"
 )
 
 var (
 	walletService pb.WalletService
 )
 
-func InitWalletEngine(engine *gin.RouterGroup) {
-	walletService = client.NewWalletClient(env.EtcdAddr)
-	group := engine.Group("/wallet")
-	group.POST("/strategyStartUpNotify", StrategyStarUpNotify)
 
+func apiV1(group *gin.RouterGroup) {
+	walletService = client.NewWalletClient(env.EtcdAddr)
+	group.POST("/strategyStartUpNotify", StrategyStarUpNotify)
 	group.Use(middleware.JWTAuth())
 	group.POST("/create", CreateWallet)
 	group.POST("/transfer", Transfer)
 	group.GET("/ifc", WalletIFC)
 	group.GET("/usdt", WalletUSDT)
-
 	group.GET("usdt/depositAddr", GetUsdtDeposit)
 	group.POST("/convertCoinTips", CovertCoinTips)
 	group.POST("/convertCoin", CovertCoin)
 	group.POST("/withdrawal", CreateWithdrawal)
 	group.GET("/totalRebate", GetTotalRebate)
 }
+
+
+
 
 func StrategyStarUpNotify(c *gin.Context) {
 	var req pb.StrategyRunNotifyReq
