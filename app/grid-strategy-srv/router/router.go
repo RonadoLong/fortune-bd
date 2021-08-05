@@ -6,6 +6,6 @@ import (
 )
 
 // Init routers
-func Init(engine *gin.RouterGroup) {
-	v1api(engine.Group("/grid"))
+func Init(engine *gin.Engine) {
+	v1api(engine.Group("/grid/v1"))
 }

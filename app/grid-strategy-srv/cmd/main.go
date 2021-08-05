@@ -1,20 +1,24 @@
-package grid_strategy_srv
+package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"os"
 	"os/signal"
-	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/app/grid-strategy-srv/model"
-	"wq-fotune-backend/app/grid-strategy-srv/router"
+	"wq-fotune-backend/app/grid-strategy-srv/server"
+	"wq-fotune-backend/libs/env"
 
 	"github.com/zhufuyi/pkg/logger"
 	"github.com/zhufuyi/pkg/mongo"
 )
 
-func InitMain(engine *gin.RouterGroup) {
+const (
+	port = "0.0.0.0:9530"
+)
+
+
+func main() {
 	initServer()
-	router.Init(engine)
+	go server.RunHttp(port)
 	wait()
 }
 
@@ -34,7 +38,6 @@ func initCache() {
 	if err != nil {
 		logger.Error("InitExchangeLimitCache failed", logger.Err(err))
 	}
-
 	// 加载策略类型
 	err = model.InitStrategyTypeCache()
 	if err != nil {
@@ -48,23 +51,6 @@ func initCache() {
 		logger.Error("InitStrategyCache failed", logger.Err(err))
 	}
 }
-
-//func runWebServer() {
-//	if config.IsProd() {
-//		gin.SetMode(gin.ReleaseMode)
-//	}
-//
-//	engine := gin.Default()
-//	engine.Use(render.InOutLog())
-//	router.Init(engine)
-//
-//	if config.IsEnableProfile() {
-//		pprof.Register(engine, "/goprofile/"+config.GetAppName())
-//	}
-//
-//	logger.Infof("启动服务，监听端口：%d", config.GetAppPort())
-//	engine.Run(fmt.Sprintf(":%d", config.GetAppPort()))
-//}
 
 func wait() {
 	quit := make(chan os.Signal)
