@@ -1,9 +1,9 @@
 package service
 
 import (
+	walletPb "wq-fotune-backend/api/wallet"
 	"wq-fotune-backend/app/usercenter-srv/internal/dao"
 	walletCli "wq-fotune-backend/app/wallet-srv/client"
-	walletPb "wq-fotune-backend/app/wallet-srv/proto"
 	"wq-fotune-backend/libs/env"
 )
 
