@@ -10,22 +10,14 @@ import (
 	"strconv"
 	pb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/api/protocol"
-	"wq-fotune-backend/app/exchange-srv/client"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/app/exchange-srv/internal/service"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/middleware"
 	"wq-fotune-backend/pkg/response"
 )
 
-var (
-	exOrderService pb.ExOrderService
-	orderService   pb.ForwardOfferService
-)
-
 func apiV1(group *gin.RouterGroup) {
-	exOrderService = client.NewExOrderClient(env.EtcdAddr)
-	orderService = client.NewForwardOfferClient(env.EtcdAddr)
 
 	group.GET("/exchange/info", GetExchangeInfo)
 	group.GET("/exchange/symbols/:exchange/:coin", GetTradeSymbol)
@@ -50,13 +42,14 @@ func apiV1(group *gin.RouterGroup) {
 }
 
 func AddProfit(c *gin.Context) {
+	var exOrderService = service.NewExOrderService()
 	var req pb.StrategyProfitCompensateReq
 	defer c.Request.Body.Close()
 	if err := jsonpb.Unmarshal(c.Request.Body, &req); err != nil {
 		response.NewBindJsonErr(c, nil)
 		return
 	}
-	_, err := exOrderService.StrategyProfitCompensate(context.Background(), &req)
+	err := exOrderService.StrategyProfitCompensate(context.Background(), &req,  &empty.Empty{})
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -66,7 +59,9 @@ func AddProfit(c *gin.Context) {
 }
 
 func GetSymbolRank(c *gin.Context) {
-	resp, err := exOrderService.GetSymbolRankWithRateYear(context.Background(), &empty.Empty{})
+	var exOrderService = service.NewExOrderService()
+	var resp pb.SymbolRankWithRateYearResp
+	err := exOrderService.GetSymbolRankWithRateYear(context.Background(), &empty.Empty{}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -78,25 +73,29 @@ func GetSymbolRank(c *gin.Context) {
 func GetUserAssert(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	assert, err := exOrderService.GetAssetsByAllApiKey(context.Background(), &pb.GetExApiReq{UserId: jwtP.UserID})
+	var exOrderService = service.NewExOrderService()
+	var resp pb.AssertsResp
+	err := exOrderService.GetAssetsByAllApiKey(context.Background(), &pb.GetExApiReq{UserId: jwtP.UserID}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
 	}
-	response.NewSuccess(c, assert)
+	response.NewSuccess(c, resp)
 }
 
 func GetTradeSymbol(c *gin.Context) {
 	exchange := c.Param("exchange")
 	coin := c.Param("coin")
-	symbols, err := exOrderService.GetTradeSymbols(context.Background(), &pb.TradeSymbolReq{Exchange: exchange, Coin: coin})
+	var exOrderService = service.NewExOrderService()
+	var resp pb.GetSymbolsResp
+	err := exOrderService.GetTradeSymbols(context.Background(), &pb.TradeSymbolReq{Exchange: exchange, Coin: coin}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
 	}
-	response.NewSuccess(c, symbols.Symbols)
+	response.NewSuccess(c, resp.Symbols)
 }
 
 func PutOrder(c *gin.Context) {
@@ -106,7 +105,8 @@ func PutOrder(c *gin.Context) {
 		response.NewBindJsonErr(c, nil)
 		return
 	}
-	_, err := orderService.PushSwapOrder(context.Background(), &req)
+	var orderService = service.NewForwardOfferHandle()
+	err := orderService.PushSwapOrder(context.Background(), &req, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -116,7 +116,9 @@ func PutOrder(c *gin.Context) {
 }
 
 func GetExchangeInfo(c *gin.Context) {
-	infoList, err := exOrderService.ExChangeInfo(context.Background(), &empty.Empty{})
+	var exOrderService = service.NewExOrderService()
+	var infoList pb.ExChangeList
+	err := exOrderService.ExChangeInfo(context.Background(), &empty.Empty{}, &infoList)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -149,7 +151,8 @@ func AddExchangeAPI(c *gin.Context) {
 		Secret:     req.Secret,
 		Passphrase: req.Passphrase,
 	}
-	_, err := exOrderService.AddExchangeApi(context.Background(), exAPi)
+	var exOrderService = service.NewExOrderService()
+	err := exOrderService.AddExchangeApi(context.Background(), exAPi, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -165,7 +168,9 @@ func GetApiKeyInfo(c *gin.Context) {
 		UserId: userID,
 		ApiKey: apiKey,
 	}
-	info, err := exOrderService.GetApiKeyInfo(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var info pb.ExchangeApiResp
+	err := exOrderService.GetApiKeyInfo(context.Background(), req, &info)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -187,7 +192,9 @@ func GetExApiList(c *gin.Context) {
 	jwtP := claims.(*jwt.JWTPayload)
 
 	req := &pb.GetExApiReq{UserId: jwtP.UserID}
-	apiList, err := exOrderService.GetExchangeApiList(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var apiList pb.ExApiResp
+	err := exOrderService.GetExchangeApiList(context.Background(), req, &apiList)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -222,7 +229,8 @@ func UpdateExApi(c *gin.Context) {
 		Secret:     req.Secret,
 		Passphrase: req.Passphrase,
 	}
-	_, err := exOrderService.UpdateExchangeApi(context.Background(), exAPi)
+	var exOrderService = service.NewExOrderService()
+	err := exOrderService.UpdateExchangeApi(context.Background(), exAPi, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -240,8 +248,9 @@ func DeleteExApi(c *gin.Context) {
 		response.NewInternalServerErr(c, nil)
 		return
 	}
+	var exOrderService = service.NewExOrderService()
 	req := &pb.UserApiReq{ApiID: int64(i), UserId: jwtP.UserID}
-	_, err = exOrderService.DeleteExchangeApi(context.Background(), req)
+	err = exOrderService.DeleteExchangeApi(context.Background(), req, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -262,7 +271,9 @@ func GetTradeList(c *gin.Context) {
 		PageNum:    int32(pageNum),
 		PageSize:   int32(pageSize),
 	}
-	resp, err := exOrderService.GetTradeList(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var resp pb.TradeListResp
+	err := exOrderService.GetTradeList(context.Background(), req, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -285,7 +296,9 @@ func GetProfit(c *gin.Context) {
 		UserId:     jwtP.UserID,
 		StrategyId: strategyId,
 	}
-	resp, err := exOrderService.GetProfitRealTime(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var resp pb.ProfitRealTimeResp
+	err := exOrderService.GetProfitRealTime(context.Background(), req, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -303,7 +316,9 @@ func GetExchangePos(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
 	req := &pb.GetExchangePosReq{UserId: jwtP.UserID}
-	resp, err := exOrderService.GetExchangePos(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var  resp pb.ExchangePosResp
+	err := exOrderService.GetExchangePos(context.Background(), req, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -319,7 +334,8 @@ func PutOrderGrid(c *gin.Context) {
 		response.NewBindJsonErr(c, nil)
 		return
 	}
-	_, err := exOrderService.EvaluationSpot(context.Background(), &req)
+	var exOrderService = service.NewExOrderService()
+	err := exOrderService.EvaluationSpot(context.Background(), &req,nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -336,7 +352,9 @@ func GetUserStrategyEva(c *gin.Context) {
 		UserId:     jwtP.UserID,
 		StrategyId: strategyId,
 	}
-	eva, err := exOrderService.GetUserStrategyEva(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var eva pb.UserStrategyEvaResp
+	err := exOrderService.GetUserStrategyEva(context.Background(), req, &eva)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -362,7 +380,9 @@ func GetUserStrategyEvaNoAuth(c *gin.Context) {
 		UserId:     userID,
 		StrategyId: strategyId,
 	}
-	eva, err := exOrderService.GetUserStrategyEva(context.Background(), req)
+	var exOrderService = service.NewExOrderService()
+	var eva pb.UserStrategyEvaResp
+	err := exOrderService.GetUserStrategyEva(context.Background(), req, &eva)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)

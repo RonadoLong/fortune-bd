@@ -23,7 +23,7 @@ func RunGrpc() {
 		}),
 	)
 	micro_service.RegisterEtcd(ms, env.EtcdAddr)
-	if err := pb.RegisterExOrderHandler(ms.Server(), service.NewExOrderHandler()); err != nil {
+	if err := pb.RegisterExOrderHandler(ms.Server(), service.NewExOrderService()); err != nil {
 		logger.Panic(fmt.Sprintf("注册服务错误 %v", err))
 	}
 	if err := pb.RegisterForwardOfferHandler(ms.Server(), service.NewForwardOfferHandle()); err != nil {

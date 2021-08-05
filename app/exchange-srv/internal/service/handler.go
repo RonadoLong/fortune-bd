@@ -8,19 +8,11 @@ const (
 	ErrID = "exchangeOrder"
 )
 
-//var (
-//	quoteService pbQuote.QuoteService
-//)
-
-//func InitQuoteCli() {
-//	quoteService = quoteCli.NewQuoteClient(config.Config.EtcdAddr)
-//}
-
 type ExOrderService struct {
 	exOrderSrv *biz.ExOrderRepo
 }
 
-func NewExOrderHandler() *ExOrderService {
+func NewExOrderService() *ExOrderService {
 	handler := &ExOrderService{
 		exOrderSrv: biz.NewExOrderRepo(),
 	}
