@@ -8,8 +8,8 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/micro/go-micro/v2/errors"
 	"strconv"
-	"wq-fotune-backend/api-gateway/protocol"
 	pb "wq-fotune-backend/api/exchange"
+	"wq-fotune-backend/api/protocol"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/jwt"
@@ -23,11 +23,10 @@ var (
 	orderService   pb.ForwardOfferService
 )
 
-func apiV1(engine *gin.RouterGroup) {
+func apiV1(group *gin.RouterGroup) {
 	exOrderService = client.NewExOrderClient(env.EtcdAddr)
 	orderService = client.NewForwardOfferClient(env.EtcdAddr)
 
-	group := engine.Group("/exchange-order")
 	group.GET("/exchange/info", GetExchangeInfo)
 	group.GET("/exchange/symbols/:exchange/:coin", GetTradeSymbol)
 	group.GET("/exchange/symbolRank", GetSymbolRank)

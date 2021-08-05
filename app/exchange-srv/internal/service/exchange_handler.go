@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/shopspring/decimal"
-	"wq-fotune-backend/api-gateway/protocol"
+	pb "wq-fotune-backend/api/exchange"
+	"wq-fotune-backend/api/protocol"
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/response"
 	"wq-fotune-backend/pkg/utils"
-	pb "wq-fotune-backend/api/exchange"
 )
 
 const (
