@@ -29,7 +29,7 @@ func RunHttp(port string) {
 		MaxHeaderBytes: 1 << 20,
 	}
 	pprof.Register(engine, "/common/debug")
-	logger.Infof("启动服务，监听端口：%d", port)
+	logger.Infof("启动服务，监听端口：%v", port)
 	if err := s.ListenAndServe(); err != nil {
 		log.Println("启动服务失败 ", port)
 	}
