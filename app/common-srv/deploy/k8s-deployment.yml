@@ -96,7 +96,7 @@ spec:
           - path: /common
             pathType: Prefix
             backend:
-              app:
+              service:
                 name: common-svc
                 port:
                   number: 9530
