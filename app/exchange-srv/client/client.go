@@ -4,10 +4,8 @@ import (
 	pb "wq-fotune-backend/api/exchange"
 	pbQuote "wq-fotune-backend/api/quote"
 	pbUser "wq-fotune-backend/api/usercenter"
-	pbWallet "wq-fotune-backend/api/wallet"
 	quoteCli "wq-fotune-backend/app/quote-srv/client"
 	userCli "wq-fotune-backend/app/usercenter-srv/client"
-	walletCli "wq-fotune-backend/app/wallet-srv/client"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/micro_client"
 )
@@ -15,7 +13,6 @@ import (
 func NewExOrderClient(etcdAddr string) pb.ExOrderService {
 	service := micro_client.InitBase(
 		etcdAddr,
-		//micro.Name("exchange-srv.client"),
 	)
 	exOrderService := pb.NewExOrderService(env.EXCHANGE_SRV_NAME, service.Client())
 	return exOrderService
@@ -29,14 +26,11 @@ func NewForwardOfferClient(etcdAddr string) pb.ForwardOfferService {
 	return exOrderService
 }
 
-var (
-	QuoteService  pbQuote.QuoteService
-	UserService   pbUser.UserService
-	WalletService pbWallet.WalletService
-)
-
-func InitService() {
-	QuoteService = quoteCli.NewQuoteClient(env.EtcdAddr)
-	UserService = userCli.NewUserClient(env.EtcdAddr)
-	WalletService = walletCli.NewWalletClient(env.EtcdAddr)
+func GetQuoteService() pbQuote.QuoteService {
+	return quoteCli.NewQuoteClient(env.EtcdAddr)
 }
+
+func GetUserService() pbUser.UserService {
+	return userCli.NewUserClient(env.EtcdAddr)
+}
+

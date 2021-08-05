@@ -122,7 +122,7 @@ func (e *ExOrderRepo) GetExchangeApiList(userId string) ([]*protocol.ExchangeApi
 		resp.BtcBalance = "0"
 	}
 
-	rateUsdRmb, err := client.QuoteService.GetRate(context.Background(), &empty.Empty{})
+	rateUsdRmb, err := client.GetQuoteService().GetRate(context.Background(), &empty.Empty{})
 	if err != nil {
 		logger.Warnf("quoteService调用GetRate 失败 %v", err)
 	}

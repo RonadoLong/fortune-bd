@@ -24,7 +24,7 @@ func (e *ExOrderRepo) GetTradeSymbols(exchange, symbol string) ([]*pb.Symbol, er
 	if len(symbols) == 0 {
 		return nil, response.NewDataNotFound(ErrID, "没有品种数据")
 	}
-	ticksResp, errTick := client.QuoteService.GetTicksWithExchangeSymbol(context.Background(), &pbQuote.GetTicksSymbolReq{
+	ticksResp, errTick := client.GetQuoteService().GetTicksWithExchangeSymbol(context.Background(), &pbQuote.GetTicksSymbolReq{
 		Symbol:   symbol,
 		Exchange: exchange,
 	})
@@ -110,7 +110,7 @@ func (e *ExOrderRepo) CacheRateReturn() {
 	index := 0
 	userIdList := make(map[string]bool, 0)
 	for _, profit := range profitList {
-		user, err := client.UserService.GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
+		user, err := client.GetUserService().GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
 		if err != nil {
 			logger.Warnf("CacheRateReturn 查找用户信息失败 %v 用户id %s", err, profit.UserID)
 			continue
@@ -148,7 +148,7 @@ func (e *ExOrderRepo) CacheRateReturnYear() {
 	index := 0
 	userIdList := make(map[string]bool, 0)
 	for _, profit := range profitList {
-		user, err := client.UserService.GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
+		user, err := client.GetUserService().GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
 		if err != nil {
 			logger.Warnf("CacheRateReturnYear 查找用户信息失败 %v 用户id %s", err, profit.UserID)
 			continue
@@ -184,7 +184,7 @@ func (e *ExOrderRepo) GetSymbolRankWithRateYear() []*model.WqSymbolRecommend {
 }
 
 func (e *ExOrderRepo) GetBtcTickPrice() float64 {
-	ticksResp, err := client.QuoteService.GetTicksWithExchangeSymbol(context.Background(), &pbQuote.GetTicksSymbolReq{
+	ticksResp, err := client.GetQuoteService().GetTicksWithExchangeSymbol(context.Background(), &pbQuote.GetTicksSymbolReq{
 		Symbol:   "usdt",
 		Exchange: "binance",
 	})
