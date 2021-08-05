@@ -91,7 +91,7 @@ spec:
     - host: yun.mateforce.cn
       http:
         paths:
-          - path: /userv
+          - path: /user
             pathType: Prefix
             backend:
               service:

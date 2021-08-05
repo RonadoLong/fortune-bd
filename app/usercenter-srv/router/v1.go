@@ -6,7 +6,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/micro/go-micro/v2/errors"
-	"wq-fotune-backend/api-gateway/protocol"
+	"wq-fotune-backend/api/protocol"
 	pb "wq-fotune-backend/api/usercenter"
 	"wq-fotune-backend/app/usercenter-srv/client"
 	"wq-fotune-backend/libs/env"
