@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        workload.user.cattle.io/workloadselector: dm-develop-quote-svc
+        workload.user.cattle.io/workloadselector: dm-develop-grid-strategy-svc
     spec:
       containers:
         - env:
