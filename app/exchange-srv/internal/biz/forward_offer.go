@@ -15,7 +15,7 @@ import (
 
 const TradeRequestQueue = "trade:%s:request"
 
-//direction 不再使用
+// PushSwapOrder direction 不再使用
 func (f *ForwardOfferRepo) PushSwapOrder(req *pb.TradeSignal) error {
 	if req == nil || req.Orders == nil {
 		return nil

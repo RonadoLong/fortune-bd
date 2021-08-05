@@ -38,8 +38,12 @@ func (e *ExOrderRepo) GetExchangeInfo() ([]*model.WqExchange, error) {
 }
 
 func (e *ExOrderRepo) checkIfApiValid(apiKey, secret, passphrase, exchange string) error {
-	client := e.GetExchangeClient(apiKey, secret, passphrase, exchange)
-	if err := client.CheckIfApiValid(); err != nil {
+	exchangeClient := e.GetExchangeClient(apiKey, secret, passphrase, exchange)
+	if exchangeClient == nil {
+		logger.Info("No exchange exchangeClient")
+		return errors.New("exchange exchangeClient nil")
+	}
+	if err := exchangeClient.CheckIfApiValid(); err != nil {
 		return response.NewExchangeApiCheckErrMsg(ErrID)
 	}
 	return nil
@@ -83,24 +87,6 @@ func (e *ExOrderRepo) AddExchangeApi(userID, apiKey, secret, passphrase string, 
 	if err := e.dao.AddExchangeApi(newAPI); err != nil {
 		return response.NewExchangeApiCreateErrMsg(ErrID)
 	}
-	//赠送邀请ifc
-	//resp, err := client.UserService.GetUserMasterByInViteUser(context.Background(), &userPb.GetUserMasterReq{
-	//	InviteUid: userID,
-	//})
-	//if err != nil {
-	//	logger.Warnf("找不到邀请数据 无需添加ifc userid %s", userID)
-	//	return nil
-	//}
-	//_, err = client.WalletService.AddIfcBalance(context.Background(), &walletPb.AddIfcBalanceReq{
-	//	UserMasterId: resp.UserMasterId,
-	//	InUserId:     userID,
-	//	Volume:       10,
-	//	Type:         "api",
-	//	Exchange:     exchange.Exchange,
-	//})
-	//if err != nil {
-	//	logger.Warnf("添加apikey 增加发出邀请码用户的ifc失败 uid %s userMasterID %s  err %v", userID, resp.UserMasterId, err)
-	//}
 	return nil
 }
 
@@ -207,10 +193,13 @@ func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos
 		secret, _ := hex.DecodeString(apiInfo.Secret)
 		secretBytes, _ := encoding.AesDecrypt(secret)
 		//获取对应的交易所客户端
-		client := e.GetExchangeClient(apiInfo.ApiKey, string(secretBytes), apiInfo.Passphrase, exchange)
-
+		exchangeClient := e.GetExchangeClient(apiInfo.ApiKey, string(secretBytes), apiInfo.Passphrase, exchange)
+		if exchangeClient == nil {
+			logger.Info("No exchange client")
+			continue
+		}
 		err := utils.ReTryFunc(3, func() (bool, error) { //重试
-			spotList, err := client.GetAccountSpot() //调用现货接口
+			spotList, err := exchangeClient.GetAccountSpot() //调用现货接口
 			if err != nil {
 				if err.Error() == "validation-format-error" {
 					return false, nil
@@ -253,42 +242,7 @@ func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos
 		if err != nil {
 			return nil, err
 		}
-		//time.Sleep(time.Second * 1)
-		//err = utils.ReTryFunc(3, func() (bool, error) {
-		//	swapList, err := client.GetAccountSwap() //查询永续合约
-		//	if err != nil {
-		//		if err.Error() == "validation-format-error" {
-		//			return false, nil
-		//		}
-		//		logger.Infof("GetExchangePos:GetFutureUserinfo has err %v", err)
-		//		time.Sleep(time.Second * 1)
-		//		return false, err
-		//	}
-		//	for key, value := range swapList.SubAccounts {
-		//		if value.Balance == 0 && value.Amount == 0 {
-		//			continue
-		//		}
-		//		price := 0.0
-		//		tick, err := e.cacheService.GetOKexQuote(fmt.Sprintf("%s%s", key.Symbol, "-USDT"))
-		//		if err == nil {
-		//			price = tick.Last
-		//		}
-		//		pos := &pb.ExchangePos{
-		//			Symbol:    key.Symbol,
-		//			Balance:   decimal.NewFromFloat(value.Balance).String(),
-		//			Available: decimal.NewFromFloat(value.Amount).String(),
-		//			Frozen:    decimal.NewFromFloat(value.ForzenAmount).String(),
-		//			Price:     decimal.NewFromFloat(price).String(),
-		//			TotalUsdt: decimal.NewFromFloat(price * value.Balance).Round(8).String(),
-		//			Type:      "swap", //永续合约
-		//		}
-		//		posList = append(posList, pos)
-		//	}
-		//	return false, nil
-		//})
-		//if err != nil {
-		//	return nil, err
-		//}
+
 	}
 	return posList, nil
 }

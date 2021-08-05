@@ -20,7 +20,7 @@ import (
 	"wq-fotune-backend/pkg/utils"
 )
 
-//不再使用
+// EvaluationSwap 不再使用
 func (e *ExOrderRepo) EvaluationSwap(req *pb.TradeReq) error {
 	log.Println("开始计算合约统计")
 	//参数处理
