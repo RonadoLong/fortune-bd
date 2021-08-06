@@ -20,7 +20,7 @@ func New() *Dao {
 		os.Exit(-1)
 	}
 	return &Dao{
-		db:    dbclient.NewDB(env.DBDSN),
+		db:    dbclient.NewDB(env.DbAddr),
 		mongo: mgoClient,
 	}
 }

@@ -1,4 +1,4 @@
-package api
+package exchange_clientI
 
 import (
 	"context"
@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 	"time"
-	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
+	"wq-fotune-backend/pkg/goex"
 )
 
 var (
@@ -28,7 +28,7 @@ var (
 
 )
 
-func TestInitClient(t *testing.T) {
+func TestInitOkexClient(t *testing.T) {
 	client := InitClient(apikey, secretkey, Passphrase)
 
 	orderBook := client.GetOrderBook(Symbol)

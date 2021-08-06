@@ -24,7 +24,7 @@ var (
 	RunMode   = configMap.getValue(runMode)
 	RedisAddr = configMap.getValue(redisAddr)
 	RedisPWD  = configMap.getValue(redisPWD)
-	DBDSN     = configMap.getValue(dbDSN)
+	DbDSN    = configMap.getValue(dbDSN)
 	EtcdAddr  = configMap.getValue(etcdAddr)
 	MongoAddr = configMap.getValue(mongoAddr)
 

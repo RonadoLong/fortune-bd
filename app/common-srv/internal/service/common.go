@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 	pb "wq-fotune-backend/api/common"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/common-srv/cache"
 	"wq-fotune-backend/app/common-srv/internal/dao"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/libs/oss"
-	"wq-fotune-backend/pkg/response"
 )
 
 const (
@@ -24,7 +24,6 @@ const (
 
 type CommonService struct {
 	dao      *dao.Dao
-	cacheSrv *cache.Service
 }
 
 func (c *CommonService) PushProfitImageOss(ctx context.Context, req *pb.PushImageReq, resp *pb.ImageResp) error {
@@ -47,7 +46,7 @@ func (c *CommonService) PushProfitImageOss(ctx context.Context, req *pb.PushImag
 }
 
 func (c *CommonService) GetUserRateRank(ctx context.Context, e *empty.Empty, resp *pb.UserRateRankResp) error {
-	data, err := c.cacheSrv.GetData("rateReturnSort")
+	data, err := cache.GetData("rateReturnSort")
 	if err != nil {
 		logger.Warnf("暂无排名数据 %v", err)
 		return response.NewDataNotFound(errID, "暂无排名数据")
@@ -57,7 +56,7 @@ func (c *CommonService) GetUserRateRank(ctx context.Context, e *empty.Empty, res
 }
 
 func (c *CommonService) GetUserRateYearRank(ctx context.Context, e *empty.Empty, resp *pb.UserRateRankResp) error {
-	data, err := c.cacheSrv.GetData("rateReturnYearSort")
+	data, err := cache.GetData("rateReturnYearSort")
 	if err != nil {
 		logger.Warnf("暂无排名数据 %v", err)
 		return response.NewDataNotFound(errID, "暂无排名数据")

@@ -9,19 +9,17 @@ import (
 	"github.com/micro/go-micro/v2/errors"
 	pb "wq-fotune-backend/api/common"
 	"wq-fotune-backend/api/protocol"
-	"wq-fotune-backend/app/common-srv/client"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/api/response"
+	"wq-fotune-backend/app/common-srv/internal/service"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/response"
 )
 
 
 var (
-	commonService pb.CommonService
+	commonService = service.NewCommonService()
 )
 
 func apiV1(group *gin.RouterGroup) {
-	commonService = client.NewCommonClient(env.EtcdAddr)
 	group.GET("/carousels", GetCarousels)
 	group.GET("/contact", GetContact)
 	group.GET("/appVersion/:platform", GetAppVersion)
@@ -37,7 +35,8 @@ func pushProfitImage(c *gin.Context) {
 		response.NewBindJsonErr(c, nil)
 		return
 	}
-	oss, err := commonService.PushProfitImageOss(context.Background(), &req)
+	var oss pb.ImageResp
+	err := commonService.PushProfitImageOss(context.Background(), &req, &oss)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -47,7 +46,8 @@ func pushProfitImage(c *gin.Context) {
 }
 
 func GetRateRank(c *gin.Context) {
-	rank, err := commonService.GetUserRateRank(context.Background(), &empty.Empty{})
+	var rank pb.UserRateRankResp
+	err := commonService.GetUserRateRank(context.Background(), &empty.Empty{}, &rank)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -63,7 +63,8 @@ func GetRateRank(c *gin.Context) {
 }
 
 func GetRateYearRank(c *gin.Context) {
-	rank, err := commonService.GetUserRateYearRank(context.Background(), &empty.Empty{})
+	var rank pb.UserRateRankResp
+	err := commonService.GetUserRateYearRank(context.Background(), &empty.Empty{}, &rank)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -79,7 +80,8 @@ func GetRateYearRank(c *gin.Context) {
 }
 
 func GetCarousels(c *gin.Context) {
-	list, err := commonService.Carousel(context.Background(), &empty.Empty{})
+	var list pb.CarouselList
+	err := commonService.Carousel(context.Background(), &empty.Empty{}, &list)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -95,7 +97,8 @@ func GetCarousels(c *gin.Context) {
 }
 
 func GetContact(c *gin.Context) {
-	contact, err := commonService.CustomerService(context.Background(), &empty.Empty{})
+	var contact pb.ContractAddr
+	err := commonService.CustomerService(context.Background(), &empty.Empty{}, &contact)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -110,7 +113,8 @@ func GetContact(c *gin.Context) {
 
 func GetAppVersion(c *gin.Context) {
 	platform := c.Param("platform")
-	version, err := commonService.GetAppVersion(context.Background(), &pb.VersionReq{Platform: platform})
+	var version pb.AppVersion
+	err := commonService.GetAppVersion(context.Background(), &pb.VersionReq{Platform: platform}, &version)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)

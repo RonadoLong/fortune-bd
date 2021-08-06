@@ -1,4 +1,4 @@
-package apiHuobi
+package exchange_clientI
 
 import (
 	"log"

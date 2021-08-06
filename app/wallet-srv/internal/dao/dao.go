@@ -14,7 +14,7 @@ type Dao struct {
 
 func New() *Dao {
 	return &Dao{
-		db: dbclient.NewDB(env.DBDSN),
+		db: dbclient.NewDB(env.DbAddr),
 	}
 }
 

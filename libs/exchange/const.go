@@ -1,6 +1,9 @@
 package exchange
 
 const (
-	OKEX = "okex"
-	HUOBI = "huobi"
+	OKEX    = "okex"
+	BITMEX  = "bitmex"
+	DERIBIT = "deribit"
+	HUOBI   = "huobi"
+	BINANCE = "binance"
 )
