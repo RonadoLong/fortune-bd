@@ -9,8 +9,7 @@ import (
 	"wq-fotune-backend/api/protocol"
 	"wq-fotune-backend/api/response"
 	pb "wq-fotune-backend/api/usercenter"
-	"wq-fotune-backend/app/usercenter-srv/client"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/app/usercenter-srv/internal/service"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/libs/middleware"
@@ -18,11 +17,10 @@ import (
 )
 
 var (
-	userService pb.UserService
+	userService = service.NewUserService()
 )
 
 func apiV1(group *gin.RouterGroup) {
-	userService = client.NewUserClient(env.EtcdAddr)
 	group.POST("/login", Login)
 	group.POST("/send/validate-code", SendValidateCode)
 	group.POST("/register", Register)
@@ -47,7 +45,8 @@ func Login(c *gin.Context) {
 		Phone:    req.Phone,
 		Password: req.Password,
 	}
-	user, err := userService.Login(context.Background(), loginReq)
+	var user pb.LoginResp
+	err := userService.Login(context.Background(), loginReq, &user)
 	if err != nil {
 		fromError := errors.FromError(err)
 		logger.Errorf("userService.Login  调用失败 %v", err.Error())
@@ -85,7 +84,8 @@ func SendValidateCode(c *gin.Context) {
 	}
 
 	vcodeReq := &pb.ValidateCodeReq{Phone: req.Phone}
-	resp, err := userService.SendValidateCode(context.Background(), vcodeReq)
+	var resp pb.ValidateCodeResp
+	err := userService.SendValidateCode(context.Background(), vcodeReq, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -112,7 +112,7 @@ func Register(c *gin.Context) {
 		InvitationCode:  req.InvitationCode,
 		ValidateCode:    req.ValidateCode,
 	}
-	if _, err := userService.Register(context.Background(), registerReq); err != nil {
+	if err := userService.Register(context.Background(), registerReq, nil); err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
@@ -133,7 +133,7 @@ func ResetPassword(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
 	resetReq := &pb.ChangePasswordReq{UserID: jwtP.UserID, Password: req.Password, ConfirmPassword: req.ConfirmPassword}
-	if _, err := userService.ResetPassword(context.Background(), resetReq); err != nil {
+	if err := userService.ResetPassword(context.Background(), resetReq, nil); err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
@@ -158,7 +158,7 @@ func UpdateUser(c *gin.Context) {
 		Avatar: req.Avatar,
 		UserId: JwtP.UserID,
 	}
-	if _, err := userService.UpdateUser(context.Background(), updateUserReq); err != nil {
+	if err := userService.UpdateUser(context.Background(), updateUserReq, nil); err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
@@ -188,7 +188,7 @@ func ForgetPassword(c *gin.Context) {
 		ValidateCode:    req.ValidateCode,
 	}
 
-	if _, err := userService.ForgetPassword(context.Background(), changePassReq); err != nil {
+	if err := userService.ForgetPassword(context.Background(), changePassReq, nil); err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
 		return
@@ -200,7 +200,8 @@ func BaseInfo(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	JwtP := claims.(*jwt.JWTPayload)
 	req := &pb.UserInfoReq{UserID: JwtP.UserID}
-	user, err := userService.GetUserInfo(context.Background(), req)
+	var user pb.LoginResp
+	err := userService.GetUserInfo(context.Background(), req, &user)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -219,7 +220,8 @@ func BaseInfo(c *gin.Context) {
 }
 
 func GetMembers(c *gin.Context) {
-	resp, err := userService.GetMembers(context.Background(), &empty.Empty{})
+	var resp pb.GetMembersResp
+	err := userService.GetMembers(context.Background(), &empty.Empty{}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -229,7 +231,8 @@ func GetMembers(c *gin.Context) {
 }
 
 func GetPaymentMethods(c *gin.Context) {
-	resp, err := userService.GetPaymentMethod(context.Background(), &empty.Empty{})
+	var resp pb.GetPaymentMethodResp
+	err := userService.GetPaymentMethod(context.Background(), &empty.Empty{}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)

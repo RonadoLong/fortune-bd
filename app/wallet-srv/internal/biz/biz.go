@@ -5,8 +5,8 @@ import (
 	userCli "wq-fotune-backend/app/usercenter-srv/client"
 	"wq-fotune-backend/app/wallet-srv/cache"
 	"wq-fotune-backend/app/wallet-srv/internal/dao"
-	apiBinance "wq-fotune-backend/libs/binance_client"
 	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/exchangeclient"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 type WalletRepo struct {
 	dao          *dao.Dao
 	cacheService *cache.Service
-	binance      *apiBinance.BinanceClient
+	binance      *exchangeclient.Binance
 	UserSrv      pb.UserService
 }
 
@@ -29,7 +29,7 @@ func NewWalletRepo() *WalletRepo {
 	return &WalletRepo{
 		dao:          dao.New(),
 		cacheService: cache.NewService(),
-		binance:      apiBinance.InitClient(BinanceApiKey, BinanceSecret),
+		binance:      exchangeclient.InitBinance(BinanceApiKey, BinanceSecret),
 		UserSrv:      userCli.NewUserClient(env.EtcdAddr),
 	}
 }

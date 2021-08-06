@@ -4,9 +4,8 @@ import (
 	"errors"
 	"github.com/go-redis/redis"
 	"time"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/cache"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/libs/redisHelper"
 )
 
 type Service struct {
@@ -17,7 +16,7 @@ var userRunKey = "run-strategy:"
 
 func NewService() *Service {
 	return &Service{
-		redisCli: redisHelper.InitRedisClient(env.RedisAddr, env.RedisPWD),
+		redisCli: cache.Redis(),
 	}
 }
 

@@ -8,12 +8,12 @@ import (
 	"github.com/shopspring/decimal"
 	"strings"
 	"time"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/wallet-srv/cache"
 	"wq-fotune-backend/app/wallet-srv/internal/model"
-	apiBinance "wq-fotune-backend/libs/binance_client"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/response"
 )
 
 const (
@@ -51,7 +51,7 @@ func (w *WalletRepo) CreateWallet(userID string) error {
 		return response.NewInternalServerErrMsg(ErrID)
 	}
 	//用子账户的api secret查询它的充值地址
-	subBinance := apiBinance.InitClient(subApiResp.ApiKey, subApiResp.SecretKey)
+	subBinance := exchangeclient.InitBinance(subApiResp.ApiKey, subApiResp.SecretKey)
 	address, err := subBinance.GetAccountDepositAddress("USDT")
 	//创建用户钱包
 	walletModel := model.NewWqWalletModel(userID, subApiResp.ApiKey, subApiResp.SecretKey, subAccountId, address.Address)
@@ -108,7 +108,7 @@ func (w *WalletRepo) Transfer(userID, fromCoin, toCoin string, fromCoinAmount fl
 		if decimal.NewFromFloat(fromCoinAmount).Cmp(ifcBalance) == 1 {
 			return response.NewParamsErrWithMsg(ErrID, "ifc余额不足")
 		}
-		binance := apiBinance.InitClient(walletInfo.ApiKey, walletInfo.Secret)
+		binance := exchangeclient.InitBinance(walletInfo.ApiKey, walletInfo.Secret)
 		spotUsdt, err := binance.GetAccountSpotUsdt()
 		if err != nil {
 			logger.Warnf("用户%s 查询子账户资产错误 %v", userID, err)
@@ -142,7 +142,7 @@ func (w *WalletRepo) Transfer(userID, fromCoin, toCoin string, fromCoinAmount fl
 	}
 	if fromCoin == USDT { // 从USDT 转到ifc
 		ifc := decimal.NewFromFloat(fromCoinAmount).Div(ifcPrice).RoundBank(8)
-		binance := apiBinance.InitClient(walletInfo.ApiKey, walletInfo.Secret)
+		binance := exchangeclient.InitBinance(walletInfo.ApiKey, walletInfo.Secret)
 		spotUsdt, err := binance.GetAccountSpotUsdt()
 		if err != nil {
 			logger.Warnf("用户%s 查询子账户资产错误 %v", userID, err)
@@ -191,7 +191,7 @@ func (w *WalletRepo) Withdrawal(userID, Coin, Addr string, Volume float64) error
 		}
 	}
 	if Coin == USDT {
-		binance := apiBinance.InitClient(wallet.ApiKey, wallet.Secret)
+		binance := exchangeclient.InitBinance(wallet.ApiKey, wallet.Secret)
 		usdt, err := binance.GetAccountSpotUsdt()
 		if err != nil {
 			return response.NewInternalServerErrMsg(ErrID)
@@ -281,7 +281,7 @@ func (w *WalletRepo) GetIfcRecordByUidExchange(userMasterId, inUserID, exchange 
 	return w.dao.GetIfcGiftRecordBySql(userMasterId, inUserID, exchange)
 }
 
-//给当月首次启动策略加积分
+// AddIfcByStrategyRunInfo 给当月首次启动策略加积分
 func (w *WalletRepo) AddIfcByStrategyRunInfo(userMasterID, inUserID string, volume float64) {
 	_, err := w.cacheService.GetUserStrategyRunInfo(userMasterID)
 	if err != nil {

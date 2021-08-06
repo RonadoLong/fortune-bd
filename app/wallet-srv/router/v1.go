@@ -6,12 +6,12 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/micro/go-micro/v2/errors"
 	"log"
+	"wq-fotune-backend/api/response"
 	pb "wq-fotune-backend/api/wallet"
 	"wq-fotune-backend/app/wallet-srv/client"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/jwt"
-	"wq-fotune-backend/pkg/middleware"
-	"wq-fotune-backend/pkg/response"
+	"wq-fotune-backend/libs/middleware"
 )
 
 var (

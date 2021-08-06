@@ -6,13 +6,14 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/shopspring/decimal"
 	"strings"
+	"wq-fotune-backend/api/response"
 	userPb "wq-fotune-backend/api/usercenter"
 	pb "wq-fotune-backend/api/wallet"
 	"wq-fotune-backend/app/wallet-srv/internal/biz"
-	apiBinance "wq-fotune-backend/libs/binance_client"
+	"wq-fotune-backend/libs/exchange"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/pkg/symbol"
+
 )
 
 type WalletService struct {
@@ -59,7 +60,7 @@ func (w WalletService) GetWalletUSDT(ctx context.Context, req *pb.UidReq, resp *
 	if err != nil {
 		return err
 	}
-	binance := apiBinance.InitClient(wallet.ApiKey, wallet.Secret)
+	binance := exchangeclient.InitBinance(wallet.ApiKey, wallet.Secret)
 	spot, err := binance.GetAccountSpot()
 	if err != nil {
 		if strings.Contains(err.Error(), "1022") {
@@ -131,7 +132,7 @@ func (w WalletService) ConvertCoinTips(ctx context.Context, req *pb.ConvertCoinT
 		return nil
 	}
 	//else
-	binance := apiBinance.InitClient(wallet.ApiKey, wallet.Secret)
+	binance := exchangeclient.InitBinance(wallet.ApiKey, wallet.Secret)
 	spot, err := binance.GetAccountSpot()
 	if err != nil {
 		logger.Warnf("用户id%s 钱包api-%s 获取财产%+v", req.UserId, wallet.ApiKey, err)
@@ -194,7 +195,7 @@ func (w WalletService) Withdrawal(ctx context.Context, req *pb.WithdrawalReq, e 
 	return w.walletSrv.Withdrawal(req.UserId, req.Coin, req.Address, req.Volume)
 }
 
-var exchangeParam = map[string]string{symbol.BINANCE: "", symbol.HUOBI: "", symbol.OKEX: ""}
+var exchangeParam = map[string]string{exchange.BINANCE: "", exchange.HUOBI: "", exchange.OKEX: ""}
 
 func (w WalletService) AddIfcBalance(ctx context.Context, req *pb.AddIfcBalanceReq, e *empty.Empty) error {
 	if req.Type != biz.TYPE_BIND_API && req.Type != biz.TYPE_REGISTER && req.Type != biz.TYPE_STRATEGY {

@@ -6,12 +6,12 @@ import (
 	"wq-fotune-backend/pkg/goex/binance"
 )
 
-type BinanceClient struct {
+type Binance struct {
 	ApiClient *binance.Binance
 	Ws        *binance.BinanceWs
 }
 
-func InitBinance(apiKey, secret string) *BinanceClient {
+func InitBinance(apiKey, secret string) *Binance {
 	binanceClt := binance.NewWithConfig(&goex.APIConfig{
 		HttpClient:    client,
 		Endpoint:      "",
@@ -20,17 +20,17 @@ func InitBinance(apiKey, secret string) *BinanceClient {
 		ApiPassphrase: "",
 		ClientId:      "",
 	})
-	return &BinanceClient{
+	return &Binance{
 		ApiClient: binanceClt,
 		Ws:        nil,
 	}
 }
 
-func (b *BinanceClient) GetAccountSpot() (*goex.Account, error) {
+func (b *Binance) GetAccountSpot() (*goex.Account, error) {
 	return b.ApiClient.GetAccount()
 }
 
-func (b *BinanceClient) GetAccountSpotUsdt() (float64, error) {
+func (b *Binance) GetAccountSpotUsdt() (float64, error) {
 	account, err := b.ApiClient.GetAccount()
 	if err != nil {
 		return 0, err
@@ -43,34 +43,34 @@ func (b *BinanceClient) GetAccountSpotUsdt() (float64, error) {
 	return 0, nil
 }
 
-func (b *BinanceClient) GetAccountSwap() (*goex.Account, error) {
+func (b *Binance) GetAccountSwap() (*goex.Account, error) {
 	return nil, errors.New("Not available")
 }
 
-func (b *BinanceClient) CheckIfApiValid() error {
+func (b *Binance) CheckIfApiValid() error {
 	_, err := b.GetAccountSpot()
 	return err
 }
 
-func (b *BinanceClient) CreateSubAccount() (accId string, err error) {
+func (b *Binance) CreateSubAccount() (accId string, err error) {
 	return b.ApiClient.CreateSubAccount()
 }
 
-func (b *BinanceClient) EnableSubAccountMargin(subAccountId string) (err error) {
+func (b *Binance) EnableSubAccountMargin(subAccountId string) (err error) {
 	return b.ApiClient.EnableSubAccountMargin(subAccountId)
 }
 
-func (b *BinanceClient) ParentTransferToSubAccount(toId, clientTranId, asset, amount string) (data binance.TransFerResp, err error) {
+func (b *Binance) ParentTransferToSubAccount(toId, clientTranId, asset, amount string) (data binance.TransFerResp, err error) {
 	return b.ApiClient.SubAccountTransfer("", toId, clientTranId, asset, amount)
 }
 
-func (b *BinanceClient) SubAccountTransferToParent(fromId, clientTranId, asset, amount string) (data binance.TransFerResp, err error) {
+func (b *Binance) SubAccountTransferToParent(fromId, clientTranId, asset, amount string) (data binance.TransFerResp, err error) {
 	return b.ApiClient.SubAccountTransfer(fromId, "", clientTranId, asset, amount)
 }
 
-func (b *BinanceClient) GetAccountDepositAddress(symbol string) (resp binance.DepositAddrResp, err error) {
+func (b *Binance) GetAccountDepositAddress(symbol string) (resp binance.DepositAddrResp, err error) {
 	return b.ApiClient.GetAccountDepositAddress(symbol)
 }
-func (b *BinanceClient) CreateSubAccountApi(subAccountId, canTrade string) (binance.SubAccountApiResp, error) {
+func (b *Binance) CreateSubAccountApi(subAccountId, canTrade string) (binance.SubAccountApiResp, error) {
 	return b.ApiClient.CreateSubAccountApi(subAccountId, canTrade)
 }
