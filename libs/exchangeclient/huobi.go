@@ -1,8 +1,6 @@
-package exchange_clientI
+package exchangeclient
 
 import (
-	"net/http"
-	"time"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/goex/huobi"
@@ -12,16 +10,6 @@ var (
 	TypeSpot        = "spot"
 	TypeMargin      = "margin"
 	TypeSuperMargin = "super-margin"
-	client          = &http.Client{
-		Transport: &http.Transport{
-			//Proxy: func(req *http.Request) (*url.URL, error) {
-			//	return &url.URL{
-			//		Scheme: "socks5",
-			//		Host:   "192.168.101.237:1080"}, nil
-			//},
-		},
-		Timeout: time.Second * 5,
-	}
 )
 
 type HuobiClient struct {
@@ -32,7 +20,7 @@ type HuobiClient struct {
 	accIdSuperMargin string //全仓杠杆账户id  需要在initClient赋值
 }
 
-func InitClient(apiKey, apiSecretKey string, initID bool) *HuobiClient {
+func InitHuobi(apiKey, apiSecretKey string, initID bool) *HuobiClient {
 	huobiPro := huobi.NewHuoBiPro(client, apiKey, apiSecretKey, "")
 	huobiClt := &HuobiClient{
 		APIClient: huobiPro,

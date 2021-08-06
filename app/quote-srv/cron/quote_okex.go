@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"wq-fotune-backend/libs/cache"
 	"wq-fotune-backend/libs/env"
-	"wq-fotune-backend/libs/global"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/logger"
-	api "wq-fotune-backend/libs/okex_client"
 )
 
 type Ticker struct {
@@ -41,7 +41,6 @@ func StoreOkexTick() {
 	for {
 		<-t.C
 		storeOkexTick()
-		//logger.Infof("lens %d", len(OkexTickArray))
 		if len(OkexTickMap) == 0 {
 			continue
 		}
@@ -52,16 +51,13 @@ func StoreOkexTick() {
 			High: 1,
 			Low:  1,
 		}
-		if err := global.RedisCli.HMSet(TickOKex, OkexTickMap).Err(); err != nil {
+		if err := cache.Redis().HMSet(TickOKex, OkexTickMap).Err(); err != nil {
 			logger.Errorf("将行情存到redis失败 %v", err)
 		}
-		if err := global.RedisCli.HMSet(TickOkexAll, OkexTickMapAll).Err(); err != nil {
+		if err := cache.Redis().HMSet(TickOkexAll, OkexTickMapAll).Err(); err != nil {
 			logger.Errorf("将行情存到redis失败 %v", err)
 		}
 		storeRateRmb()
-		//for k, v := range OkexTickMap {
-		//    logger.Infof("%v--%v", k, v.Symbol)
-		//}
 	}
 }
 
@@ -73,7 +69,7 @@ var OkexTickArrayAll = make([]Ticker, 0)
 var OkexTickArrayBtc = make([]Ticker, 0)
 
 func storeOkexTick() {
-	client := api.InitClient("", "", "")
+	client := exchangeclient.InitOKEX("", "", "")
 	tickers, err := client.APIClient.OKExSpot.GetAllTicker()
 	if err != nil {
 		logger.Infof("storeOkexTick OKExSpot.GetTicker has err %v", err)
@@ -145,7 +141,7 @@ func storeRateRmb() {
 		logger.Warnf("解析法币汇率数据错误 %v %s", err, string(all))
 		return
 	}
-	if err := global.RedisCli.Set(RateKey, rate, 0).Err(); err != nil {
+	if err := cache.Redis().Set(RateKey, rate, 0).Err(); err != nil {
 		logger.Warnf("保存汇率失败 %v", err)
 		return
 	}

@@ -1,6 +1,6 @@
 package biz
 
-import "wq-fotune-backend/pkg/evaluation"
+import "wq-fotune-backend/app/exchange-srv/evaluation"
 
 func getEvaDirection(direction string) string {
 	switch direction {

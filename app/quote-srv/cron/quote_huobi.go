@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 	"time"
-	global2 "wq-fotune-backend/libs/global"
-	api "wq-fotune-backend/libs/huobi_client"
+	"wq-fotune-backend/libs/cache"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/logger"
 )
 
@@ -26,14 +26,14 @@ func StoreHuobiTick() {
 			log.Println("为0")
 			continue
 		}
-		if err := global2.RedisCli.HMSet(TickHuobiAll, HuobiTickMapAll).Err(); err != nil {
+		if err := cache.Redis().HMSet(TickHuobiAll, HuobiTickMapAll).Err(); err != nil {
 			logger.Errorf("huobi将行情存到redis失败 %v", err)
 		}
 	}
 }
 
 func storeHuobiTick() {
-	client := api.InitClient("", "", false)
+	client := exchangeclient.InitHuobi("", "", false)
 	tickers, err := client.APIClient.GetTickers()
 	if err != nil {
 		logger.Infof("storeHuobiTick GetTickers has err %v", err)

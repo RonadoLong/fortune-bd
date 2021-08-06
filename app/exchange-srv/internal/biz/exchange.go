@@ -13,19 +13,16 @@ import (
 	"time"
 	pb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/api/protocol"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/app/exchange-srv/internal/model"
 	quoteCron "wq-fotune-backend/app/quote-srv/cron"
-	apiBinance "wq-fotune-backend/libs/binance_client"
-	"wq-fotune-backend/libs/exchange_clientI"
+	"wq-fotune-backend/libs/encoding"
+	"wq-fotune-backend/libs/exchange"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/helper"
-	apiHuobi "wq-fotune-backend/libs/huobi_client"
 	"wq-fotune-backend/libs/logger"
-	api "wq-fotune-backend/libs/okex_client"
-	"wq-fotune-backend/pkg/encoding"
-	"wq-fotune-backend/pkg/response"
-	exSymbol "wq-fotune-backend/pkg/symbol"
-	"wq-fotune-backend/pkg/utils"
+	"wq-fotune-backend/libs/utils"
 )
 
 func (e *ExOrderRepo) GetExchangeInfo() ([]*model.WqExchange, error) {
@@ -50,11 +47,11 @@ func (e *ExOrderRepo) checkIfApiValid(apiKey, secret, passphrase, exchange strin
 }
 
 func (e *ExOrderRepo) AddExchangeApi(userID, apiKey, secret, passphrase string, exchangeID int64) error {
-	exchange, err := e.dao.GetExchangeById(exchangeID)
+	ex, err := e.dao.GetExchangeById(exchangeID)
 	if err != nil {
 		return response.NewInternalServerErrMsg(ErrID)
 	}
-	if exchange.Exchange == exSymbol.OKEX {
+	if ex.Exchange == exchange.OKEX {
 		if passphrase == "" {
 			return response.NewExchangePassphraseNoneErrMsg(ErrID)
 		}
@@ -66,7 +63,7 @@ func (e *ExOrderRepo) AddExchangeApi(userID, apiKey, secret, passphrase string, 
 
 	log.Println("=================", exchangeID)
 	//check
-	err = e.checkIfApiValid(apiKey, secret, passphrase, exchange.Exchange)
+	err = e.checkIfApiValid(apiKey, secret, passphrase, ex.Exchange)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -77,7 +74,7 @@ func (e *ExOrderRepo) AddExchangeApi(userID, apiKey, secret, passphrase string, 
 	newAPI := &model.WqExchangeApi{
 		UserID:       userID,
 		ExchangeID:   exchangeID,
-		ExchangeName: exchange.Exchange,
+		ExchangeName: ex.Exchange,
 		ApiKey:       apiKey,
 		Secret:       hex.EncodeToString(secretCrypt),
 		Passphrase:   passphrase,
@@ -159,41 +156,41 @@ func (e *ExOrderRepo) GetExchangeApiList(userId string) ([]*protocol.ExchangeApi
 	return apiResp, nil
 }
 
-func (e *ExOrderRepo) GetExchangeClient(apiKey, apiSecretKey, apiPassphrase, exchange string) exchange_clientI.ClientI {
-	if exchange == exSymbol.HUOBI {
-		return apiHuobi.InitClient(apiKey, apiSecretKey, true)
+func (e *ExOrderRepo) GetExchangeClient(apiKey, apiSecretKey, apiPassphrase, ex string) exchangeclient.ExClientI {
+	if ex == exchange.HUOBI {
+		return exchangeclient.InitHuobi(apiKey, apiSecretKey, true)
 	}
-	if exchange == exSymbol.BINANCE {
-		return api.InitClient(apiKey, apiSecretKey, apiPassphrase)
+	if ex == exchange.OKEX {
+		return exchangeclient.InitOKEX(apiKey, apiSecretKey, apiPassphrase)
 	}
-	return apiBinance.InitClient(apiKey, apiSecretKey)
+	return exchangeclient.InitBinance(apiKey, apiSecretKey)
 }
 
-func (e *ExOrderRepo) GetTickWithExchange(exchange, symbol string) (*quoteCron.Ticker, error) {
+func (e *ExOrderRepo) GetTickWithExchange(ex, symbol string) (*quoteCron.Ticker, error) {
 	if symbol == "USDT" {
 		return &quoteCron.Ticker{Last: 1}, nil
 	}
-	if exchange == exSymbol.OKEX {
+	if ex == exchange.OKEX {
 		return e.cacheService.GetOKexQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
-	if exchange == exSymbol.HUOBI {
+	if ex == exchange.HUOBI {
 		return e.cacheService.GetHuobiQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
-	if exchange == exSymbol.BINANCE {
+	if ex == exchange.BINANCE {
 		return e.cacheService.GetBinanceQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
 	return nil, errors.New("exchange not valide")
 }
 
-func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos, error) {
+func (e *ExOrderRepo) GetExchangePos(userId, ex string) ([]*pb.ExchangePos, error) {
 	posList := make([]*pb.ExchangePos, 0)
 
-	apiList := e.dao.GetExchangeApiListByUidAndPlatform(userId, exchange) //查询数据库中okex的api信息
+	apiList := e.dao.GetExchangeApiListByUidAndPlatform(userId, ex) //查询数据库中okex的api信息
 	for _, apiInfo := range apiList {
 		secret, _ := hex.DecodeString(apiInfo.Secret)
 		secretBytes, _ := encoding.AesDecrypt(secret)
 		//获取对应的交易所客户端
-		exchangeClient := e.GetExchangeClient(apiInfo.ApiKey, string(secretBytes), apiInfo.Passphrase, exchange)
+		exchangeClient := e.GetExchangeClient(apiInfo.ApiKey, string(secretBytes), apiInfo.Passphrase, ex)
 		if exchangeClient == nil {
 			logger.Info("No exchange client")
 			continue
@@ -216,7 +213,7 @@ func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos
 					continue
 				}
 				price := 0.0
-				tick, err := e.GetTickWithExchange(exchange, key.Symbol)
+				tick, err := e.GetTickWithExchange(ex, key.Symbol)
 				if err == nil {
 					price = tick.Last
 				}
@@ -230,7 +227,7 @@ func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos
 					Type:      "spot", //现货
 				}
 				balance := value.Balance
-				if exchange == exSymbol.HUOBI {
+				if ex == exchange.HUOBI {
 					balance = value.Amount + value.ForzenAmount
 				}
 				pos.Balance = decimal.NewFromFloat(balance).Round(8).String()
@@ -248,11 +245,11 @@ func (e *ExOrderRepo) GetExchangePos(userId, exchange string) ([]*pb.ExchangePos
 }
 
 func (e *ExOrderRepo) UpdateExchangeApi(userID, apiKey, secret, passphrase string, exchangeID, apiID int64) error {
-	exchange, err := e.dao.GetExchangeById(exchangeID)
+	ex, err := e.dao.GetExchangeById(exchangeID)
 	if err != nil {
 		return response.NewInternalServerErrMsg(ErrID)
 	}
-	if exchange.Exchange == exSymbol.OKEX {
+	if ex.Exchange == exchange.OKEX {
 		if passphrase == "" {
 			return response.NewExchangePassphraseNoneErrMsg(ErrID)
 		}
@@ -274,7 +271,7 @@ func (e *ExOrderRepo) UpdateExchangeApi(userID, apiKey, secret, passphrase strin
 	secretCrypt, _ := encoding.AesEncrypt([]byte(secret))
 
 	//check
-	err = e.checkIfApiValid(apiKey, secret, passphrase, exchange.Exchange)
+	err = e.checkIfApiValid(apiKey, secret, passphrase, ex.Exchange)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -283,7 +280,7 @@ func (e *ExOrderRepo) UpdateExchangeApi(userID, apiKey, secret, passphrase strin
 		ID:           apiID,
 		UserID:       userID,
 		ExchangeID:   exchangeID,
-		ExchangeName: exchange.Exchange,
+		ExchangeName: ex.Exchange,
 		ApiKey:       apiKey,
 		Secret:       hex.EncodeToString(secretCrypt),
 		Passphrase:   passphrase,
@@ -292,10 +289,7 @@ func (e *ExOrderRepo) UpdateExchangeApi(userID, apiKey, secret, passphrase strin
 	if err := e.dao.UpdateExchangeApi(apiInfo); err != nil {
 		return response.NewUpdateExchangeApiErrMsg(ErrID)
 	}
-	//// todo 弃用 通过新的接口查
-	//if err := e.dao.SetUserAllStrategyApi(userID, apiKey, exchange.Exchange); err != nil {
-	//	logger.Warnf("SetUserAllStrategyApi has err %v", err)
-	//}
+
 	return nil
 }
 

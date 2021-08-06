@@ -10,12 +10,12 @@ import (
 	"net/http"
 	"time"
 	pb "wq-fotune-backend/api/quote"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/quote-srv/client"
 	"wq-fotune-backend/app/quote-srv/cron"
 	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/exchange"
 	"wq-fotune-backend/libs/logger"
-	exchange_info "wq-fotune-backend/pkg/symbol"
-	"wq-fotune-backend/pkg/response"
 )
 
 var (
@@ -103,12 +103,12 @@ func StreamHandler(ws1 *websocket.Conn) {
 
 		}
 	}
-
+	//todo 待优化代码
 	go func(ws1 *websocket.Conn) {
 		ctx := context.Background()
 		ctxOut, cancelOut := context.WithCancel(ctx)
 		ctxRun, cancelRun := context.WithCancel(ctx)
-		msg := []byte(exchange_info.BINANCE)
+		msg := []byte(exchange.BINANCE)
 		var err error
 		go run(ws1, string(msg), ctxOut, cancelRun)
 		//open := true
@@ -125,7 +125,7 @@ func StreamHandler(ws1 *websocket.Conn) {
 					cancelOut()
 					return
 				}
-				if string(msg) == exchange_info.OKEX || string(msg) == exchange_info.BINANCE || string(msg) == exchange_info.HUOBI {
+				if string(msg) == exchange.OKEX || string(msg) == exchange.BINANCE || string(msg) == exchange.HUOBI {
 					cancelOut()
 					time.Sleep(2 * time.Second)
 					ctxOut, cancelOut = context.WithCancel(ctx)

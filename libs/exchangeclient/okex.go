@@ -1,18 +1,17 @@
-package exchange_clientI
+package exchangeclient
 
 import (
 	"errors"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
 	"log"
-	"net/http"
 	"strings"
 	"time"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/libs/logger"
+	"wq-fotune-backend/libs/utils"
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/goex/okex"
-	"wq-fotune-backend/pkg/utils"
 
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
 )
@@ -25,16 +24,6 @@ var (
 		"BTC-USDT-SWAP": goex.BTC_USDT,
 		"ETH-USDT-SWAP": goex.ETH_USDT,
 		"EOS-USDT-SWAP": goex.EOS_USDT,
-	}
-	client = &http.Client{
-		Timeout:   time.Second * 5,
-		Transport: &http.Transport{
-			//Proxy: func(req *http.Request) (*url.URL, error) {
-			//	return &url.URL{
-			//		Scheme: "socks5",
-			//		Host:   "192.168.101.220:1080"}, nil
-			//},
-		},
 	}
 )
 
@@ -61,7 +50,7 @@ type ErrDesc struct {
 	OrderID      string `json:"order_id"`
 }
 
-func InitClient(apiKey, apiSecretKey, apiPassphrase string) *OKClient {
+func InitOKEX(apiKey, apiSecretKey, apiPassphrase string) *OKClient {
 	okexClt := okex.NewOKEx(&goex.APIConfig{
 		HttpClient:    client,
 		ApiKey:        apiKey,

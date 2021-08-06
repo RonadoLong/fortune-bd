@@ -1,4 +1,4 @@
-package exchange_clientI
+package exchangeclient
 
 import (
 	"context"
@@ -29,7 +29,7 @@ var (
 )
 
 func TestInitOkexClient(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 
 	orderBook := client.GetOrderBook(Symbol)
 	var ask = orderBook.AskList[1]
@@ -38,7 +38,7 @@ func TestInitOkexClient(t *testing.T) {
 }
 
 func TestOKClient_FindTradesByOrderID(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	ret := client.FindTradesByOrderID(Symbol, "OK6670108577312899072")
 	for _, trade := range ret {
 		log.Printf("%+v", trade)
@@ -46,7 +46,7 @@ func TestOKClient_FindTradesByOrderID(t *testing.T) {
 }
 
 func TestOKClient_GetAccount(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	account := client.GetAccount()
 	if account == nil {
 		log.Println("account call bank")
@@ -58,7 +58,7 @@ func TestOKClient_GetAccount(t *testing.T) {
 }
 
 func TestOKClient_GetPosition(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	position := client.GetPosition(Symbol)
 	for _, futurePosition := range position {
 		log.Printf("%+v", futurePosition)
@@ -66,7 +66,7 @@ func TestOKClient_GetPosition(t *testing.T) {
 }
 
 func TestOKClient_PostMatchOrder(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	orderBook := client.GetOrderBook(Symbol)
 	var ask = orderBook.AskList[1] // 卖价
 	var bid = orderBook.BidList[1] // 买价
@@ -83,7 +83,7 @@ func TestOKClient_PostMatchOrder(t *testing.T) {
 }
 
 func TestOKClient_PostOrder(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	orderBook := client.GetOrderBook(Symbol)
 	var ask = orderBook.AskList[1] // 卖价
 	var bid = orderBook.BidList[1] // 买价
@@ -101,7 +101,7 @@ func TestOKClient_PostOrder(t *testing.T) {
 
 func TestOKClient_CancelOrderByID(t *testing.T) {
 	//
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 
 	ret, err := client.CancelOrderByID(Symbol, "OK6670108577312899072")
 	if err != nil {
@@ -112,7 +112,7 @@ func TestOKClient_CancelOrderByID(t *testing.T) {
 
 // long 为平多， short为平空单
 func TestOKClient_CallAll(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	err := client.CallAll(Symbol, "short")
 	if err != nil {
 		log.Println(err)
@@ -120,7 +120,7 @@ func TestOKClient_CallAll(t *testing.T) {
 }
 
 func TestOKClient_GetAllOrders(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	os, err := client.GetAllUnFinishOrders(Symbol)
 	if err != nil {
 		log.Println(err)
@@ -132,7 +132,7 @@ func TestOKClient_GetAllOrders(t *testing.T) {
 }
 
 func TestOKClient_GetLastFinishOrders(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	os, err := client.GetLastFinishOrders(Symbol)
 	if err != nil {
 		log.Println(err)
@@ -143,7 +143,7 @@ func TestOKClient_GetLastFinishOrders(t *testing.T) {
 }
 
 func TestOKClient_GetAccountTradeHistory(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	tradeHisotry, err := client.GetAccountTradeHisotry(Symbol, "520037974051155968")
 	if err != nil {
 		log.Println(err)
@@ -154,13 +154,13 @@ func TestOKClient_GetAccountTradeHistory(t *testing.T) {
 }
 
 func TestOKClient_GetAccountWithSymbol(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	ac := client.GetAccountWithSymbol(Symbol)
 	log.Println(global.StructToJsonStr(ac))
 }
 
 func TestTick(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 
 	tickers, e := client.APIClient.OKExSpot.GetAllTicker()
 	if e != nil {
@@ -175,7 +175,7 @@ func TestTick(t *testing.T) {
 }
 
 func TestOKClient_SubscribeOrdersEvent(t *testing.T) {
-	client := InitClient(apikey, secretkey, Passphrase)
+	client := InitOKEX(apikey, secretkey, Passphrase)
 	err := client.BuildWS()
 	if err != nil {
 		log.Println(err)
@@ -208,7 +208,7 @@ func TestOKClient_SubscribeOrdersEvent(t *testing.T) {
 }
 
 func TestOKClient_GetAccountSpot(t *testing.T) {
-	Clt := InitClient(apikey, secretkey, Passphrase)
+	Clt := InitOKEX(apikey, secretkey, Passphrase)
 	account, err := Clt.GetAccountSpot()
 	if err != nil {
 		log.Println(err)

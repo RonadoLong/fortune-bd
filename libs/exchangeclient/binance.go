@@ -1,12 +1,7 @@
-package apiBinance
+package exchangeclient
 
 import (
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-	"time"
-	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/pkg/goex/binance"
 )
@@ -16,22 +11,7 @@ type BinanceClient struct {
 	Ws        *binance.BinanceWs
 }
 
-//todo 代理
-var (
-	client = &http.Client{
-		Timeout: time.Second * 5,
-		Transport: &http.Transport{
-			Proxy: func(req *http.Request) (*url.URL, error) {
-				return &url.URL{
-					Scheme: "socks5",
-					Host:   strings.Split(env.ProxyAddr, "//")[1],
-				}, nil
-			},
-		},
-	}
-)
-
-func InitClient(apiKey, secret string) *BinanceClient {
+func InitBinance(apiKey, secret string) *BinanceClient {
 	binanceClt := binance.NewWithConfig(&goex.APIConfig{
 		HttpClient:    client,
 		Endpoint:      "",
@@ -88,10 +68,6 @@ func (b *BinanceClient) SubAccountTransferToParent(fromId, clientTranId, asset, 
 	return b.ApiClient.SubAccountTransfer(fromId, "", clientTranId, asset, amount)
 }
 
-//func (b *BinanceClient) GetSubAccountDepositAddress(email, symbol string) (resp binance.DepositAddrResp, err error) {
-//	return b.ApiClient.GetSubAccountDepositAddress(email, symbol)
-//}
-//GetAccountDepositAddress
 func (b *BinanceClient) GetAccountDepositAddress(symbol string) (resp binance.DepositAddrResp, err error) {
 	return b.ApiClient.GetAccountDepositAddress(symbol)
 }

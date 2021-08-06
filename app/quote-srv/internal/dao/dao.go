@@ -2,16 +2,15 @@ package dao
 
 import (
 	"github.com/go-redis/redis"
-	"wq-fotune-backend/libs/global"
+	"wq-fotune-backend/libs/cache"
 )
 
 type Dao struct {
-	//db *gorm.DB
 	RedisCli *redis.Client
 }
 
 func New() *Dao {
 	return &Dao{
-		RedisCli: global.RedisCli,
+		RedisCli: cache.Redis(),
 	}
 }

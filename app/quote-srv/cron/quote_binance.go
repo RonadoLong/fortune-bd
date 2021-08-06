@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	api "wq-fotune-backend/libs/binance_client"
-	global2 "wq-fotune-backend/libs/global"
+	"wq-fotune-backend/libs/cache"
+	"wq-fotune-backend/libs/exchangeclient"
 	"wq-fotune-backend/libs/logger"
 )
 
@@ -24,14 +24,14 @@ func StoreBinanceTick() {
 		if len(BinanceTickMapAll) == 0 {
 			continue
 		}
-		if err := global2.RedisCli.HMSet(TickBinanceAll, BinanceTickMapAll).Err(); err != nil {
+		if err := cache.Redis().HMSet(TickBinanceAll, BinanceTickMapAll).Err(); err != nil {
 			logger.Errorf("binance将行情存到redis失败 %v", err)
 		}
 	}
 }
 
 func storeBinanceTick() {
-	client := api.InitClient("", "")
+	client := exchangeclient.InitBinance("", "")
 	tickers, err := client.ApiClient.GetTickers()
 	if err != nil {
 		logger.Infof("storeBinanceTick GetTickers has err %v", err)

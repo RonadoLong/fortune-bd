@@ -8,16 +8,16 @@ import (
 	"strings"
 	"time"
 	pb "wq-fotune-backend/api/exchange"
+	"wq-fotune-backend/api/response"
+	"wq-fotune-backend/app/exchange-srv/evaluation"
 	"wq-fotune-backend/app/exchange-srv/internal/dao"
 	"wq-fotune-backend/app/exchange-srv/internal/model"
 	"wq-fotune-backend/app/forward-offer-srv/global"
+	"wq-fotune-backend/libs/exchange"
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/evaluation"
+	"wq-fotune-backend/libs/utils"
 	"wq-fotune-backend/pkg/goex"
-	"wq-fotune-backend/pkg/response"
-	exchange "wq-fotune-backend/pkg/symbol"
-	"wq-fotune-backend/pkg/utils"
 )
 
 // EvaluationSwap 不再使用

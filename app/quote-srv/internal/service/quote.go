@@ -6,10 +6,10 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"time"
 	quotepb "wq-fotune-backend/api/quote"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/quote-srv/cron"
+	"wq-fotune-backend/libs/exchange"
 	"wq-fotune-backend/libs/logger"
-	exchange_info "wq-fotune-backend/pkg/symbol"
-	"wq-fotune-backend/pkg/response"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 func (q *QuoteService) GetTicksWithExchangeSymbol(ctx context.Context, req *quotepb.GetTicksSymbolReq, resp *quotepb.TickResp) error {
 	var tickArrayAll = make([]cron.Ticker, 0)
 	//var tickerAll = make(map[string]map[string]interface{})
-	if req.Exchange == exchange_info.BINANCE {
+	if req.Exchange == exchange.BINANCE {
 		if req.Symbol == USDT {
 			tickArrayAll = cron.BinanceTickArrayAll
 		}
@@ -29,7 +29,7 @@ func (q *QuoteService) GetTicksWithExchangeSymbol(ctx context.Context, req *quot
 			tickArrayAll = cron.BinaceTickArrayBtc
 		}
 	}
-	if req.Exchange == exchange_info.HUOBI {
+	if req.Exchange == exchange.HUOBI {
 		if req.Symbol == USDT {
 			tickArrayAll = cron.HuobiTickArrayAll
 		}
@@ -37,7 +37,7 @@ func (q *QuoteService) GetTicksWithExchangeSymbol(ctx context.Context, req *quot
 			tickArrayAll = cron.HuobiTickArrayBtc
 		}
 	}
-	if req.Exchange == exchange_info.OKEX {
+	if req.Exchange == exchange.OKEX {
 		if req.Symbol == USDT {
 			tickArrayAll = cron.OkexTickArrayAll
 		}
@@ -75,7 +75,7 @@ func (q *QuoteService) GetTicksWithExchange(ctx context.Context, req *quotepb.Ge
 	//}
 
 	var tickerAll = make(map[string]map[string]interface{})
-	tickerAll[exchange_info.BINANCE] = map[string]interface{}{
+	tickerAll[exchange.BINANCE] = map[string]interface{}{
 		"usdt": cron.BinanceTickMapAll,
 	}
 	ticks, err := json.Marshal(tickerAll)
@@ -113,11 +113,11 @@ func (q *QuoteService) StreamOkexTicks(ctx context.Context, req *quotepb.GetTick
 		tickArrayAll := cron.OkexTickArrayAll
 		//tickArrayBtc := cron.OkexTickArrayBtc
 
-		if req.Exchange == exchange_info.HUOBI {
+		if req.Exchange == exchange.HUOBI {
 			tickArrayAll = cron.HuobiTickArrayAll
 			//tickArrayBtc = cron.HuobiTickArrayBtc
 		}
-		if req.Exchange == exchange_info.BINANCE {
+		if req.Exchange == exchange.BINANCE {
 			tickArrayAll = cron.BinanceTickArrayAll
 			//tickArrayBtc = cron.BinaceTickArrayBtc
 		}
