@@ -5,7 +5,6 @@ import (
 	pb "wq-fotune-backend/api/usercenter"
 	"wq-fotune-backend/app/usercenter-srv/internal/service"
 	"wq-fotune-backend/libs/env"
-	"wq-fotune-backend/libs/global"
 	"wq-fotune-backend/libs/logger"
 	"wq-fotune-backend/libs/micro_service"
 
@@ -18,7 +17,6 @@ func RunGrpc() {
 		micro.Name(env.USER_SRV_NAME),
 		micro.Version("latest"),
 		micro.Action(func(c *cli.Context) error {
-			global.InitRedis()
 			return nil
 		}),
 	)

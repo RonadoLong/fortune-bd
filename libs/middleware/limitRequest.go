@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/libs/jwt"
+	"wq-fotune-backend/libs/limitReq"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/limitReq"
-	"wq-fotune-backend/pkg/response"
 )
 
 //ipCount := limitReq.GetReqCount(req.Phone)

@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/libs/jwt"
-	"wq-fotune-backend/pkg/response"
 )
 
 func JWTAuth() gin.HandlerFunc {

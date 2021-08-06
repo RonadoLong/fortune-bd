@@ -2,9 +2,10 @@ package model
 
 import (
     "time"
+    "wq-fotune-backend/libs/bcrypt2"
+    "wq-fotune-backend/libs/snowflake"
     "wq-fotune-backend/libs/ucode"
-    "wq-fotune-backend/pkg/bcrypt2"
-    "wq-fotune-backend/pkg/snowflake"
+
 )
 
 type WqUserBase struct {

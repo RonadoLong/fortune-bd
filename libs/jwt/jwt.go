@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	"wq-fotune-backend/pkg/encoding"
+	"wq-fotune-backend/libs/encoding"
 )
 
 var (

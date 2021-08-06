@@ -7,14 +7,14 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/micro/go-micro/v2/errors"
 	"wq-fotune-backend/api/protocol"
+	"wq-fotune-backend/api/response"
 	pb "wq-fotune-backend/api/usercenter"
 	"wq-fotune-backend/app/usercenter-srv/client"
 	"wq-fotune-backend/libs/env"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/middleware"
-	"wq-fotune-backend/pkg/response"
-	"wq-fotune-backend/pkg/validate-code/phone"
+	"wq-fotune-backend/libs/middleware"
+	"wq-fotune-backend/libs/validate-code/phone"
 )
 
 var (

@@ -11,17 +11,15 @@ import (
 	"time"
 	pb "wq-fotune-backend/api/quote"
 	"wq-fotune-backend/api/response"
-	"wq-fotune-backend/app/quote-srv/client"
 	"wq-fotune-backend/app/quote-srv/cron"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/app/quote-srv/internal/service"
 	"wq-fotune-backend/libs/exchange"
 	"wq-fotune-backend/libs/logger"
 )
 
 var (
-	quoteService pb.QuoteService
+	quoteService = service.NewQuoteService()
 	upGrader = websocket.Upgrader{
-		//允许跨域
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
@@ -29,7 +27,6 @@ var (
 )
 
 func v1api(group *gin.RouterGroup) {
-	quoteService = client.NewQuoteClient(env.EtcdAddr)
 	group.GET("/ticks", GetTicks)
 	group.GET("/ticks/realtime", SubRealTimeTickers)
 }
@@ -48,38 +45,18 @@ func SubRealTimeTickers(c *gin.Context) {
 func StreamHandler(ws1 *websocket.Conn) {
 	//即便 我们不再 期望 来自websocket 更多的请求,我们仍需要 去 websocket 读取 内容，为了能获取到 close 信号
 	run := func(ws *websocket.Conn, exchange string, ctxOut context.Context, cancelClose context.CancelFunc) {
-		// 发送请求 给 stream server
-		service, err := quoteService.StreamOkexTicks(context.Background(), &pb.GetTicksReq{Exchange: exchange})
-		if err != nil {
-			logger.Warnf("行情服务端连接失败 %v", err)
-			errMsg := response.NewResultInternalErr("行情服务端连接失败")
-			_ = ws.WriteJSON(errMsg)
-			return
-		}
-		defer func() {
-			service.Close()
-		}()
 		for {
 			select {
 			case <-ctxOut.Done():
 				return
 			default:
 				// 1. 不断获取行情数据
-				resp, err := service.Recv()
+				resp := quoteService.GetOkexTicks(ctxOut, &pb.GetTicksReq{Exchange: exchange}) //
 				if resp == nil {
 					time.Sleep(1 * time.Second)
 					continue
 				}
-				if err != nil {
-					logger.Warnf("行情服务recv数据失败 %v", err)
-					errMsg := response.NewResultInternalErr("行情服务recv数据失败")
-					_ = ws.WriteJSON(errMsg)
-					time.Sleep(2 * time.Second)
-					continue
-				}
 				// 2. 转发到ws中
-				//TODO 币本位行情
-				//ticks := make([]map[string][]cron.Ticker, 0)
 				var ticks []cron.Ticker
 				if err := jsoniter.Unmarshal(resp.Ticks, &ticks); err != nil {
 					logger.Warnf("StreamHandler:Unmarshal数据失败")
@@ -89,7 +66,7 @@ func StreamHandler(ws1 *websocket.Conn) {
 					continue
 				}
 
-				err = ws.WriteJSON(response.NewResultSuccess(ticks))
+				err := ws.WriteJSON(response.NewResultSuccess(ticks))
 				if err != nil {
 					if isExpectedClose(err) {
 						logger.Warnf("expected close on socket")
@@ -147,7 +124,8 @@ func isExpectedClose(err error) bool {
 
 // GetTicks 获取行情数据
 func GetTicks(c *gin.Context) {
-	resp, err := quoteService.GetTicksWithExchange(context.Background(), &pb.GetTicksReq{All: false})
+	var resp pb.TickResp
+	err := quoteService.GetTicksWithExchange(context.Background(), &pb.GetTicksReq{All: false}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)

@@ -55,25 +55,6 @@ func (q *QuoteService) GetTicksWithExchangeSymbol(ctx context.Context, req *quot
 }
 
 func (q *QuoteService) GetTicksWithExchange(ctx context.Context, req *quotepb.GetTicksReq, resp *quotepb.TickResp) error {
-	//if req.All == false {
-	//	if len(cron.OkexTickArray) == 0 {
-	//		return response.NewDataNotFound(errID, "行情数据更新失败")
-	//	}
-	//	ticks, err := json.Marshal(cron.OkexTickArray)
-	//	if err != nil {
-	//		return response.NewInternalServerErrMsg(errID)
-	//	}
-	//	resp.Ticks = ticks
-	//	return nil
-	//}
-	//tickArrayAll := cron.OkexTickArrayAll
-	//if req.Exchange == exchange_info.HUOBI {
-	//	tickArrayAll = cron.HuobiTickArrayAll
-	//}
-	//if req.Exchange == exchange_info.BINANCE {
-	//	tickArrayAll = cron.BinanceTickArrayAll
-	//}
-
 	var tickerAll = make(map[string]map[string]interface{})
 	tickerAll[exchange.BINANCE] = map[string]interface{}{
 		"usdt": cron.BinanceTickMapAll,
@@ -111,18 +92,13 @@ func (q *QuoteService) GetRate(ctx context.Context, e *empty.Empty, rmb *quotepb
 func (q *QuoteService) StreamOkexTicks(ctx context.Context, req *quotepb.GetTicksReq, resp quotepb.QuoteService_StreamOkexTicksStream) error {
 	for {
 		tickArrayAll := cron.OkexTickArrayAll
-		//tickArrayBtc := cron.OkexTickArrayBtc
-
 		if req.Exchange == exchange.HUOBI {
 			tickArrayAll = cron.HuobiTickArrayAll
-			//tickArrayBtc = cron.HuobiTickArrayBtc
 		}
 		if req.Exchange == exchange.BINANCE {
 			tickArrayAll = cron.BinanceTickArrayAll
-			//tickArrayBtc = cron.BinaceTickArrayBtc
 		}
 
-		//if len(tickArrayAll) == 0 || len(tickArrayBtc) == 0{
 		if len(tickArrayAll) == 0 {
 			time.Sleep(2 * time.Second)
 			continue
@@ -131,21 +107,7 @@ func (q *QuoteService) StreamOkexTicks(ctx context.Context, req *quotepb.GetTick
 		if err != nil {
 			logger.Infof("streamOkexTicks json Marshal err %v", err)
 			return err
-			//return  response.NewInternalServerErrMsg(errID)
 		}
-		//TODO 币本位行情
-		//dataMap := make(map[string][]cron.Ticker)
-		//dataMap["USDT"] = tickArrayAll
-		//dataMap["BTC"] = tickArrayBtc
-
-		//data := make([]map[string][]cron.Ticker, 0)
-		//data = append(data, dataMap)
-		//ticks, err := json.Marshal(data) //{"usdt":[tickArrayALl的数据]}
-		//if err != nil {
-		//	logger.Infof("streamOkexTicks json Marshal err %v", err)
-		//	return err
-		//	//return  response.NewInternalServerErrMsg(errID)
-		//}
 		err = resp.Send(&quotepb.TickResp{Ticks: ticks})
 		if err != nil {
 			logger.Infof("streamOkexTicks sendMsg err %v", err)
@@ -154,4 +116,23 @@ func (q *QuoteService) StreamOkexTicks(ctx context.Context, req *quotepb.GetTick
 		time.Sleep(6 * time.Second)
 		continue
 	}
+}
+
+func (q *QuoteService) GetOkexTicks(ctx context.Context, req *quotepb.GetTicksReq) *quotepb.TickResp {
+	tickArrayAll := cron.OkexTickArrayAll
+	if req.Exchange == exchange.HUOBI {
+		tickArrayAll = cron.HuobiTickArrayAll
+	}
+	if req.Exchange == exchange.BINANCE {
+		tickArrayAll = cron.BinanceTickArrayAll
+	}
+	if len(tickArrayAll) == 0 {
+		time.Sleep(2 * time.Second)
+	}
+	ticks, err := json.Marshal(tickArrayAll)
+	if err != nil {
+		logger.Infof("streamOkexTicks json Marshal err %v", err)
+		return nil
+	}
+	return &quotepb.TickResp{Ticks: ticks}
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"strings"
 	"time"
 	"wq-fotune-backend/libs/cache"
@@ -124,12 +123,7 @@ func (rate QuoteRate) MarshalBinary() ([]byte, error) {
 }
 
 func storeRateRmb() {
-	request, err := http.NewRequest("get", "https://www.okex.com/api/futures/v3/rate", nil)
-	if err != nil {
-		logger.Warnf("获取法币汇率接口错误 %v", err)
-		return
-	}
-	response, err := env.GetProxyHttpClient().Do(request)
+	response, err := env.GetProxyHttpClient().Get("https://www.okex.com/api/futures/v3/rate")
 	if err != nil {
 		logger.Warnf("获取法币汇率接口错误 %v", err)
 		return

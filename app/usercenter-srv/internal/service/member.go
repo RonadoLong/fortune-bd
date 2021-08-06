@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
+	"wq-fotune-backend/api/response"
 	fotune_srv_user "wq-fotune-backend/api/usercenter"
-	"wq-fotune-backend/pkg/response"
 
 	"github.com/golang/protobuf/ptypes/empty"
 )

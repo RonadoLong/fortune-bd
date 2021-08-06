@@ -3,9 +3,8 @@ package dao
 import (
 	"github.com/jinzhu/gorm"
 	"wq-fotune-backend/app/usercenter-srv/internal/model"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/cache"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/dbclient"
 )
 
 type Dao struct {
@@ -14,7 +13,7 @@ type Dao struct {
 
 func New() *Dao {
 	return &Dao{
-		db: dbclient.NewDB(env.DbAddr),
+		db: cache.Mysql(),
 	}
 }
 
