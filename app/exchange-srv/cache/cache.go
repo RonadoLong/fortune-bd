@@ -2,48 +2,38 @@ package cache
 
 import (
 	"encoding/json"
-	"github.com/go-redis/redis"
 	"time"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/quote-srv/cron"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/libs/cache"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/libs/redisHelper"
 )
 
 const (
 	exchangeKey = "ex:account:"
 )
 
-type Service struct {
-	redisCli *redis.Client
-}
 
-func NewService() *Service {
-	return &Service{
-		redisCli: redisHelper.InitRedisClient(env.RedisAddr, env.RedisPWD),
-	}
-}
 
 // CacheExchangeAccountList 缓存交易所数据
-func (s *Service) CacheExchangeAccountList(userId string, data []byte) {
+func CacheExchangeAccountList(userId string, data []byte) {
 	var key = global.StringJoinString(exchangeKey, userId)
-	s.redisCli.Set(key, data, time.Second*10)
+	cache.Redis().Set(key, data, time.Second*10)
 }
 
 // GetExchangeAccountList 获取用户在缓存中的数据
-func (s *Service) GetExchangeAccountList(userId string) []byte {
+func GetExchangeAccountList(userId string) []byte {
 	var key = global.StringJoinString(exchangeKey, userId)
-	result, err := s.redisCli.Get(key).Bytes()
+	result, err := cache.Redis().Get(key).Bytes()
 	if err != nil {
 		return nil
 	}
 	return result
 }
 
-func (s *Service) GetOKexQuote(symbol string) (*cron.Ticker, error) {
+func GetOKexQuote(symbol string) (*cron.Ticker, error) {
 	data := &cron.Ticker{}
-	bytes, err := s.redisCli.HGet(cron.TickOkexAll, symbol).Bytes()
+	bytes, err := cache.Redis().HGet(cron.TickOkexAll, symbol).Bytes()
 	if err != nil {
 		logger.Warnf("reids获取tick:okex此品种获取失败 %s %v", symbol, err)
 		return nil, err
@@ -55,9 +45,9 @@ func (s *Service) GetOKexQuote(symbol string) (*cron.Ticker, error) {
 	return data, nil
 }
 
-func (s *Service) GetHuobiQuote(symbol string) (*cron.Ticker, error) {
+func  GetHuobiQuote(symbol string) (*cron.Ticker, error) {
 	data := &cron.Ticker{}
-	bytes, err := s.redisCli.HGet(cron.TickHuobiAll, symbol).Bytes()
+	bytes, err := cache.Redis().HGet(cron.TickHuobiAll, symbol).Bytes()
 	if err != nil {
 		logger.Warnf("reids获取tick:huobi此品种获取失败 %s %v", symbol, err)
 		return nil, err
@@ -69,9 +59,9 @@ func (s *Service) GetHuobiQuote(symbol string) (*cron.Ticker, error) {
 	return data, nil
 }
 
-func (s *Service) GetBinanceQuote(symbol string) (*cron.Ticker, error) {
+func GetBinanceQuote(symbol string) (*cron.Ticker, error) {
 	data := &cron.Ticker{}
-	bytes, err := s.redisCli.HGet(cron.TickBinanceAll, symbol).Bytes()
+	bytes, err := cache.Redis().HGet(cron.TickBinanceAll, symbol).Bytes()
 	if err != nil {
 		logger.Warnf("reids获取tick:binance此品种获取失败 %s %v", symbol, err)
 		return nil, err
@@ -83,6 +73,6 @@ func (s *Service) GetBinanceQuote(symbol string) (*cron.Ticker, error) {
 	return data, nil
 }
 
-func (s *Service) CacheData(key string, data interface{}, duration time.Duration) error {
-	return s.redisCli.Set(key, data, duration).Err()
+func CacheData(key string, data interface{}, duration time.Duration) error {
+	return cache.Redis().Set(key, data, duration).Err()
 }

@@ -14,6 +14,7 @@ import (
 	pb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/api/protocol"
 	"wq-fotune-backend/api/response"
+	"wq-fotune-backend/app/exchange-srv/cache"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/app/exchange-srv/internal/model"
 	quoteCron "wq-fotune-backend/app/quote-srv/cron"
@@ -88,12 +89,12 @@ func (e *ExOrderRepo) AddExchangeApi(userID, apiKey, secret, passphrase string, 
 }
 
 func (e *ExOrderRepo) GetExchangeAccountListFromCache(userID string) []byte {
-	ret := e.cacheService.GetExchangeAccountList(userID)
+	ret := cache.GetExchangeAccountList(userID)
 	return ret
 }
 
 func (e *ExOrderRepo) SetExchangeAccountListCache(userID string, data []byte) {
-	e.cacheService.CacheExchangeAccountList(userID, data)
+	cache.CacheExchangeAccountList(userID, data)
 }
 
 func (e *ExOrderRepo) GetExchangeApiList(userId string) ([]*protocol.ExchangeApiResp, error) {
@@ -171,13 +172,13 @@ func (e *ExOrderRepo) GetTickWithExchange(ex, symbol string) (*quoteCron.Ticker,
 		return &quoteCron.Ticker{Last: 1}, nil
 	}
 	if ex == exchange.OKEX {
-		return e.cacheService.GetOKexQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
+		return cache.GetOKexQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
 	if ex == exchange.HUOBI {
-		return e.cacheService.GetHuobiQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
+		return cache.GetHuobiQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
 	if ex == exchange.BINANCE {
-		return e.cacheService.GetBinanceQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
+		return cache.GetBinanceQuote(fmt.Sprintf("%s%s", symbol, "-USDT"))
 	}
 	return nil, errors.New("exchange not valide")
 }

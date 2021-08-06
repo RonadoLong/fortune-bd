@@ -3,7 +3,7 @@ package cron
 import (
 	"time"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/utils"
+	"wq-fotune-backend/libs/utils"
 )
 
 func (s *serviceCron) evaluationDaily() {

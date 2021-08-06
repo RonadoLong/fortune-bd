@@ -7,10 +7,10 @@ import (
 	pb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
+	"wq-fotune-backend/libs/encoding"
 	"wq-fotune-backend/libs/helper"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/encoding"
-	"wq-fotune-backend/pkg/utils"
+	"wq-fotune-backend/libs/utils"
 )
 
 const TradeRequestQueue = "trade:%s:request"

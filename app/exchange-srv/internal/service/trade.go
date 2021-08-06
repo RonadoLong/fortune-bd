@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/golang/protobuf/ptypes/empty"
 	pb "wq-fotune-backend/api/exchange"
-	"wq-fotune-backend/pkg/response"
+	"wq-fotune-backend/api/response"
 )
 
 func (e *ExOrderService) GetTradeSymbols(ctx context.Context, req *pb.TradeSymbolReq, resp *pb.GetSymbolsResp) error {

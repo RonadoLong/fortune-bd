@@ -8,13 +8,14 @@ import (
 	"time"
 	pb "wq-fotune-backend/api/exchange"
 	pbQuote "wq-fotune-backend/api/quote"
-	fotune_srv_user "wq-fotune-backend/api/usercenter"
+	"wq-fotune-backend/api/response"
+	userPb "wq-fotune-backend/api/usercenter"
+	"wq-fotune-backend/app/exchange-srv/cache"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/app/exchange-srv/internal/model"
 	globalF "wq-fotune-backend/app/forward-offer-srv/global"
 	quoteCron "wq-fotune-backend/app/quote-srv/cron"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/response"
 )
 
 func (e *ExOrderRepo) GetTradeSymbols(exchange, symbol string) ([]*pb.Symbol, error) {
@@ -98,7 +99,7 @@ func (e *ExOrderRepo) GetProfitSortByRateYear() []*model.WqProfit {
 }
 
 func (e *ExOrderRepo) SaveRateRankToRedis(key string, data interface{}) {
-	if err := e.cacheService.CacheData(key, data, time.Minute*5); err != nil {
+	if err := cache.CacheData(key, data, time.Minute*5); err != nil {
 		logger.Warnf("保存排名数据失败 %v", err)
 	}
 }
@@ -110,7 +111,7 @@ func (e *ExOrderRepo) CacheRateReturn() {
 	index := 0
 	userIdList := make(map[string]bool, 0)
 	for _, profit := range profitList {
-		user, err := client.GetUserService().GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
+		user, err := client.GetUserService().GetUserInfo(context.Background(), &userPb.UserInfoReq{UserID: profit.UserID})
 		if err != nil {
 			logger.Warnf("CacheRateReturn 查找用户信息失败 %v 用户id %s", err, profit.UserID)
 			continue
@@ -148,7 +149,7 @@ func (e *ExOrderRepo) CacheRateReturnYear() {
 	index := 0
 	userIdList := make(map[string]bool, 0)
 	for _, profit := range profitList {
-		user, err := client.GetUserService().GetUserInfo(context.Background(), &fotune_srv_user.UserInfoReq{UserID: profit.UserID})
+		user, err := client.GetUserService().GetUserInfo(context.Background(), &userPb.UserInfoReq{UserID: profit.UserID})
 		if err != nil {
 			logger.Warnf("CacheRateReturnYear 查找用户信息失败 %v 用户id %s", err, profit.UserID)
 			continue

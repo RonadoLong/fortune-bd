@@ -10,11 +10,11 @@ import (
 	"strconv"
 	pb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/api/protocol"
+	"wq-fotune-backend/api/response"
 	"wq-fotune-backend/app/exchange-srv/internal/service"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/middleware"
-	"wq-fotune-backend/pkg/response"
+	"wq-fotune-backend/libs/middleware"
 )
 
 func apiV1(group *gin.RouterGroup) {

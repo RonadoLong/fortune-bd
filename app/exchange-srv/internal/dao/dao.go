@@ -3,10 +3,7 @@ package dao
 import (
 	"github.com/jinzhu/gorm"
 	"go.mongodb.org/mongo-driver/mongo"
-	"os"
-	"wq-fotune-backend/libs/env"
-	"wq-fotune-backend/libs/mongoClient"
-	"wq-fotune-backend/pkg/dbclient"
+	"wq-fotune-backend/libs/cache"
 )
 
 type Dao struct {
@@ -15,13 +12,9 @@ type Dao struct {
 }
 
 func New() *Dao {
-	mgoClient, err := mongoClient.InitMongo(env.MongoAddr)
-	if err != nil {
-		os.Exit(-1)
-	}
 	return &Dao{
-		db:    dbclient.NewDB(env.DbAddr),
-		mongo: mgoClient,
+		db:   cache.Mysql(),
+		mongo: cache.Mongo(),
 	}
 }
 
