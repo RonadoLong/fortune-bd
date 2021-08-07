@@ -8,19 +8,17 @@ import (
 	"log"
 	"wq-fotune-backend/api/response"
 	pb "wq-fotune-backend/api/wallet"
-	"wq-fotune-backend/app/wallet-srv/client"
-	"wq-fotune-backend/libs/env"
+	"wq-fotune-backend/app/wallet-srv/internal/service"
 	"wq-fotune-backend/libs/jwt"
 	"wq-fotune-backend/libs/middleware"
 )
 
 var (
-	walletService pb.WalletService
+	walletService = service.NewWalletService()
 )
 
 
 func apiV1(group *gin.RouterGroup) {
-	walletService = client.NewWalletClient(env.EtcdAddr)
 	group.POST("/strategyStartUpNotify", StrategyStarUpNotify)
 	group.Use(middleware.JWTAuth())
 	group.POST("/create", CreateWallet)
@@ -45,7 +43,7 @@ func StrategyStarUpNotify(c *gin.Context) {
 		response.NewBindJsonErr(c, nil)
 		return
 	}
-	_, err := walletService.StrategyRunNotify(context.Background(), &req)
+	err := walletService.StrategyRunNotify(context.Background(), &req, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -57,7 +55,8 @@ func StrategyStarUpNotify(c *gin.Context) {
 func GetTotalRebate(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	rebate, err := walletService.GetTotalRebate(context.Background(), &pb.GetTotalRebateReq{UserId: jwtP.UserID})
+	var rebate pb.GetTotalRebateResp
+	err := walletService.GetTotalRebate(context.Background(), &pb.GetTotalRebateReq{UserId: jwtP.UserID}, &rebate)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -77,7 +76,7 @@ func CreateWithdrawal(c *gin.Context) {
 		return
 	}
 	req.UserId = jwtP.UserID
-	_, err := walletService.Withdrawal(context.Background(), &req)
+	err := walletService.Withdrawal(context.Background(), &req, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -96,7 +95,8 @@ func CovertCoin(c *gin.Context) {
 		return
 	}
 	req.UserId = jwtP.UserID
-	coin, err := walletService.ConvertCoin(context.Background(), &req)
+	var coin *pb.ConvertCoinResp
+	err := walletService.ConvertCoin(context.Background(), &req, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -115,7 +115,8 @@ func CovertCoinTips(c *gin.Context) {
 		return
 	}
 	req.UserId = jwtP.UserID
-	tips, err := walletService.ConvertCoinTips(context.Background(), &req)
+	var tips pb.ConvertCoinTipsResp
+	err := walletService.ConvertCoinTips(context.Background(), &req, &tips)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -127,7 +128,8 @@ func CovertCoinTips(c *gin.Context) {
 func GetUsdtDeposit(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	resp, err := walletService.GetUsdtDepositAddr(context.Background(), &pb.UidReq{UserId: jwtP.UserID})
+	var resp pb.UsdtDepositAddrResp
+	err := walletService.GetUsdtDepositAddr(context.Background(), &pb.UidReq{UserId: jwtP.UserID}, &resp)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -139,7 +141,7 @@ func GetUsdtDeposit(c *gin.Context) {
 func CreateWallet(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	_, err := walletService.CreateWallet(context.Background(), &pb.UidReq{UserId: jwtP.UserID})
+	err := walletService.CreateWallet(context.Background(), &pb.UidReq{UserId: jwtP.UserID}, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -157,12 +159,12 @@ func Transfer(c *gin.Context) {
 	}
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	_, err := walletService.Transfer(context.Background(), &pb.TransferReq{
+	err := walletService.Transfer(context.Background(), &pb.TransferReq{
 		UserId:         jwtP.UserID,
 		FromCoin:       req.FromCoin,
 		ToCoin:         req.ToCoin,
 		FromCoinAmount: req.FromCoinAmount,
-	})
+	}, nil)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -174,7 +176,8 @@ func Transfer(c *gin.Context) {
 func WalletIFC(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	wallet, err := walletService.GetWalletIFC(context.Background(), &pb.UidReq{UserId: jwtP.UserID})
+	var wallet pb.WalletBalanceResp
+	err := walletService.GetWalletIFC(context.Background(), &pb.UidReq{UserId: jwtP.UserID}, &wallet)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)
@@ -186,7 +189,8 @@ func WalletIFC(c *gin.Context) {
 func WalletUSDT(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	jwtP := claims.(*jwt.JWTPayload)
-	wallet, err := walletService.GetWalletUSDT(context.Background(), &pb.UidReq{UserId: jwtP.UserID})
+	var wallet pb.WalletBalanceResp
+	err := walletService.GetWalletUSDT(context.Background(), &pb.UidReq{UserId: jwtP.UserID}, &wallet)
 	if err != nil {
 		fromError := errors.FromError(err)
 		response.NewErrWithCodeAndMsg(c, fromError.Code, fromError.Detail)

@@ -21,7 +21,7 @@ func RunGrpc() {
 		}),
 	)
 	micro_service.RegisterEtcd(ms, env.EtcdAddr)
-	if err := pb.RegisterWalletServiceHandler(ms.Server(), service.NewWalletHandler()); err != nil {
+	if err := pb.RegisterWalletServiceHandler(ms.Server(), service.NewWalletService()); err != nil {
 		logger.Panic(fmt.Sprintf("注册服务错误 %v", err))
 	}
 	if err := ms.Run(); err != nil {

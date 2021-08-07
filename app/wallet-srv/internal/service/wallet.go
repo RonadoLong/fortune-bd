@@ -21,7 +21,7 @@ type WalletService struct {
 	walletSrv *biz.WalletRepo
 }
 
-func NewWalletHandler() *WalletService {
+func NewWalletService() *WalletService {
 	return &WalletService{
 		walletSrv: biz.NewWalletRepo(),
 	}
