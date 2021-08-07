@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"testing"
 	"time"
-	. "wq-grid-strategy/util/goex/app/logger"
 )
 
 func Test_time(t *testing.T) {
@@ -17,7 +16,6 @@ func ProtoHandle(data []byte) error {
 }
 
 func TestNewWsConn(t *testing.T) {
-	Log.SetLevel(DEBUG)
 
 	clientId := "a"
 	args := make([]interface{}, 0)

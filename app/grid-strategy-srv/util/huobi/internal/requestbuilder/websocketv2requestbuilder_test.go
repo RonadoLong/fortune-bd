@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 	"time"
-
-	"wq-grid-strategy/util/huobi/internal/model"
+	"wq-fotune-backend/app/grid-strategy-srv/util/huobi/internal/model"
 )
 
 func TestWebSocketV2RequestBuilder_build_Time_Success(t *testing.T) {

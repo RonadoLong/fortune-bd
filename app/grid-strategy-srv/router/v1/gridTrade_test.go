@@ -4,36 +4,16 @@ import (
 	"fmt"
 	"testing"
 	"time"
-	"wq-fotune-backend/app/grid-strategy-srv/config"
 	"wq-fotune-backend/app/grid-strategy-srv/model"
 	"wq-fotune-backend/app/grid-strategy-srv/util/grid"
 
 	"strconv"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/k0kubun/pp"
 	"github.com/zhufuyi/pkg/krand"
 	"github.com/zhufuyi/pkg/logger"
-	"github.com/zhufuyi/pkg/mongo"
 )
-
-func init() {
-	appConfigFile := "C:\\Work\\Golang\\Project\\src\\wq-grid-strategy\\config\\conf.toml"
-	err := config.ParseConfig(appConfigFile)
-	if err != nil {
-		panic(err)
-	}
-
-	err = mongo.InitializeMongodb(config.GetMongoURL())
-	if err != nil {
-		panic(err)
-	}
-
-	err = model.InitExchangeLimitCache()
-	if err != nil {
-		panic(err)
-	}
-}
 
 func TestOutJSON(t *testing.T) {
 	o := &strategyOut{}

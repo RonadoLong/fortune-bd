@@ -2,15 +2,11 @@ package dao
 
 import (
 	"testing"
-	"wq-fotune-backend/libs/mongoClient"
+	"wq-fotune-backend/libs/cache"
 )
 
 func TestDao_GetUserStrategy(t *testing.T) {
-	mgoClient, err := mongoClient.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
-	if err != nil {
-		t.Errorf("")
-		return
-	}
+	mgoClient := cache.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
 	d := &Dao{
 		mongo: mgoClient,
 	}
@@ -22,11 +18,7 @@ func TestDao_GetUserStrategy(t *testing.T) {
 }
 
 func TestDao_GetUserStrategyOfRun(t *testing.T) {
-	mgoClient, err := mongoClient.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
-	if err != nil {
-		t.Errorf("")
-		return
-	}
+	mgoClient := cache.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
 	d := &Dao{
 		mongo: mgoClient,
 	}
@@ -35,11 +27,7 @@ func TestDao_GetUserStrategyOfRun(t *testing.T) {
 }
 
 func TestDao_GetUserStrategyByApiKey(t *testing.T) {
-	mgoClient, err := mongoClient.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
-	if err != nil {
-		t.Errorf("")
-		return
-	}
+	mgoClient := cache.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
 	d := &Dao{
 		mongo: mgoClient,
 	}
@@ -48,11 +36,7 @@ func TestDao_GetUserStrategyByApiKey(t *testing.T) {
 }
 
 func TestDao_SetUserAllStrategyApi(t *testing.T) {
-	mgoClient, err := mongoClient.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
-	if err != nil {
-		t.Errorf("")
-		return
-	}
+	mgoClient := cache.InitMongo("mongodb://wquant:wqabc123@47.57.161.25:38028/ifortune")
 	d := &Dao{
 		mongo: mgoClient,
 	}

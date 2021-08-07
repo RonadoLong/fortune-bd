@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 	"unsafe"
-	"wq-grid-strategy/util/goex"
+	"wq-fotune-backend/app/grid-strategy-srv/util/goex"
 )
 
 var bnWs = NewBinanceWs()

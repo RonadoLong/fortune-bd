@@ -17,10 +17,11 @@ import (
 )
 
 var (
-	userService = service.NewUserService()
+	userService *service.UserService
 )
 
 func apiV1(group *gin.RouterGroup) {
+	userService = service.NewUserService()
 	group.POST("/login", Login)
 	group.POST("/send/validate-code", SendValidateCode)
 	group.POST("/register", Register)

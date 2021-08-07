@@ -2,12 +2,13 @@ package cache_service
 
 import (
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
 	"strings"
-	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/utils"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
+	"wq-fotune-backend/libs/logger"
+	"wq-fotune-backend/libs/utils"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 // PushDelayerInfoToQueue send delayer message to queue

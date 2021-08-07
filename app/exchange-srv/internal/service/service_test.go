@@ -2,14 +2,15 @@ package service
 
 import (
 	"context"
-	"github.com/golang/protobuf/ptypes"
 	"math/rand"
 	"testing"
 	"time"
 	fotune_srv_exchange "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/app/exchange-srv/client"
 	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/snowflake"
+	"wq-fotune-backend/libs/snowflake"
+
+	"github.com/golang/protobuf/ptypes"
 )
 
 func TestExOrderHandler_Evaluation(t *testing.T) {

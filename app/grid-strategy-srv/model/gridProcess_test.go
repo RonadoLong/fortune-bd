@@ -5,29 +5,12 @@ import (
 	"sync"
 	"testing"
 	"time"
-	"wq-fotune-backend/app/grid-strategy-srv/config"
 	"wq-fotune-backend/app/grid-strategy-srv/util/huobi"
 
 	"github.com/globalsign/mgo/bson"
 	"github.com/k0kubun/pp"
 	"github.com/zhufuyi/pkg/logger"
-	"github.com/zhufuyi/pkg/mongo"
 )
-
-func init() {
-	appConfigFile := "C:\\Work\\Golang\\Project\\src\\wq-grid-strategy\\config\\conf.toml"
-	err := config.ParseConfig(appConfigFile)
-	if err != nil {
-		panic(err)
-	}
-
-	err = mongo.InitializeMongodb(config.GetMongoURL())
-	if err != nil {
-		fmt.Println("mongoURL", config.GetMongoURL())
-		panic(err)
-	}
-
-}
 
 func TestUpdateNormalGrid(t *testing.T) {
 	// 测试参数

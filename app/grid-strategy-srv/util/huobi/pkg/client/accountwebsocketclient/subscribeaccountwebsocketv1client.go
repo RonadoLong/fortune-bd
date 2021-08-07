@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"wq-grid-strategy/util/huobi/pkg/client/websocketclientbase"
-	"wq-grid-strategy/util/huobi/pkg/response/account"
 )
 
 // Responsible to handle account asset subscription from WebSocket

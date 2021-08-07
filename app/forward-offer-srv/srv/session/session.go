@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	"wq-fotune-backend/libs/logger"
-	api "wq-fotune-backend/libs/okex_client"
-	"wq-fotune-backend/pkg/goex"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/forward-offer-srv/srv/cache_service"
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
+	"wq-fotune-backend/libs/exchangeclient"
+	"wq-fotune-backend/libs/logger"
+	"wq-fotune-backend/pkg/goex"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -22,7 +22,7 @@ const (
 
 type Client struct {
 	OnlineTime time.Time
-	ApiClient  *api.OKClient
+	ApiClient  *exchangeclient.OKClient
 	cancelFunc context.CancelFunc
 	cxt        context.Context
 }
@@ -30,14 +30,14 @@ type Client struct {
 func initClient(apiKey, secret, Passphrase string) *Client {
 	var (
 		err      error
-		okClient *api.OKClient
+		okClient *exchangeclient.OKClient
 	)
 	var tryCount = 3
 	for {
 		if tryCount == 0 {
 			return nil
 		}
-		okClient = api.InitClient(apiKey, secret, Passphrase)
+		okClient = exchangeclient.InitOKEX(apiKey, secret, Passphrase)
 		if err = okClient.BuildWS(); err != nil {
 			if strings.Contains(err.Error(), maxReqCode) || strings.Contains(err.Error(), maxReqErr) {
 				<-time.After(time.Millisecond * 50)
@@ -64,7 +64,7 @@ func initClient(apiKey, secret, Passphrase string) *Client {
 }
 
 func InitClientNormal(info *model.ExchangeInfo) *Client {
-	okClient := api.InitClient(info.APIKey, info.SecretKey, info.EcPass)
+	okClient := exchangeclient.InitOKEX(info.APIKey, info.SecretKey, info.EcPass)
 	return &Client{ApiClient: okClient}
 }
 

@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"wq-fotune-backend/libs/logger"
-	"wq-fotune-backend/pkg/goex"
-	"wq-fotune-backend/pkg/utils"
+	exchangePb "wq-fotune-backend/api/exchange"
 	"wq-fotune-backend/app/exchange-srv/client"
-	fotune_srv_exchange "wq-fotune-backend/app/exchange-srv/proto"
 	"wq-fotune-backend/app/forward-offer-srv/config"
 	"wq-fotune-backend/app/forward-offer-srv/global"
 	"wq-fotune-backend/app/forward-offer-srv/srv/cache_service"
 	"wq-fotune-backend/app/forward-offer-srv/srv/model"
+	"wq-fotune-backend/libs/logger"
+	"wq-fotune-backend/libs/utils"
+	"wq-fotune-backend/pkg/goex"
 )
 
 const (
@@ -76,7 +76,7 @@ func (c *Client) calTrade(orderId string, delayerReq *model.DelayerReq) {
 	trades := c.ApiClient.FindTradesByOrderID(delayerReq.Symbol, orderId)
 	var exchangeClient = client.NewExOrderClient(config.Config.EtcdAddr)
 	for _, trade := range trades {
-		t := &fotune_srv_exchange.TradeReq{
+		t := &exchangePb.TradeReq{
 			TradeId:    string(trade.Tid),
 			UserId:     delayerReq.UserID,
 			ApiKey:     delayerReq.APIKey,

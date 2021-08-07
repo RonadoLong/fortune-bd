@@ -3,9 +3,8 @@ package accountwebsocketclient
 import (
 	"encoding/json"
 	"fmt"
-
+	"wq-fotune-backend/app/grid-strategy-srv/util/huobi/pkg/response/account"
 	"wq-grid-strategy/util/huobi/pkg/client/websocketclientbase"
-	"wq-grid-strategy/util/huobi/pkg/response/account"
 )
 
 // Responsible to handle account asset request from WebSocket

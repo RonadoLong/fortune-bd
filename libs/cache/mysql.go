@@ -11,12 +11,12 @@ var db *gorm.DB
 
 func Mysql() *gorm.DB {
 	if db == nil {
-		db = CreateConnectionByHost(env.DbDSN)
+		db = InitMysql(env.DbDSN)
 	}
 	return db
 }
 
-func CreateConnectionByHost(host string) *gorm.DB {
+func InitMysql(host string) *gorm.DB {
 	logger.Infof("mysql host: %s", host)
 	var err error
 	DB, err := gorm.Open("mysql", host)
