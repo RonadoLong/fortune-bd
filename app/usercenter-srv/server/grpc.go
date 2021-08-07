@@ -13,18 +13,18 @@ import (
 )
 
 func RunGrpc() {
-	ms := micro_service.InitBase(
+	app := micro_service.InitBase(
 		micro.Name(env.USER_SRV_NAME),
 		micro.Version("latest"),
 		micro.Action(func(c *cli.Context) error {
 			return nil
 		}),
 	)
-	micro_service.RegisterEtcd(ms, env.EtcdAddr)
-	if err := pb.RegisterUserHandler(ms.Server(), service.NewUserService()); err != nil {
+	micro_service.RegisterEtcd(app, env.EtcdAddr)
+	if err := pb.RegisterUserHandler(app.Server(), service.NewUserService()); err != nil {
 		logger.Panic(fmt.Sprintf("注册服务错误 %v", err))
 	}
-	if err := ms.Run(); err != nil {
+	if err := app.Run(); err != nil {
 		logger.Panic(fmt.Sprintf("启动grpc服务失败: %+v", err))
 	}
 }
