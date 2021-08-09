@@ -4,17 +4,24 @@
 * 基于go-micro微服务实战
 * 基于k8s编排，Jenkins持续交付
 * [配套基于Flutter开发Android、iOS、Web](https://github.com/RonadoLong/wq-fotune.git)
+* [APP体验版本:https://www.pgyer.com/gnTX](https://www.pgyer.com/gnTX)
 
 ### 简易架构图
 
 
 ### 前端部分页面展示
-
+![](./resource/images/WechatIMG33.jpeg)
+![](./resource/images/WechatIMG34.jpeg)
+![](./resource/images/WechatIMG36.jpeg)
+![](./resource/images/WechatIMG37.jpeg)
+![](./resource/images/WechatIMG38.jpeg)
+![](./resource/images/WechatIMG39.jpeg)
 
 ### 待完成功能
 * 摒弃go-micro迁移到bilibili的go-kratos
 * 实时行情看板
 * 更多币种交易
-* 引入消息队列解耦
+* 利用redis zset做策略收益的时候排行榜  
+* 引入消息队列解耦，解决分布式事务问题
 * 引入基于redis布隆过滤器
-。。。
+* 利用epoller模式优化websocket中的go wait模式
