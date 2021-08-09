@@ -10,10 +10,10 @@
 
 
 ### 前端部分页面展示
-![](./resource/images/WechatIMG33.jpeg)
-![](./resource/images/WechatIMG34.jpeg)
-![](./resource/images/WechatIMG36.jpeg)
-![](./resource/images/WechatIMG37.jpeg)
+![](./resource/images/WechatIMG33.jpeg =100)
+![](./resource/images/WechatIMG34.jpeg =100)
+![](./resource/images/WechatIMG36.jpeg =100)
+![](./resource/images/WechatIMG37.jpeg =100)
 ![](./resource/images/WechatIMG38.jpeg)
 ![](./resource/images/WechatIMG39.jpeg)
 
