@@ -26,4 +26,7 @@
 * 引入基于redis布隆过滤器
 * 利用epoller模式优化websocket中的go wait模式
 
-#### 部署使用说明
+#### 当前部署使用说明
+* 目前是本地服务器自建k8s，一个master，两个worker。基于frpc进行内网穿透，流量转发；
+* 使用rancher管理k8s集群；
+* 使用Jenkins pipeline进行持续化构建；
