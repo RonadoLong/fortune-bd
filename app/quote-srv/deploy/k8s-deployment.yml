@@ -42,9 +42,6 @@ spec:
             - containerPort: 5000
               name: health
               protocol: TCP
-          #            - containerPort: 8084
-          #              name: grpc
-          #              protocol: TCP
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always

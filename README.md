@@ -5,7 +5,7 @@
 * 基于k8s编排，Jenkins持续交付
 * [配套基于Flutter开发Android、iOS、Web](https://github.com/RonadoLong/wq-fotune.git)
 * [APP体验版本:https://www.pgyer.com/gnTX](https://www.pgyer.com/gnTX)
-* [web体验版本:http://yun.mateforce.cn/test/web/#/](http://yun.mateforce.cn/test/web/#/)
+* [web体验版本:https://yun.mateforce.cn/test/web/#/](https://yun.mateforce.cn/test/web/#/)
 #### 简易架构图
 
 
