@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package api.common.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "fortune-bd/api/common/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.common.v1";
+
+service Common {
+    rpc Carousel(google.protobuf.Empty) returns (CarouselList) {}
+    rpc CustomerService(google.protobuf.Empty) returns (ContractAddr) {}
+    rpc GetAppVersion(VersionReq) returns (AppVersion) {}
+    rpc GetUserRateRank(google.protobuf.Empty) returns (UserRateRankResp) {}
+    rpc GetUserRateYearRank(google.protobuf.Empty) returns (UserRateRankResp) {}
+    rpc PushProfitImageOss(PushImageReq) returns (ImageResp) {}
+}
+
+message VersionReq {
+    string platform = 1;
+}
+
+message PushImageReq {
+    string image_base64 = 1;
+}
+
+message ImageResp {
+    string image_url = 1;
+}
+
+message UserRateRankResp {
+    bytes data = 1;
+}
+
+message CarouselList {
+    bytes carousels = 1;
+}
+
+message ContractAddr {
+    string image = 1;
+    string content = 2;
+    string contact = 3;
+}
+
+message SharedGroups {
+    int64 id = 1;
+    string group_name = 2;
+    string total_capitals = 3;
+    string capital_unit = 4;
+    double distribute_type = 5;
+    string leverage_ratio = 6;
+    string total_return = 7;
+    string annual_return = 8;
+    string max_ddpercent = 9;
+    string calmar_ratio = 10;
+    string sharpe_ratio = 11;
+    repeated Strategies strategies = 12;
+}
+
+message Strategies {
+    int64 id = 1;
+    string strategy_name = 2;
+    string distribute_ratio = 3;
+    string exchange = 4;
+    string symbol = 5;
+}
+
+message AppVersion {
+    int32 id = 1;
+    bool has_update = 2;
+    bool is_ignorable = 3;
+    int32 version_code = 4;
+    string version_name = 5;
+    string update_log = 6;
+    string apk_url = 7;
+    string ios_url = 8;
+}

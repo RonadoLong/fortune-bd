@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package api.quote.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "fortune-bd/api/quote/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.quote.v1";
+
+service Quote {
+    rpc GetTicksWithExchange(GetTicksReq) returns (TickResp) {}
+    rpc GetTicksWithExchangeSymbol(GetTicksSymbolReq) returns (TickResp) {}
+    rpc StreamTicks(GetTicksReq) returns (stream TickResp) {}
+    rpc GetRate(google.protobuf.Empty) returns (RateUsdRmb) {}
+}
+
+message GetTicksSymbolReq {
+    string symbol = 1;
+    string exchange = 2;
+}
+
+message GetTicksReq {
+    bool all = 1;
+    string exchange = 2;
+}
+
+message TickResp {
+    bytes ticks = 1;
+}
+
+message RateUsdRmb {
+    string instrument_id = 1;
+    string rate = 2;
+    string timestamp = 3;
+}

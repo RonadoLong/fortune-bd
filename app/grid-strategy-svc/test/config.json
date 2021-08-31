@@ -1,0 +1,23 @@
+{
+    "exchange":"huobi",
+    "symbol":"ethusdt",
+    "targetProfitRate":0.001,
+    "priceDifferenceLimit":30,
+    "paramsRange":{
+        "totalSum":{
+            "start":50,
+            "end":2000,
+            "step":10
+        },
+        "latestPrice":{
+            "start":10,
+            "end":200,
+            "step":1
+        },
+        "intervalPrice":{
+            "start":0.1,
+            "end":10,
+            "step":0.2
+        }
+    }
+}
